@@ -169,6 +169,141 @@
             display: block;
         }
 
+        .sheet-title-bar {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            margin-top: 14px;
+            padding: 10px 12px;
+            background: #ffffff;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+        }
+
+        .sheet-title-bar label {
+            color: #166534;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .sheet-title-bar input {
+            flex: 1;
+            min-width: 220px;
+            padding: 8px 10px;
+            border: 1px solid #86efac;
+            border-radius: 9px;
+            font-size: 12px;
+        }
+
+        .saved-sheets {
+            margin-top: 14px;
+            padding: 12px;
+            background: #ffffff;
+            border: 1px solid #bbf7d0;
+            border-radius: 12px;
+        }
+
+        .saved-sheets-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .saved-sheets-head strong {
+            color: #166534;
+            font-size: 13px;
+        }
+
+        .saved-sheets-search {
+            width: 100%;
+            margin-bottom: 8px;
+            padding: 8px 10px;
+            border: 1px solid #bbf7d0;
+            border-radius: 9px;
+            font-size: 12px;
+            font-family: inherit;
+        }
+
+        .saved-sheets-search:focus {
+            outline: 2px solid #10b981;
+            border-color: transparent;
+            box-shadow: 0 0 0 3px #bbf7d0;
+        }
+
+        .saved-sheets-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 6px;
+            max-height: 240px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .saved-sheet-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            padding: 8px;
+            border: 1px solid #d1fae5;
+            border-radius: 9px;
+            background: #f8fafc;
+        }
+
+        @media (max-width: 700px) {
+            .saved-sheets-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .saved-sheet-open {
+            flex: 1;
+            min-width: 0;
+            border: 0;
+            padding: 0;
+            background: transparent;
+            color: #0f172a;
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .saved-sheet-open strong,
+        .saved-sheet-open span {
+            display: block;
+        }
+
+        .saved-sheet-open strong {
+            overflow: hidden;
+            font-size: 12px;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .saved-sheet-open span {
+            margin-top: 2px;
+            color: #64748b;
+            font-size: 10px;
+        }
+
+        .saved-sheet-action {
+            border: 0;
+            padding: 5px 7px;
+            border-radius: 6px;
+            background: #e2e8f0;
+            color: #334155;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        .saved-sheet-action.delete {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
         .sheet-row {
             display: flex;
             flex-wrap: wrap;
@@ -482,14 +617,35 @@
 
         /* Card Preview Duo */
         .card-duo {
+            position: relative;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             gap: 30px 40px;
             background: #f8fafc;
-            padding: 24px;
+            padding: 24px 72px;
             border-radius: 20px;
             border: 1px solid #e2e8f0;
+        }
+
+        .card-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 2;
+            min-width: 58px;
+        }
+
+        .card-nav-btn.prev {
+            left: 10px;
+        }
+
+        .card-nav-btn.next {
+            right: 10px;
+        }
+
+        .card-duo.monochrome {
+            filter: grayscale(1);
         }
 
         .card-wrapper {
@@ -501,6 +657,25 @@
             flex-shrink: 0;
             background: #ffffff;
             overflow: hidden;
+        }
+
+        @media (max-width: 700px) {
+            .card-duo {
+                padding: 64px 16px 24px;
+            }
+
+            .card-nav-btn {
+                top: 18px;
+                transform: none;
+            }
+
+            .card-nav-btn.prev {
+                left: 16px;
+            }
+
+            .card-nav-btn.next {
+                right: 16px;
+            }
         }
 
         .card-bg {
@@ -618,6 +793,10 @@
         .field-badge.front-course {
             top: 280px;
             left: 23px;
+
+            span{
+                text-transform: uppercase;
+            }
         }
 
         .field-badge.front-batch {
@@ -995,9 +1174,14 @@
 
         .back-OfficeAddress {
             position: absolute;
-            bottom: 24px;
+             bottom: 24px;
+            /*bottom: 12px;*/
             text-align: center;
             left: 24px;
+        }
+
+        .back-OfficeAddress .value-text {
+            white-space: pre-line;
         }
 
         .principal_sign {
@@ -1087,11 +1271,29 @@
                 </div>
             </div>
 
+            <div class="sheet-title-bar">
+                <label for="sheetTitleInput">Title for this sheet</label>
+                <input type="text" id="sheetTitleInput" placeholder="Example: Chennai Branch - September 2026">
+                <span style="font-size:11px;color:#64748b;">Required before saving a new Excel or Google Sheet.</span>
+            </div>
+
             <!-- Status Box -->
             <div id="importStatus" class="status-box"></div>
 
             <!-- Mapping Result Chips -->
             <div id="mappingChips" class="mapping-chips"></div>
+
+            <div class="saved-sheets">
+                <div class="saved-sheets-head">
+                    <strong>Saved Sheets</strong>
+                    <span style="font-size:11px;color:#64748b;">Click a title to load it</span>
+                </div>
+                <input type="search" id="savedSheetsSearch" class="saved-sheets-search"
+                    placeholder="Search saved sheets..." aria-label="Search saved sheets">
+                <div id="savedSheetsList" class="saved-sheets-list">
+                    <div style="font-size:11px;color:#94a3b8;">No saved sheets yet.</div>
+                </div>
+            </div>
         </div>
 
         <!-- Layout Grid -->
@@ -1116,6 +1318,8 @@
 
                 <!-- CARD PREVIEW DUO -->
                 <div class="card-duo" id="cardDuo">
+                    <button class="btn btn-outline btn-sm card-nav-btn prev" id="prevStudentBtn">◀ Prev</button>
+                    <button class="btn btn-outline btn-sm card-nav-btn next" id="nextStudentBtn">Next ▶</button>
 
                     <!-- FRONT CARD -->
                     <div class="card-wrapper" id="frontCard">
@@ -1182,8 +1386,63 @@
                             </div>
                             <div class="field-badge back-OfficeAddress">
                                 <!-- <span class="label-text">Emergency Contact</span> -->
-                                <span class="value-text">29 GNG Colony, 2nd St,
-                                    VaradarajaPuram, <br> Ambattur Chennai, Tamil Nadu 600053 <br>Phone : 9444120052
+                                <span class="value-text" id="valOfficeAddress">
+                                    <!-- Ambuttur -->
+                                    29 GNG Colony, 2nd St, VaradarajaPuram, <br> Ambattur Chennai, Tamil Nadu 600053
+                                    
+                                    <!-- Ambur -->
+                                    <!-- No.104, S.K. Road, Dr.Nagaraj Hospital <br> (2nd Floor), Krishnapuram, Ambur -635 802 -->
+
+                                    <!-- Ariyalur -->
+                                    <!-- No. 36/12, Vellalar Street, Ragavan Complex, <br> TMB Bank 2nd Floor, Ariyalur - 621704 -->
+                                    
+                                    <!-- Broadway -->
+                                    <!-- No.108, Thambuchetti Street, Kalikammbal <br> Kovil Opp. Broadway, Chennai - 600 001 -->
+
+                                    <!-- Kallakuruchi -->
+                                    <!-- No.59, 3rd floor, Gopuram towers, <br> Dhurugam Road, Kallakurichi - 606202 -->
+
+                                    <!-- Kanchipuram -->
+                                    <!-- No.17 A, Ulagalandhar Mada Street, Near <br> Aruna Mahal, Big Kanchipuram, <br> Kanchipuram – 6631 502 -->
+                                  
+                                    <!-- Dindugal -->
+                                    <!-- No 10, LGB compound, E.B colony, Near <br> Anil semiya head office, Dindigul 624001 -->
+                                  
+                                    <!-- Cuddalore -->
+                                    <!-- No.25, S.N.Chavadi Road, K.V.Tex Near, <br> SRG Tours, Cuddalore. -->
+                                  
+                                    <!-- Karaikudi -->
+                                    <!-- No.47, Ramal Residence, Mudiyarasan Salai, <br> Karaikudi – 630 002 -->
+                                  
+                                    <!-- Ranipet -->
+                                    <!-- No.9, M.B.T. Road, Navalpur, Vimal <br> Shopping Complex, Ranipet – 632 402 -->
+
+                                    <!-- Salem -->
+                                    <!-- No.14/1, SMPDA Chambers, LIC Colony, <br> New Bus Stand, Salem – 636 004 -->
+                                   
+                                    <!-- Tambaram -->
+                                    <!-- No.95, Rajaji Road, Near Vasan Eye Care <br> Hospital, Tambaram, Chennai – 600045 -->
+
+                                    <!-- Tirunelveli -->
+                                    <!-- No.171, Hindu Nadar Sangam Complex, <br> S N High Road, Tirunelveli Junction, <br> Tirunelveli - 627 001 -->
+                                  
+                                    <!-- Tindivanam -->
+                                    <!-- No 15, Subramaniya Swami Koil Street, <br> Tindivanam, 604001 -->
+
+                                    <!-- Tiruvannamalai -->
+                                    <!-- No.15/5, Pollur Main Road, Near <br> Axis Bank, Thiruvannamalai – 606 601 -->
+
+                                    <!-- Tiruchirappalli -->
+                                    <!-- 25, Nandhi Koil St, Theppakulam, <br> Tiruchirappalli, Tamil Nadu 620002 -->
+
+                                    <!-- Vellore -->
+                                    <!-- No. 29-B, IDA SCUDDAR Road, 3rd Floor, <br> Jambubala Complex, Vellore - 632004 -->
+                                    
+                                    <!-- Villupuram -->
+                                    <!-- No.793, Nerhuji Road, Indian Bank <br> Upstairs, Villupuram-605 602 -->
+                                    
+                                    
+                                    <br>Phone : 9444120052
                                     <br>E-mail : bharathiichm@gmail.com </span>
                             </div>
                         </div>
@@ -1230,6 +1489,10 @@
                         <textarea id="inputAddress" placeholder="Full address" rows="2"></textarea>
                     </div>
                     <div class="form-field">
+                        <label for="inputOfficeAddress">Branch / Office Address</label>
+                        <textarea id="inputOfficeAddress" placeholder="Branch office address" rows="3"></textarea>
+                    </div>
+                    <div class="form-field">
                         <label for="inputEmergency">Emergency Contact</label>
                         <input type="text" id="inputEmergency" placeholder="Emergency contact number">
                     </div>
@@ -1237,8 +1500,6 @@
 
                 <!-- Photo URL & Navigation Action Bar -->
                 <div class="action-bar">
-                    <button class="btn btn-outline btn-sm" id="prevStudentBtn">◀ Prev</button>
-                    <button class="btn btn-outline btn-sm" id="nextStudentBtn">Next ▶</button>
                     <input type="url" id="photoUrlInput" placeholder="Photo URL (https://... or Google Drive link)"
                         style="flex:1;min-width:200px;padding:8px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:12px;">
                     <button class="btn btn-primary btn-sm" id="applyPhotoBtn">Apply Photo</button>
@@ -1248,7 +1509,9 @@
                     <button class="btn btn-purple btn-sm" id="saveCurrentBtn">💾 Save</button>
                     <button class="btn btn-danger btn-sm" id="deleteCurrentBtn">🗑 Delete</button>
                     <div class="action-spacer"></div>
+                    <button class="btn btn-outline btn-sm" id="colorModeBtn" aria-pressed="false">◐ Color</button>
                     <button class="btn btn-success btn-sm" id="downloadCurrentBtn">⬇ Download Front + Back</button>
+                    <button class="btn btn-primary btn-sm" id="downloadAllPdfBtn">📄 Download All Cards PDF</button>
                 </div>
 
                 <!-- EXPORT PANEL -->
@@ -1319,6 +1582,7 @@
 
     <!-- Libraries: html2canvas, JSZip, PapaParse, SheetJS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
@@ -1335,7 +1599,9 @@
             const inputBlood = document.getElementById('inputBlood');
             const inputPhone = document.getElementById('inputPhone');
             const inputAddress = document.getElementById('inputAddress');
+            const inputOfficeAddress = document.getElementById('inputOfficeAddress');
             const inputEmergency = document.getElementById('inputEmergency');
+            const defaultOfficeAddress = '29 GNG Colony, 2nd St, VaradarajaPuram,\nAmbattur Chennai, Tamil Nadu 600053\nPhone : 9444120052\nE-mail : bharathiichm@gmail.com';
 
             const valFrontName = document.getElementById('valFrontName');
             const valFrontCourse = document.getElementById('valFrontCourse');
@@ -1346,6 +1612,7 @@
             const valBackBlood = document.getElementById('valBackBlood');
             const valBackPhone = document.getElementById('valBackPhone');
             const valBackAddress = document.getElementById('valBackAddress');
+            const valOfficeAddress = document.getElementById('valOfficeAddress');
             const valBackEmergency = document.getElementById('valBackEmergency');
 
             const photoHolder = document.getElementById('photoHolder');
@@ -1371,6 +1638,8 @@
             const saveCurrentBtn = document.getElementById('saveCurrentBtn');
             const deleteCurrentBtn = document.getElementById('deleteCurrentBtn');
             const downloadCurrentBtn = document.getElementById('downloadCurrentBtn');
+            const downloadAllPdfBtn = document.getElementById('downloadAllPdfBtn');
+            const colorModeBtn = document.getElementById('colorModeBtn');
             const prevStudentBtn = document.getElementById('prevStudentBtn');
             const nextStudentBtn = document.getElementById('nextStudentBtn');
             const exportRosterBtn = document.getElementById('exportRosterBtn');
@@ -1380,6 +1649,9 @@
             const testUrlBtn = document.getElementById('testUrlBtn');
             const importStatus = document.getElementById('importStatus');
             const mappingChips = document.getElementById('mappingChips');
+            const sheetTitleInput = document.getElementById('sheetTitleInput');
+            const savedSheetsSearch = document.getElementById('savedSheetsSearch');
+            const savedSheetsList = document.getElementById('savedSheetsList');
 
             const fileDropzone = document.getElementById('fileDropzone');
             const excelFileInput = document.getElementById('excelFileInput');
@@ -1407,11 +1679,15 @@
 
             // ==================== Application State ====================
             const STORAGE_KEY = 'bharathi_id_cards_data_v5';
+            const SAVED_SHEETS_KEY = 'bharathi_saved_sheets_v1';
             let students = [];
+            let savedSheets = [];
+            let activeSavedSheetId = null;
             let activeIndex = -1;
             let currentPhoto = '';
             let isExporting = false;
             let cancelExportRequested = false;
+            let isMonochrome = false;
 
             // ==================== Toast & Status Helpers ====================
             function showToast(message, type = '') {
@@ -1449,7 +1725,7 @@
             function emptyStudent() {
                 return {
                     name: '', course: '', batch: '', id: '', dob: '',
-                    father: '', blood: '', phone: '', address: '', emergency: '',
+                    father: '', blood: '', phone: '', address: '', officeAddress: defaultOfficeAddress, emergency: '',
                     photo: ''
                 };
             }
@@ -1468,6 +1744,11 @@
                             students = parsed;
                         }
                     }
+                    const savedSheetsRaw = localStorage.getItem(SAVED_SHEETS_KEY);
+                    const parsedSheets = savedSheetsRaw ? JSON.parse(savedSheetsRaw) : [];
+                    if (Array.isArray(parsedSheets)) {
+                        savedSheets = parsedSheets.filter(sheet => sheet && Array.isArray(sheet.rows) && Array.isArray(sheet.students));
+                    }
                 } catch (e) {
                     console.warn('LocalStorage load failed', e);
                 }
@@ -1476,9 +1757,102 @@
             function saveToStorage() {
                 try {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+                    const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
+                    if (activeSheet) {
+                        activeSheet.students = students.map(student => ({ ...student }));
+                    }
+                    localStorage.setItem(SAVED_SHEETS_KEY, JSON.stringify(savedSheets));
                 } catch (e) {
                     console.warn('LocalStorage save failed', e);
                 }
+            }
+
+            function renderSavedSheets() {
+                savedSheetsList.innerHTML = '';
+                if (savedSheets.length === 0) {
+                    savedSheetsList.innerHTML = '<div style="font-size:11px;color:#94a3b8;">No saved sheets yet.</div>';
+                    return;
+                }
+
+                const query = savedSheetsSearch.value.trim().toLowerCase();
+                const matchingSheets = savedSheets.slice().reverse().filter(sheet =>
+                    sheet.title.toLowerCase().includes(query)
+                );
+
+                if (matchingSheets.length === 0) {
+                    savedSheetsList.innerHTML = '<div style="font-size:11px;color:#94a3b8;">No matching sheets found.</div>';
+                    return;
+                }
+
+                matchingSheets.forEach(sheet => {
+                    const row = document.createElement('div');
+                    row.className = 'saved-sheet-item';
+
+                    const openButton = document.createElement('button');
+                    openButton.type = 'button';
+                    openButton.className = 'saved-sheet-open';
+                    const title = document.createElement('strong');
+                    title.textContent = sheet.title;
+                    const meta = document.createElement('span');
+                    meta.textContent = `${new Date(sheet.savedAt).toLocaleString()} · ${sheet.rows.length} rows`;
+                    openButton.append(title, meta);
+                    openButton.addEventListener('click', () => loadSavedSheet(sheet.id));
+
+                    const renameButton = document.createElement('button');
+                    renameButton.type = 'button';
+                    renameButton.className = 'saved-sheet-action';
+                    renameButton.textContent = 'Rename';
+                    renameButton.addEventListener('click', () => renameSavedSheet(sheet.id));
+
+                    const deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.className = 'saved-sheet-action delete';
+                    deleteButton.textContent = 'Delete';
+                    deleteButton.addEventListener('click', () => deleteSavedSheet(sheet.id));
+
+                    row.append(openButton, renameButton, deleteButton);
+                    savedSheetsList.appendChild(row);
+                });
+            }
+
+            function loadSavedSheet(sheetId) {
+                const sheet = savedSheets.find(item => item.id === sheetId);
+                if (!sheet) return;
+                saveCurrentToActive();
+                activeSavedSheetId = sheet.id;
+                students = sheet.students.map(student => ({ ...emptyStudent(), ...student }));
+                activeIndex = students.length > 0 ? 0 : -1;
+                setFormData(activeIndex >= 0 ? students[activeIndex] : emptyStudent());
+                saveToStorage();
+                renderStudentList();
+                updateStats();
+                sheetTitleInput.value = sheet.title;
+                showToast(`Loaded saved sheet: ${sheet.title}`, 'success');
+            }
+
+            function renameSavedSheet(sheetId) {
+                const sheet = savedSheets.find(item => item.id === sheetId);
+                if (!sheet) return;
+                const nextTitle = prompt('Enter a new title for this saved sheet:', sheet.title);
+                if (!nextTitle || !nextTitle.trim()) return;
+                const title = nextTitle.trim();
+                const duplicate = savedSheets.some(item => item.id !== sheet.id && item.title.toLowerCase() === title.toLowerCase());
+                if (duplicate && !confirm(`A saved sheet named "${title}" already exists. Rename anyway?`)) return;
+                sheet.title = title;
+                saveToStorage();
+                renderSavedSheets();
+                if (activeSavedSheetId === sheet.id) sheetTitleInput.value = title;
+                showToast('Saved sheet renamed', 'success');
+            }
+
+            function deleteSavedSheet(sheetId) {
+                const sheet = savedSheets.find(item => item.id === sheetId);
+                if (!sheet || !confirm(`Delete saved sheet "${sheet.title}"?`)) return;
+                savedSheets = savedSheets.filter(item => item.id !== sheetId);
+                if (activeSavedSheetId === sheetId) activeSavedSheetId = null;
+                saveToStorage();
+                renderSavedSheets();
+                showToast('Saved sheet deleted', 'success');
             }
 
             // ==================== UI Updates ====================
@@ -1492,6 +1866,7 @@
                 valBackBlood.textContent = inputBlood.value.trim() || '—';
                 valBackPhone.textContent = inputPhone.value.trim() || '—';
                 valBackAddress.textContent = inputAddress.value.trim() || '—';
+                valOfficeAddress.textContent = inputOfficeAddress.value.trim() || '—';
                 valBackEmergency.textContent = inputEmergency.value.trim() || '—';
             }
 
@@ -1522,6 +1897,7 @@
                 inputBlood.value = s.blood || '';
                 inputPhone.value = s.phone || '';
                 inputAddress.value = s.address || '';
+                inputOfficeAddress.value = s.officeAddress || defaultOfficeAddress;
                 inputEmergency.value = s.emergency || '';
 
                 currentPhoto = s.photo || '';
@@ -1545,6 +1921,7 @@
                     blood: inputBlood.value.trim(),
                     phone: inputPhone.value.trim(),
                     address: inputAddress.value.trim(),
+                    officeAddress: inputOfficeAddress.value.trim(),
                     emergency: inputEmergency.value.trim(),
                     photo: currentPhoto
                 };
@@ -2095,27 +2472,55 @@
                     throw new Error('No valid student rows found in ' + sourceName + '.');
                 }
 
-                // Append or Replace confirmation
-                let replace = true;
-                if (students.length > 0) {
-                    replace = confirm(
-                        `Found ${newStudents.length} student records from ${sourceName}.\n\n` +
-                        `Current list has ${students.length} students.\n\n` +
-                        `Click OK to REPLACE the list.\nClick Cancel to APPEND to existing students.`
-                    );
+                let title = sheetTitleInput.value.trim();
+                if (!title) {
+                    setStatus('❌ Enter a title for this sheet before saving it.', 'error');
+                    sheetTitleInput.focus();
+                    return;
                 }
 
-                if (replace) {
-                    students = newStudents;
-                } else {
-                    students = students.concat(newStudents);
+                const duplicate = savedSheets.find(sheet => sheet.title.toLowerCase() === title.toLowerCase());
+                if (duplicate) {
+                    const overwrite = confirm(
+                        `A saved sheet named "${duplicate.title}" already exists.\n\n` +
+                        'Click OK to overwrite it. Click Cancel to save this as a new entry.'
+                    );
+                    if (!overwrite) {
+                        const newTitle = prompt('Enter a different title for the new saved sheet:', `${title} (new)`);
+                        if (!newTitle || !newTitle.trim()) return;
+                        title = newTitle.trim();
+                    }
                 }
+
+                const savedSheet = {
+                    id: duplicate && title.toLowerCase() === duplicate.title.toLowerCase()
+                        ? duplicate.id
+                        : 'sheet_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                    title,
+                    savedAt: new Date().toISOString(),
+                    sourceName,
+                    headers: [...rawHeaders],
+                    rows: rows.map(row => ({ ...row })),
+                    students: newStudents.map(student => ({ ...student }))
+                };
+
+                if (duplicate && savedSheet.id === duplicate.id) {
+                    const duplicateIndex = savedSheets.findIndex(sheet => sheet.id === duplicate.id);
+                    savedSheets[duplicateIndex] = savedSheet;
+                } else {
+                    savedSheets.push(savedSheet);
+                }
+
+                activeSavedSheetId = savedSheet.id;
+                students = newStudents;
+                sheetTitleInput.value = title;
 
                 activeIndex = 0;
                 setFormData(students[0]);
                 saveToStorage();
                 renderStudentList();
                 updateStats();
+                renderSavedSheets();
 
                 exportFrom.value = 1;
                 exportTo.value = Math.min(students.length, 10);
@@ -2315,6 +2720,29 @@
                 });
             }
 
+            function canvasDataUrlForPdf(canvas) {
+                if (!isMonochrome) return canvas.toDataURL('image/png');
+
+                const monochromeCanvas = document.createElement('canvas');
+                monochromeCanvas.width = canvas.width;
+                monochromeCanvas.height = canvas.height;
+                const context = monochromeCanvas.getContext('2d');
+                context.drawImage(canvas, 0, 0);
+                const imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+                for (let index = 0; index < imageData.data.length; index += 4) {
+                    const gray = Math.round(
+                        imageData.data[index] * 0.299 +
+                        imageData.data[index + 1] * 0.587 +
+                        imageData.data[index + 2] * 0.114
+                    );
+                    imageData.data[index] = gray;
+                    imageData.data[index + 1] = gray;
+                    imageData.data[index + 2] = gray;
+                }
+                context.putImageData(imageData, 0, 0);
+                return monochromeCanvas.toDataURL('image/png');
+            }
+
             function makeSafeName(s, idx) {
                 const idPart = (s.id || '').trim().replace(/[^a-z0-9_-]/gi, '_');
                 const namePart = (s.name || '').trim().replace(/[^a-z0-9_-]/gi, '_');
@@ -2367,6 +2795,68 @@
                         students[prev] = backup;
                         setFormData(students[prev]);
                     }
+                }
+            }
+
+            // ==================== PDF Export ====================
+            async function exportAllToPdf() {
+                if (isExporting || students.length === 0) {
+                    if (students.length === 0) showToast('No students to export', 'error');
+                    return;
+                }
+                if (!window.jspdf || !window.jspdf.jsPDF) {
+                    showToast('PDF library could not be loaded. Check your internet connection.', 'error');
+                    return;
+                }
+
+                isExporting = true;
+                downloadAllPdfBtn.disabled = true;
+                downloadAllPdfBtn.innerHTML = '<span class="spinner"></span>Creating PDF...';
+                progressWrap.classList.add('show');
+                const backupIndex = activeIndex;
+                const backupData = backupIndex >= 0 ? getFormData() : null;
+                const pdf = new window.jspdf.jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+                const pageWidth = 210;
+                const cardWidth = 88;
+                const cardHeight = cardWidth * 399 / 263;
+                const left = (pageWidth - (cardWidth * 2 + 8)) / 2;
+
+                try {
+                    for (let index = 0; index < students.length; index++) {
+                        const student = students[index];
+                        progressText.textContent = `Rendering #${index + 1}: ${student.name || 'Student'}`;
+                        progressCount.textContent = `${index + 1} / ${students.length}`;
+                        await ensureStudentPhoto(student);
+                        setFormData(student);
+                        await new Promise(resolve => setTimeout(resolve, 80));
+
+                        const frontCanvas = await renderElementToCanvas(frontCard, 2);
+                        const backCanvas = await renderElementToCanvas(backCard, 2);
+                        if (index > 0) pdf.addPage();
+                        const top = Math.max(10, (297 - cardHeight) / 2);
+                        pdf.addImage(canvasDataUrlForPdf(frontCanvas), 'PNG', left, top, cardWidth, cardHeight);
+                        pdf.addImage(canvasDataUrlForPdf(backCanvas), 'PNG', left + cardWidth + 8, top, cardWidth, cardHeight);
+                    }
+
+                    pdf.save(`bharathi_id_cards_all_${new Date().toISOString().slice(0, 10)}.pdf`);
+                    progressFill.style.width = '100%';
+                    progressText.textContent = `Completed ${students.length} student cards`;
+                    showToast('✅ All cards downloaded as one PDF', 'success');
+                } catch (err) {
+                    console.error('PDF export error:', err);
+                    showToast('❌ PDF export failed: ' + err.message, 'error');
+                } finally {
+                    if (backupData && backupIndex >= 0 && backupIndex < students.length) {
+                        students[backupIndex] = backupData;
+                        setFormData(students[backupIndex]);
+                    }
+                    isExporting = false;
+                    downloadAllPdfBtn.disabled = false;
+                    downloadAllPdfBtn.innerHTML = '📄 Download All Cards PDF';
+                    setTimeout(() => {
+                        progressWrap.classList.remove('show');
+                        progressFill.style.width = '0%';
+                    }, 2500);
                 }
             }
 
@@ -2516,7 +3006,7 @@
             const formInputs = [
                 inputName, inputCourse, inputBatch, inputId,
                 inputDob, inputFather, inputBlood, inputPhone,
-                inputAddress, inputEmergency
+                inputAddress, inputOfficeAddress, inputEmergency
             ];
 
             formInputs.forEach(inp => {
@@ -2633,6 +3123,12 @@
                 showToast('💾 Record saved', 'success');
             });
             deleteCurrentBtn.addEventListener('click', deleteCurrent);
+            colorModeBtn.addEventListener('click', () => {
+                isMonochrome = !isMonochrome;
+                cardDuo.classList.toggle('monochrome', isMonochrome);
+                colorModeBtn.setAttribute('aria-pressed', String(isMonochrome));
+                colorModeBtn.textContent = isMonochrome ? '◐ B&W' : '◐ Color';
+            });
             downloadCurrentBtn.addEventListener('click', () => {
                 if (activeIndex < 0 || !students[activeIndex]) {
                     showToast('No student selected', 'error');
@@ -2640,6 +3136,7 @@
                 }
                 exportOne(students[activeIndex], activeIndex + 1);
             });
+            downloadAllPdfBtn.addEventListener('click', exportAllToPdf);
 
             exportRosterBtn.addEventListener('click', exportRosterCsv);
 
@@ -2679,6 +3176,7 @@
 
             importPastedBtn.addEventListener('click', importPastedData);
             searchInput.addEventListener('input', renderStudentList);
+            savedSheetsSearch.addEventListener('input', renderSavedSheets);
 
             // Export Listeners
             exportBtn.addEventListener('click', () => {
@@ -2703,6 +3201,12 @@
 
             // ==================== Initialization ====================
             loadFromStorage();
+            if (savedSheets.length > 0) {
+                const latestSheet = savedSheets[savedSheets.length - 1];
+                activeSavedSheetId = latestSheet.id;
+                students = latestSheet.students.map(student => ({ ...emptyStudent(), ...student }));
+                sheetTitleInput.value = latestSheet.title;
+            }
             if (students.length > 0) {
                 activeIndex = 0;
                 setFormData(students[0]);
@@ -2712,6 +3216,7 @@
             }
             renderStudentList();
             updateStats();
+            renderSavedSheets();
 
             // Default prefill sheet URL from the user
             sheetUrl.value = 'https://docs.google.com/spreadsheets/d/1WlV_EWQZE1b1sVhKqY7396CU9-cxBxp495OY45iknJI/edit?gid=0#gid=0';
