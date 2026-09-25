@@ -900,6 +900,10 @@
             gap: 3px;
         }
 
+        .form-field-wide {
+            grid-column: 1 / -1;
+        }
+
         .form-field label {
             font-size: 11px;
             font-weight: 700;
@@ -1384,67 +1388,6 @@
                                 <span class="label-text">Emergency Contact</span>
                                 <span class="value-text" id="valBackEmergency">—</span>
                             </div>
-                            <div class="field-badge back-OfficeAddress">
-                                <!-- <span class="label-text">Emergency Contact</span> -->
-                                <span class="value-text" id="valOfficeAddress">
-                                    <!-- Ambuttur -->
-                                    29 GNG Colony, 2nd St, VaradarajaPuram, <br> Ambattur Chennai, Tamil Nadu 600053
-                                    
-                                    <!-- Ambur -->
-                                    <!-- No.104, S.K. Road, Dr.Nagaraj Hospital <br> (2nd Floor), Krishnapuram, Ambur -635 802 -->
-
-                                    <!-- Ariyalur -->
-                                    <!-- No. 36/12, Vellalar Street, Ragavan Complex, <br> TMB Bank 2nd Floor, Ariyalur - 621704 -->
-                                    
-                                    <!-- Broadway -->
-                                    <!-- No.108, Thambuchetti Street, Kalikammbal <br> Kovil Opp. Broadway, Chennai - 600 001 -->
-
-                                    <!-- Kallakuruchi -->
-                                    <!-- No.59, 3rd floor, Gopuram towers, <br> Dhurugam Road, Kallakurichi - 606202 -->
-
-                                    <!-- Kanchipuram -->
-                                    <!-- No.17 A, Ulagalandhar Mada Street, Near <br> Aruna Mahal, Big Kanchipuram, <br> Kanchipuram – 6631 502 -->
-                                  
-                                    <!-- Dindugal -->
-                                    <!-- No 10, LGB compound, E.B colony, Near <br> Anil semiya head office, Dindigul 624001 -->
-                                  
-                                    <!-- Cuddalore -->
-                                    <!-- No.25, S.N.Chavadi Road, K.V.Tex Near, <br> SRG Tours, Cuddalore. -->
-                                  
-                                    <!-- Karaikudi -->
-                                    <!-- No.47, Ramal Residence, Mudiyarasan Salai, <br> Karaikudi – 630 002 -->
-                                  
-                                    <!-- Ranipet -->
-                                    <!-- No.9, M.B.T. Road, Navalpur, Vimal <br> Shopping Complex, Ranipet – 632 402 -->
-
-                                    <!-- Salem -->
-                                    <!-- No.14/1, SMPDA Chambers, LIC Colony, <br> New Bus Stand, Salem – 636 004 -->
-                                   
-                                    <!-- Tambaram -->
-                                    <!-- No.95, Rajaji Road, Near Vasan Eye Care <br> Hospital, Tambaram, Chennai – 600045 -->
-
-                                    <!-- Tirunelveli -->
-                                    <!-- No.171, Hindu Nadar Sangam Complex, <br> S N High Road, Tirunelveli Junction, <br> Tirunelveli - 627 001 -->
-                                  
-                                    <!-- Tindivanam -->
-                                    <!-- No 15, Subramaniya Swami Koil Street, <br> Tindivanam, 604001 -->
-
-                                    <!-- Tiruvannamalai -->
-                                    <!-- No.15/5, Pollur Main Road, Near <br> Axis Bank, Thiruvannamalai – 606 601 -->
-
-                                    <!-- Tiruchirappalli -->
-                                    <!-- 25, Nandhi Koil St, Theppakulam, <br> Tiruchirappalli, Tamil Nadu 620002 -->
-
-                                    <!-- Vellore -->
-                                    <!-- No. 29-B, IDA SCUDDAR Road, 3rd Floor, <br> Jambubala Complex, Vellore - 632004 -->
-                                    
-                                    <!-- Villupuram -->
-                                    <!-- No.793, Nerhuji Road, Indian Bank <br> Upstairs, Villupuram-605 602 -->
-                                    
-                                    
-                                    <br>Phone : 9444120052
-                                    <br>E-mail : bharathiichm@gmail.com </span>
-                            </div>
                         </div>
                     </div>
 
@@ -1489,12 +1432,12 @@
                         <textarea id="inputAddress" placeholder="Full address" rows="2"></textarea>
                     </div>
                     <div class="form-field">
-                        <label for="inputOfficeAddress">Branch / Office Address</label>
-                        <textarea id="inputOfficeAddress" placeholder="Branch office address" rows="3"></textarea>
-                    </div>
-                    <div class="form-field">
                         <label for="inputEmergency">Emergency Contact</label>
                         <input type="text" id="inputEmergency" placeholder="Emergency contact number">
+                    </div>
+                    <div class="form-field form-field-wide">
+                        <label for="inputOfficeAddress">Branch / Office Address</label>
+                        <textarea id="inputOfficeAddress" placeholder="Branch office address" rows="3"></textarea>
                     </div>
                 </div>
 
@@ -1680,8 +1623,10 @@
             // ==================== Application State ====================
             const STORAGE_KEY = 'bharathi_id_cards_data_v5';
             const SAVED_SHEETS_KEY = 'bharathi_saved_sheets_v1';
+            const OFFICE_ADDRESS_KEY = 'bharathi_office_address_v1';
             let students = [];
             let savedSheets = [];
+            let officeAddress = defaultOfficeAddress;
             let activeSavedSheetId = null;
             let activeIndex = -1;
             let currentPhoto = '';
@@ -1725,7 +1670,7 @@
             function emptyStudent() {
                 return {
                     name: '', course: '', batch: '', id: '', dob: '',
-                    father: '', blood: '', phone: '', address: '', officeAddress: defaultOfficeAddress, emergency: '',
+                    father: '', blood: '', phone: '', address: '', emergency: '',
                     photo: ''
                 };
             }
@@ -1744,6 +1689,12 @@
                             students = parsed;
                         }
                     }
+                    const savedOfficeAddress = localStorage.getItem(OFFICE_ADDRESS_KEY);
+                    if (savedOfficeAddress !== null) {
+                        officeAddress = savedOfficeAddress;
+                    } else if (students[0] && students[0].officeAddress) {
+                        officeAddress = students[0].officeAddress;
+                    }
                     const savedSheetsRaw = localStorage.getItem(SAVED_SHEETS_KEY);
                     const parsedSheets = savedSheetsRaw ? JSON.parse(savedSheetsRaw) : [];
                     if (Array.isArray(parsedSheets)) {
@@ -1757,6 +1708,7 @@
             function saveToStorage() {
                 try {
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
+                    localStorage.setItem(OFFICE_ADDRESS_KEY, officeAddress);
                     const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
                     if (activeSheet) {
                         activeSheet.students = students.map(student => ({ ...student }));
@@ -1897,7 +1849,7 @@
                 inputBlood.value = s.blood || '';
                 inputPhone.value = s.phone || '';
                 inputAddress.value = s.address || '';
-                inputOfficeAddress.value = s.officeAddress || defaultOfficeAddress;
+                inputOfficeAddress.value = officeAddress;
                 inputEmergency.value = s.emergency || '';
 
                 currentPhoto = s.photo || '';
@@ -1921,7 +1873,6 @@
                     blood: inputBlood.value.trim(),
                     phone: inputPhone.value.trim(),
                     address: inputAddress.value.trim(),
-                    officeAddress: inputOfficeAddress.value.trim(),
                     emergency: inputEmergency.value.trim(),
                     photo: currentPhoto
                 };
@@ -3011,12 +2962,18 @@
 
             formInputs.forEach(inp => {
                 inp.addEventListener('input', () => {
+                    if (inp === inputOfficeAddress) {
+                        officeAddress = inputOfficeAddress.value;
+                    }
                     updateBadges();
                     saveCurrentToActive();
                     renderStudentList();
                     updateStats();
                 });
                 inp.addEventListener('change', () => {
+                    if (inp === inputOfficeAddress) {
+                        officeAddress = inputOfficeAddress.value;
+                    }
                     updateBadges();
                     saveCurrentToActive();
                     renderStudentList();
@@ -3205,6 +3162,9 @@
                 const latestSheet = savedSheets[savedSheets.length - 1];
                 activeSavedSheetId = latestSheet.id;
                 students = latestSheet.students.map(student => ({ ...emptyStudent(), ...student }));
+                if (localStorage.getItem(OFFICE_ADDRESS_KEY) === null && students[0]?.officeAddress) {
+                    officeAddress = students[0].officeAddress;
+                }
                 sheetTitleInput.value = latestSheet.title;
             }
             if (students.length > 0) {
