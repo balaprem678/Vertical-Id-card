@@ -1387,6 +1387,12 @@
         }
 
         .client-folder-panel {
+            position: sticky;
+            top: 68px;
+            display: flex;
+            min-height: 220px;
+            max-height: calc(100vh - 105px);
+            flex-direction: column;
             padding: 14px;
             border: 1px solid var(--admin-line);
             border-radius: 8px;
@@ -1411,8 +1417,12 @@
 
         .client-folder-list {
             display: flex;
+            min-height: 0;
             flex-direction: column;
             gap: 6px;
+            overflow: auto;
+            overscroll-behavior: contain;
+            scrollbar-gutter: stable;
         }
 
         .all-projects-button {
@@ -1512,6 +1522,88 @@
         .folder-action:hover { background: #e4ece6; color: var(--admin-ink); }
 
         .projects-content { min-width: 0; }
+
+        .projects-content-tools {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .view-toggle {
+            display: inline-flex;
+            gap: 2px;
+            padding: 3px;
+            border: 1px solid #d7e2db;
+            border-radius: 7px;
+            background: #edf3ef;
+        }
+
+        .view-toggle-button {
+            min-height: 30px;
+            padding: 5px 9px;
+            border: 1px solid transparent;
+            border-radius: 5px;
+            background: transparent;
+            color: #586e63;
+            font: inherit;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .view-toggle-button.active {
+            border-color: #d8e4dc;
+            background: #fff;
+            color: var(--admin-green);
+            box-shadow: 0 1px 3px rgba(24, 53, 47, 0.1);
+        }
+
+        .view-toggle-button:focus-visible,
+        .folder-open-button:focus-visible,
+        .all-projects-button:focus-visible {
+            outline: 2px solid var(--admin-green);
+            outline-offset: 2px;
+        }
+
+        .projects-content .project-grid {
+            max-height: calc(100vh - 260px);
+            min-height: 220px;
+            overflow: auto;
+            overscroll-behavior: contain;
+            align-content: start;
+            padding: 1px 7px 12px 1px;
+            scrollbar-gutter: stable;
+        }
+
+        .projects-content .project-grid.table-view {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+            border: 1px solid var(--admin-line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .projects-content .table-view .project-card {
+            display: grid;
+            grid-template-columns: minmax(190px, 1.5fr) minmax(115px, 0.7fr) minmax(145px, 1fr) auto;
+            align-items: center;
+            gap: 12px;
+            min-height: 70px;
+            padding: 10px 14px;
+            border: 0;
+            border-bottom: 1px solid #e7ede8;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .projects-content .table-view .project-card:last-of-type { border-bottom: 0; }
+        .projects-content .table-view .project-card:hover { transform: none; background: #f8fbf8; box-shadow: none; }
+        .projects-content .table-view .project-card-top { align-items: center; }
+        .projects-content .table-view .project-card p { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .projects-content .table-view .project-icon { width: 34px; height: 34px; flex-basis: 34px; font-size: 17px; }
+        .projects-content .table-view .project-meta { padding: 0; border: 0; }
+        .projects-content .table-view .project-actions { margin: 0; justify-content: flex-end; }
+        .projects-content .table-view .project-move-select { width: auto; }
 
         .projects-content-head {
             display: flex;
@@ -1844,6 +1936,43 @@
             .project-section-heading h2 { font-size: 17px; }
         }
 
+        @media (max-width: 760px) {
+            .client-folder-panel {
+                top: 62px;
+                max-height: 34vh;
+                min-height: 0;
+            }
+
+            .client-folder-list {
+                display: grid;
+                max-height: calc(34vh - 75px);
+                grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            }
+
+            .projects-content-head { flex-wrap: wrap; }
+            .projects-content .project-grid { max-height: calc(100vh - 340px); }
+
+            .projects-content .table-view .project-card {
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 8px 12px;
+            }
+
+            .projects-content .table-view .project-card-top,
+            .projects-content .table-view .project-meta,
+            .projects-content .table-view .project-move-select,
+            .projects-content .table-view .project-actions {
+                grid-column: 1 / -1;
+            }
+
+            .projects-content .table-view .project-actions { justify-content: flex-start; }
+            .projects-content .table-view .project-move-select { width: 100%; }
+        }
+
+        @media (max-width: 420px) {
+            .projects-content-tools { width: 100%; justify-content: space-between; }
+            .projects-content .project-grid { max-height: calc(100vh - 360px); }
+        }
+
         @media (prefers-reduced-motion: reduce) {
             *, *::before, *::after {
                 scroll-behavior: auto !important;
@@ -1925,7 +2054,13 @@
                 <section class="projects-content" aria-labelledby="projectsViewHeading">
                     <div class="projects-content-head">
                         <h2 id="projectsViewHeading">All projects</h2>
-                        <span id="projectsViewCount">0 projects</span>
+                        <div class="projects-content-tools">
+                            <span id="projectsViewCount">0 projects</span>
+                            <div class="view-toggle" role="group" aria-label="Project display format">
+                                <button class="view-toggle-button active" type="button" data-project-view="grid" aria-pressed="true">▦ Grid</button>
+                                <button class="view-toggle-button" type="button" data-project-view="table" aria-pressed="false">☷ Table</button>
+                            </div>
+                        </div>
                     </div>
                     <div class="project-grid" id="projectsGrid"></div>
                 </section>
@@ -2374,6 +2509,7 @@
             let savedSheets = [];
             let clientFolders = [];
             let activeProjectFolderId = null;
+            let projectViewMode = 'grid';
             let activeSavedSheetId = null;
             let activeIndex = -1;
             let currentPhoto = '';
@@ -2679,6 +2815,7 @@
             function renderProjectViews() {
                 dashboardProjectGrid.replaceChildren();
                 projectsGrid.replaceChildren();
+                projectsGrid.classList.toggle('table-view', projectViewMode === 'table');
                 clientFolderList.replaceChildren();
                 const orderedSheets = savedSheets.slice().reverse();
                 const recentSheets = orderedSheets.slice(0, 3);
@@ -2735,6 +2872,16 @@
                 saveToStorage();
                 renderProjectViews();
                 showToast(`Created ${name} folder`, 'success');
+            }
+
+            function setProjectView(mode) {
+                projectViewMode = mode === 'table' ? 'table' : 'grid';
+                document.querySelectorAll('[data-project-view]').forEach(button => {
+                    const isActive = button.dataset.projectView === projectViewMode;
+                    button.classList.toggle('active', isActive);
+                    button.setAttribute('aria-pressed', String(isActive));
+                });
+                renderProjectViews();
             }
 
             function renderSavedSheets() {
@@ -4188,6 +4335,9 @@
                 event.preventDefault();
                 allClientProjectsBtn.classList.remove('drag-target');
                 moveSheetToFolder(event.dataTransfer.getData('text/plain'), null);
+            });
+            document.querySelectorAll('[data-project-view]').forEach(button => {
+                button.addEventListener('click', () => setProjectView(button.dataset.projectView));
             });
             window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
 
