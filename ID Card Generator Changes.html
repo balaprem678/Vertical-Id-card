@@ -1173,7 +1173,7 @@
         }
 
         .back-OfficeAddress {
-     position: absolute;
+       position: absolute;
     top: 315px;
     text-align: center;
     width: 100%;
@@ -1182,6 +1182,476 @@
 
         .back-OfficeAddress .value-text {
             white-space: pre-line;
+        }
+
+        .primary-nav {
+            display: flex;
+            gap: 8px;
+            padding: 0 0 16px;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .nav-button {
+            border: 1px solid transparent;
+            border-radius: 9px;
+            padding: 9px 14px;
+            background: transparent;
+            color: #52616b;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .nav-button:hover,
+        .nav-button.active {
+            background: #e6f4ef;
+            border-color: #b7dfd0;
+            color: #155e49;
+        }
+
+        .app-page[hidden] {
+            display: none !important;
+        }
+
+        .dashboard-page,
+        .projects-page {
+            min-height: 520px;
+        }
+
+        .page-heading {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: flex-end;
+            justify-content: space-between;
+            gap: 14px;
+            margin: 4px 0 20px;
+        }
+
+        .page-heading h1 {
+            margin: 0;
+            color: #162a2a;
+            font-size: 25px;
+        }
+
+        .page-heading p {
+            margin: 6px 0 0;
+            color: #64736f;
+            font-size: 13px;
+        }
+
+        .dashboard-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .metric-card {
+            min-height: 112px;
+            padding: 17px;
+            border: 1px solid #dce7e2;
+            border-top: 3px solid #2f8066;
+            border-radius: 8px;
+            background: #fbfdfc;
+        }
+
+        .metric-card:nth-child(2) { border-top-color: #d18732; }
+        .metric-card:nth-child(3) { border-top-color: #3978a5; }
+        .metric-card:nth-child(4) { border-top-color: #bc6254; }
+
+        .metric-label {
+            color: #64736f;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .metric-value {
+            display: block;
+            margin-top: 10px;
+            color: #162a2a;
+            font-size: 29px;
+            line-height: 1;
+        }
+
+        .project-section-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 12px;
+        }
+
+        .project-section-heading h2 {
+            margin: 0;
+            color: #203433;
+            font-size: 16px;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(245px, 1fr));
+            gap: 12px;
+        }
+
+        .project-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 12px;
+            padding: 16px;
+            border: 1px solid #dce7e2;
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .project-card.automation-card {
+            border-color: #b7dfd0;
+            background: linear-gradient(135deg, #f1faf6, #fff 72%);
+        }
+
+        .project-card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .project-icon {
+            display: grid;
+            width: 38px;
+            height: 38px;
+            flex: 0 0 38px;
+            place-items: center;
+            border-radius: 8px;
+            background: #e6f4ef;
+            font-size: 19px;
+        }
+
+        .project-details { min-width: 0; }
+
+        .project-card h3 {
+            overflow-wrap: anywhere;
+            margin: 0;
+            color: #203433;
+            font-size: 14px;
+        }
+
+        .project-card p {
+            margin: 5px 0 0;
+            color: #64736f;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .project-meta {
+            color: #74817d;
+            font-size: 11px;
+        }
+
+        .project-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px;
+            margin-top: auto;
+        }
+
+        .project-empty {
+            grid-column: 1 / -1;
+            padding: 24px;
+            border: 1px dashed #bfd0c9;
+            border-radius: 8px;
+            color: #64736f;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        @media (max-width: 760px) {
+            .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .app-header h2 { font-size: 16px; }
+        }
+
+        @media (max-width: 420px) {
+            .dashboard-metrics { grid-template-columns: 1fr 1fr; gap: 8px; }
+            .metric-card { min-height: 100px; padding: 12px; }
+            .metric-value { font-size: 25px; }
+            .nav-button { padding: 8px 10px; }
+        }
+
+        :root {
+            --admin-ink: #18352f;
+            --admin-green: #1b5949;
+            --admin-muted: #667872;
+            --admin-line: #d9e3dd;
+            --admin-paper: #f6f8f4;
+            --admin-copper: #d18a43;
+        }
+
+        body {
+            background: linear-gradient(130deg, #e8f0eb 0%, #f3f2e9 58%, #e7ece7 100%);
+            color: var(--admin-ink);
+        }
+
+        .container {
+            max-width: 1360px;
+            border: 1px solid rgba(33, 72, 59, 0.14);
+            border-radius: 16px;
+            background: #fcfdfb;
+            box-shadow: 0 24px 70px rgba(27, 54, 44, 0.12);
+        }
+
+        .app-header {
+            border-bottom-color: var(--admin-line);
+        }
+
+        .app-header h2 {
+            color: var(--admin-ink);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 21px;
+        }
+
+        .app-header .tag {
+            background: #f7ead6;
+            color: #84511e;
+            border-radius: 6px;
+        }
+
+        .primary-nav {
+            gap: 5px;
+            border-bottom-color: var(--admin-line);
+        }
+
+        .nav-button {
+            border-radius: 7px 7px 0 0;
+            padding: 10px 16px;
+            color: #5c6e67;
+            transition: background-color 160ms ease, color 160ms ease, border-color 160ms ease;
+        }
+
+        .nav-button:hover {
+            background: #edf3ef;
+            border-color: #d5e2da;
+            color: var(--admin-green);
+        }
+
+        .nav-button.active {
+            background: var(--admin-green);
+            border-color: var(--admin-green);
+            color: #fff;
+            box-shadow: 0 3px 10px rgba(27, 89, 73, 0.18);
+        }
+
+        .app-page:not([hidden]) {
+            animation: page-arrive 240ms ease-out both;
+        }
+
+        @keyframes page-arrive {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .dashboard-page .page-heading {
+            position: relative;
+            overflow: hidden;
+            min-height: 174px;
+            align-items: center;
+            margin: 0 0 18px;
+            padding: 28px 32px;
+            border: 1px solid #17483d;
+            border-radius: 10px;
+            background-color: #17483d;
+            background-image: repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.025) 0, rgba(255, 255, 255, 0.025) 1px, transparent 1px, transparent 8px), linear-gradient(110deg, #17483d, #286753);
+        }
+
+        .dashboard-page .page-heading h1 {
+            color: #fffdf6;
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 30px;
+            font-weight: 700;
+        }
+
+        .dashboard-page .page-heading p {
+            color: #d0e1d9;
+            font-size: 14px;
+        }
+
+        .dashboard-page .page-heading .btn-primary {
+            border: 1px solid #e1ae69;
+            background: #e1ae69;
+            color: #302315;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.14);
+        }
+
+        .dashboard-page .page-heading .btn-primary:hover {
+            background: #efbf7b;
+        }
+
+        .dashboard-metrics {
+            gap: 14px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            position: relative;
+            overflow: hidden;
+            min-height: 122px;
+            padding: 18px 20px;
+            border: 1px solid var(--admin-line);
+            border-left: 4px solid #38856b;
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 4px 13px rgba(30, 55, 45, 0.045);
+            transition: transform 160ms ease, box-shadow 160ms ease;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 9px 20px rgba(30, 55, 45, 0.09);
+        }
+
+        .metric-card:nth-child(2) { border-left-color: var(--admin-copper); }
+        .metric-card:nth-child(3) { border-left-color: #4a7fa0; }
+        .metric-card:nth-child(4) { border-left-color: #bd6856; }
+
+        .metric-label {
+            color: var(--admin-muted);
+            font-size: 11px;
+            letter-spacing: 0;
+            text-transform: uppercase;
+        }
+
+        .metric-value {
+            margin-top: 14px;
+            color: var(--admin-ink);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 34px;
+        }
+
+        .project-section-heading {
+            margin-bottom: 14px;
+        }
+
+        .project-section-heading h2 {
+            color: var(--admin-ink);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 19px;
+        }
+
+        .project-grid {
+            gap: 14px;
+        }
+
+        .project-card {
+            min-height: 205px;
+            gap: 14px;
+            padding: 18px;
+            border-color: var(--admin-line);
+            border-radius: 8px;
+            box-shadow: 0 5px 16px rgba(30, 55, 45, 0.055);
+            transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+        }
+
+        .project-card:hover {
+            transform: translateY(-2px);
+            border-color: #a9c7b8;
+            box-shadow: 0 11px 24px rgba(30, 55, 45, 0.11);
+        }
+
+        .project-card.automation-card {
+            border-color: #b8d2c3;
+            border-top: 3px solid #38856b;
+            background: linear-gradient(145deg, #f0f7f2, #fff 75%);
+        }
+
+        .project-icon {
+            width: 44px;
+            height: 44px;
+            flex-basis: 44px;
+            border: 1px solid #d2e5d9;
+            border-radius: 8px;
+            background: #e3f0e8;
+            color: var(--admin-green);
+            font-size: 21px;
+        }
+
+        .project-card h3 {
+            color: var(--admin-ink);
+            font-size: 15px;
+        }
+
+        .project-card p {
+            color: #64736e;
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .project-meta {
+            padding-top: 10px;
+            border-top: 1px solid #e9eeea;
+            color: #65776f;
+            font-size: 11px;
+        }
+
+        .project-empty {
+            padding: 30px 20px;
+            border-color: #bfd0c6;
+            background: #f7faf7;
+            color: #5e7168;
+        }
+
+        .projects-page .page-heading {
+            padding: 5px 0 18px;
+            border-bottom: 1px solid var(--admin-line);
+        }
+
+        .projects-page .page-heading h1 {
+            color: var(--admin-ink);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 28px;
+        }
+
+        .projects-page .page-heading p {
+            color: var(--admin-muted);
+        }
+
+        .btn-primary {
+            background: var(--admin-green);
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: #144638;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 10px; }
+            .container { padding: 20px 16px; border-radius: 12px; }
+            .dashboard-page .page-heading { min-height: 150px; padding: 22px; }
+            .dashboard-page .page-heading h1 { font-size: 25px; }
+            .project-card { min-height: 190px; }
+        }
+
+        @media (max-width: 420px) {
+            body { padding: 0; }
+            .container { min-height: 100vh; padding: 16px 12px; border: 0; border-radius: 0; }
+            .app-header h2 { font-size: 16px; }
+            .primary-nav { gap: 2px; }
+            .nav-button { padding: 9px 8px; font-size: 11px; }
+            .dashboard-page .page-heading { min-height: 148px; padding: 18px; }
+            .dashboard-page .page-heading h1 { font-size: 23px; }
+            .dashboard-metrics { gap: 9px; }
+            .metric-card { min-height: 104px; padding: 13px; }
+            .metric-value { margin-top: 11px; font-size: 27px; }
+            .project-section-heading h2 { font-size: 17px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
         }
 
         .principal_sign {
@@ -1204,6 +1674,46 @@
                 <button class="btn btn-outline btn-sm" id="exportRosterBtn">📊 Export Roster (CSV)</button>
             </div>
         </div>
+
+        <nav class="primary-nav" aria-label="Main navigation">
+            <button class="nav-button active" type="button" data-page="dashboardPage">Dashboard</button>
+            <button class="nav-button" type="button" data-page="projectsPage">Projects</button>
+            <button class="nav-button" type="button" data-page="generatorPage">ID Card Generator</button>
+        </nav>
+
+        <section class="app-page dashboard-page" id="dashboardPage" aria-labelledby="dashboardHeading">
+            <div class="page-heading">
+                <div>
+                    <h1 id="dashboardHeading">Admin dashboard</h1>
+                    <p>Overview of saved projects and ID card production.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" type="button" data-open-generator>Open automation</button>
+            </div>
+            <div class="dashboard-metrics">
+                <div class="metric-card"><span class="metric-label">Saved projects</span><strong class="metric-value" id="dashboardProjectCount">0</strong></div>
+                <div class="metric-card"><span class="metric-label">Students in active sheet</span><strong class="metric-value" id="dashboardStudentCount">0</strong></div>
+                <div class="metric-card"><span class="metric-label">Complete records</span><strong class="metric-value" id="dashboardCompleteCount">0</strong></div>
+                <div class="metric-card"><span class="metric-label">Automation tools</span><strong class="metric-value" id="dashboardAutomationCount">1</strong></div>
+            </div>
+            <div class="project-section-heading">
+                <h2>Recent projects</h2>
+                <button class="btn btn-outline btn-sm" type="button" data-open-projects>View all projects</button>
+            </div>
+            <div class="project-grid" id="dashboardProjectGrid"></div>
+        </section>
+
+        <section class="app-page projects-page" id="projectsPage" aria-labelledby="projectsHeading" hidden>
+            <div class="page-heading">
+                <div>
+                    <h1 id="projectsHeading">Projects</h1>
+                    <p>Saved sheets and automation projects for this browser.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" type="button" data-open-generator>＋ New import</button>
+            </div>
+            <div class="project-grid" id="projectsGrid"></div>
+        </section>
+
+        <section class="app-page generator-page" id="generatorPage" hidden>
 
         <!-- Stats Bar -->
         <div class="stats-bar">
@@ -1518,6 +2028,7 @@
 
             </div>
         </div>
+        </section>
     </div>
 
     <!-- Hidden file inputs -->
@@ -1622,6 +2133,11 @@
             const frontCard = document.getElementById('frontCard');
             const backCard = document.getElementById('backCard');
             const toast = document.getElementById('toast');
+            const dashboardProjectGrid = document.getElementById('dashboardProjectGrid');
+            const projectsGrid = document.getElementById('projectsGrid');
+            const dashboardProjectCount = document.getElementById('dashboardProjectCount');
+            const dashboardStudentCount = document.getElementById('dashboardStudentCount');
+            const dashboardCompleteCount = document.getElementById('dashboardCompleteCount');
 
             // ==================== Application State ====================
             const STORAGE_KEY = 'bharathi_id_cards_data_v5';
@@ -1713,7 +2229,126 @@
                 }
             }
 
+            function showPage(pageId, updateHash = true) {
+                const targetPage = document.getElementById(pageId);
+                if (!targetPage || !targetPage.classList.contains('app-page')) pageId = 'dashboardPage';
+                document.querySelectorAll('.app-page').forEach(page => {
+                    page.hidden = page.id !== pageId;
+                });
+                document.querySelectorAll('.nav-button').forEach(button => {
+                    const isActive = button.dataset.page === pageId;
+                    button.classList.toggle('active', isActive);
+                    button.setAttribute('aria-current', isActive ? 'page' : 'false');
+                });
+                if (updateHash && window.location.hash !== `#${pageId}`) {
+                    window.location.hash = pageId;
+                }
+            }
+
+            function createProjectCard({ title, description, icon, meta, className = '' }) {
+                const card = document.createElement('article');
+                card.className = `project-card ${className}`.trim();
+                const top = document.createElement('div');
+                top.className = 'project-card-top';
+                const iconElement = document.createElement('span');
+                iconElement.className = 'project-icon';
+                iconElement.setAttribute('aria-hidden', 'true');
+                iconElement.textContent = icon;
+                top.appendChild(iconElement);
+                const details = document.createElement('div');
+                details.className = 'project-details';
+                top.appendChild(details);
+                card.appendChild(top);
+
+                const titleElement = document.createElement('h3');
+                titleElement.textContent = title;
+                const descriptionElement = document.createElement('p');
+                descriptionElement.textContent = description;
+                details.append(titleElement, descriptionElement);
+
+                if (meta) {
+                    const metaElement = document.createElement('span');
+                    metaElement.className = 'project-meta';
+                    metaElement.textContent = meta;
+                    card.appendChild(metaElement);
+                }
+
+                const actions = document.createElement('div');
+                actions.className = 'project-actions';
+                card.appendChild(actions);
+                return { card, actions };
+            }
+
+            function addProjectAction(actions, label, onClick, className = 'btn btn-outline btn-sm') {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = className;
+                button.textContent = label;
+                button.addEventListener('click', onClick);
+                actions.appendChild(button);
+            }
+
+            function createAutomationCard() {
+                const { card, actions } = createProjectCard({
+                    title: 'ID Card Automation',
+                    description: 'Import student data, manage records, and generate print-ready ID cards in batches.',
+                    icon: '▤',
+                    meta: 'Automation · Available'
+                });
+                card.classList.add('automation-card');
+                addProjectAction(actions, 'Open automation', () => showPage('generatorPage'), 'btn btn-primary btn-sm');
+                return card;
+            }
+
+            function createSavedSheetCard(sheet) {
+                const studentCount = Array.isArray(sheet.students) ? sheet.students.length : 0;
+                const savedDate = sheet.savedAt && !Number.isNaN(Date.parse(sheet.savedAt))
+                    ? new Date(sheet.savedAt).toLocaleDateString()
+                    : 'Saved sheet';
+                const { card, actions } = createProjectCard({
+                    title: sheet.title || 'Untitled project',
+                    description: sheet.sourceName ? `Source: ${sheet.sourceName}` : 'Saved student roster',
+                    icon: '▦',
+                    meta: `${studentCount} students · ${savedDate}`
+                });
+                addProjectAction(actions, 'Open', () => {
+                    loadSavedSheet(sheet.id);
+                    showPage('generatorPage');
+                }, 'btn btn-primary btn-sm');
+                addProjectAction(actions, 'Rename', () => renameSavedSheet(sheet.id));
+                addProjectAction(actions, 'Delete', () => deleteSavedSheet(sheet.id), 'btn btn-danger btn-sm');
+                return card;
+            }
+
+            function renderProjectViews() {
+                dashboardProjectGrid.replaceChildren();
+                projectsGrid.replaceChildren();
+                const orderedSheets = savedSheets.slice().reverse();
+                const recentSheets = orderedSheets.slice(0, 3);
+
+                dashboardProjectGrid.appendChild(createAutomationCard());
+                if (recentSheets.length === 0) {
+                    const empty = document.createElement('div');
+                    empty.className = 'project-empty';
+                    empty.textContent = 'No saved projects yet. Open the automation to import your first student sheet.';
+                    dashboardProjectGrid.appendChild(empty);
+                } else {
+                    recentSheets.forEach(sheet => dashboardProjectGrid.appendChild(createSavedSheetCard(sheet)));
+                }
+
+                projectsGrid.appendChild(createAutomationCard());
+                if (orderedSheets.length === 0) {
+                    const empty = document.createElement('div');
+                    empty.className = 'project-empty';
+                    empty.textContent = 'No saved sheets yet. Start an import in ID Card Generator to create a project.';
+                    projectsGrid.appendChild(empty);
+                } else {
+                    orderedSheets.forEach(sheet => projectsGrid.appendChild(createSavedSheetCard(sheet)));
+                }
+            }
+
             function renderSavedSheets() {
+                renderProjectViews();
                 savedSheetsList.innerHTML = '';
                 if (savedSheets.length === 0) {
                     savedSheetsList.innerHTML = '<div style="font-size:11px;color:#94a3b8;">No saved sheets yet.</div>';
@@ -1831,6 +2466,10 @@
                     exportTo.value = Math.min(parseInt(exportTo.value, 10) || total, total);
                     exportFrom.value = Math.min(parseInt(exportFrom.value, 10) || 1, total);
                 }
+                dashboardProjectCount.textContent = savedSheets.length;
+                dashboardStudentCount.textContent = total;
+                dashboardCompleteCount.textContent = complete;
+                renderProjectViews();
             }
 
             function setFormData(s) {
@@ -3135,6 +3774,16 @@
             importPastedBtn.addEventListener('click', importPastedData);
             searchInput.addEventListener('input', renderStudentList);
             savedSheetsSearch.addEventListener('input', renderSavedSheets);
+            document.querySelectorAll('.nav-button').forEach(button => {
+                button.addEventListener('click', () => showPage(button.dataset.page));
+            });
+            document.querySelectorAll('[data-open-generator]').forEach(button => {
+                button.addEventListener('click', () => showPage('generatorPage'));
+            });
+            document.querySelectorAll('[data-open-projects]').forEach(button => {
+                button.addEventListener('click', () => showPage('projectsPage'));
+            });
+            window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
 
             // Export Listeners
             exportBtn.addEventListener('click', () => {
@@ -3175,6 +3824,7 @@
             renderStudentList();
             updateStats();
             renderSavedSheets();
+            showPage(window.location.hash.slice(1) || 'dashboardPage', false);
 
             // Default prefill sheet URL from the user
             sheetUrl.value = 'https://docs.google.com/spreadsheets/d/1WlV_EWQZE1b1sVhKqY7396CU9-cxBxp495OY45iknJI/edit?gid=0#gid=0';
