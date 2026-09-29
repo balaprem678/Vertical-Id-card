@@ -1379,6 +1379,177 @@
             text-align: center;
         }
 
+        .project-organizer {
+            display: grid;
+            grid-template-columns: 245px minmax(0, 1fr);
+            align-items: start;
+            gap: 16px;
+        }
+
+        .client-folder-panel {
+            padding: 14px;
+            border: 1px solid var(--admin-line);
+            border-radius: 8px;
+            background: #f7faf7;
+        }
+
+        .folder-panel-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 0 0 10px;
+            color: var(--admin-ink);
+            font-size: 12px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .folder-panel-title span {
+            color: var(--admin-muted);
+            font-size: 11px;
+        }
+
+        .client-folder-list {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .all-projects-button {
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 7px;
+            padding: 10px 9px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            background: transparent;
+            color: var(--admin-ink);
+            font: inherit;
+            font-size: 12px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .all-projects-button.active,
+        .all-projects-button:hover,
+        .all-projects-button.drag-target {
+            border-color: #bad1c2;
+            background: #eaf3ed;
+        }
+
+        .all-projects-button.drag-target { box-shadow: inset 0 0 0 1px var(--admin-green); }
+
+        .client-folder-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 4px;
+            padding: 5px;
+            border: 1px solid transparent;
+            border-radius: 7px;
+            transition: background-color 140ms ease, border-color 140ms ease;
+        }
+
+        .client-folder-row.active {
+            border-color: #bad1c2;
+            background: #eaf3ed;
+        }
+
+        .client-folder-row.drag-target {
+            border-color: var(--admin-green);
+            background: #d9ecdf;
+            box-shadow: inset 0 0 0 1px var(--admin-green);
+        }
+
+        .folder-open-button {
+            display: flex;
+            min-width: 0;
+            align-items: center;
+            gap: 9px;
+            padding: 8px 7px;
+            border: 0;
+            border-radius: 5px;
+            background: transparent;
+            color: var(--admin-ink);
+            font: inherit;
+            font-size: 12px;
+            text-align: left;
+            cursor: pointer;
+        }
+
+        .folder-open-button:hover { background: rgba(255, 255, 255, 0.75); }
+        .folder-open-button .folder-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+        .folder-glyph {
+            flex: 0 0 auto;
+            color: #b57932;
+            font-size: 16px;
+        }
+
+        .folder-count {
+            margin-left: auto;
+            color: #718079;
+            font-size: 10px;
+        }
+
+        .folder-row-actions {
+            display: flex;
+            gap: 2px;
+        }
+
+        .folder-action {
+            padding: 4px 5px;
+            border: 0;
+            border-radius: 4px;
+            background: transparent;
+            color: #65776f;
+            font-size: 10px;
+            cursor: pointer;
+        }
+
+        .folder-action:hover { background: #e4ece6; color: var(--admin-ink); }
+
+        .projects-content { min-width: 0; }
+
+        .projects-content-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            margin: 0 0 12px;
+        }
+
+        .projects-content-head h2 {
+            margin: 0;
+            color: var(--admin-ink);
+            font-family: 'Palatino Linotype', 'Book Antiqua', Georgia, serif;
+            font-size: 19px;
+            overflow-wrap: anywhere;
+        }
+
+        .projects-content-head span { color: var(--admin-muted); font-size: 11px; }
+
+        .project-move-select {
+            width: 100%;
+            min-width: 0;
+            padding: 7px 9px;
+            border: 1px solid #d5e0d9;
+            border-radius: 6px;
+            background: #fbfdfb;
+            color: #52655c;
+            font: inherit;
+            font-size: 11px;
+        }
+
+        .project-card.dragging { opacity: 0.48; }
+
+        @media (max-width: 760px) {
+            .project-organizer { grid-template-columns: 1fr; }
+            .client-folder-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); }
+        }
+
         @media (max-width: 760px) {
             .dashboard-metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
             .app-header h2 { font-size: 16px; }
@@ -1734,11 +1905,31 @@
             <div class="page-heading">
                 <div>
                     <h1 id="projectsHeading">Projects</h1>
-                    <p>Saved sheets and automation projects for this browser.</p>
+                    <p>Keep each client's saved sheets together in one folder.</p>
                 </div>
-                <button class="btn btn-primary btn-sm" type="button" data-open-generator>＋ New import</button>
+                <div class="project-actions">
+                    <button class="btn btn-outline btn-sm" type="button" id="newClientFolderBtn">＋ Client Folder</button>
+                    <button class="btn btn-primary btn-sm" type="button" data-open-generator>＋ New import</button>
+                </div>
             </div>
-            <div class="project-grid" id="projectsGrid"></div>
+            <div class="project-organizer">
+                <aside class="client-folder-panel" aria-label="Client folders">
+                    <div class="folder-panel-title">Clients <span id="clientFolderCount">0</span></div>
+                    <button class="all-projects-button active" type="button" id="allClientProjectsBtn">
+                        <span class="folder-glyph" aria-hidden="true">▤</span>
+                        <span>All projects</span>
+                        <span class="folder-count" id="allProjectsCount">0</span>
+                    </button>
+                    <div class="client-folder-list" id="clientFolderList"></div>
+                </aside>
+                <section class="projects-content" aria-labelledby="projectsViewHeading">
+                    <div class="projects-content-head">
+                        <h2 id="projectsViewHeading">All projects</h2>
+                        <span id="projectsViewCount">0 projects</span>
+                    </div>
+                    <div class="project-grid" id="projectsGrid"></div>
+                </section>
+            </div>
         </section>
 
         <section class="app-page generator-page" id="generatorPage" hidden>
@@ -2164,6 +2355,13 @@
             const toast = document.getElementById('toast');
             const dashboardProjectGrid = document.getElementById('dashboardProjectGrid');
             const projectsGrid = document.getElementById('projectsGrid');
+            const clientFolderList = document.getElementById('clientFolderList');
+            const clientFolderCount = document.getElementById('clientFolderCount');
+            const projectsViewHeading = document.getElementById('projectsViewHeading');
+            const projectsViewCount = document.getElementById('projectsViewCount');
+            const newClientFolderBtn = document.getElementById('newClientFolderBtn');
+            const allClientProjectsBtn = document.getElementById('allClientProjectsBtn');
+            const allProjectsCount = document.getElementById('allProjectsCount');
             const dashboardProjectCount = document.getElementById('dashboardProjectCount');
             const dashboardStudentCount = document.getElementById('dashboardStudentCount');
             const dashboardCompleteCount = document.getElementById('dashboardCompleteCount');
@@ -2171,8 +2369,11 @@
             // ==================== Application State ====================
             const STORAGE_KEY = 'bharathi_id_cards_data_v5';
             const SAVED_SHEETS_KEY = 'bharathi_saved_sheets_v1';
+            const CLIENT_FOLDERS_KEY = 'bharathi_client_folders_v1';
             let students = [];
             let savedSheets = [];
+            let clientFolders = [];
+            let activeProjectFolderId = null;
             let activeSavedSheetId = null;
             let activeIndex = -1;
             let currentPhoto = '';
@@ -2240,6 +2441,11 @@
                     if (Array.isArray(parsedSheets)) {
                         savedSheets = parsedSheets.filter(sheet => sheet && Array.isArray(sheet.rows) && Array.isArray(sheet.students));
                     }
+                    const foldersRaw = localStorage.getItem(CLIENT_FOLDERS_KEY);
+                    const parsedFolders = foldersRaw ? JSON.parse(foldersRaw) : [];
+                    if (Array.isArray(parsedFolders)) {
+                        clientFolders = parsedFolders.filter(folder => folder && typeof folder.id === 'string' && typeof folder.name === 'string');
+                    }
                 } catch (e) {
                     console.warn('LocalStorage load failed', e);
                 }
@@ -2253,6 +2459,7 @@
                         activeSheet.students = students.map(student => ({ ...student }));
                     }
                     localStorage.setItem(SAVED_SHEETS_KEY, JSON.stringify(savedSheets));
+                    localStorage.setItem(CLIENT_FOLDERS_KEY, JSON.stringify(clientFolders));
                 } catch (e) {
                     console.warn('LocalStorage save failed', e);
                 }
@@ -2332,7 +2539,104 @@
                 return card;
             }
 
-            function createSavedSheetCard(sheet) {
+            function moveSheetToFolder(sheetId, folderId) {
+                const sheet = savedSheets.find(item => item.id === sheetId);
+                if (!sheet) return;
+                sheet.folderId = folderId || null;
+                saveToStorage();
+                renderProjectViews();
+                const folder = clientFolders.find(item => item.id === sheet.folderId);
+                showToast(folder ? `Moved to ${folder.name}` : 'Moved to All projects', 'success');
+            }
+
+            function renameClientFolder(folderId) {
+                const folder = clientFolders.find(item => item.id === folderId);
+                if (!folder) return;
+                const enteredName = prompt('Enter a new name for this client folder:', folder.name);
+                if (!enteredName || !enteredName.trim()) return;
+                const name = enteredName.trim();
+                const duplicate = clientFolders.some(item => item.id !== folderId && item.name.toLowerCase() === name.toLowerCase());
+                if (duplicate) {
+                    showToast('A client folder with that name already exists', 'error');
+                    return;
+                }
+                folder.name = name;
+                saveToStorage();
+                renderProjectViews();
+                showToast('Client folder renamed', 'success');
+            }
+
+            function deleteClientFolder(folderId) {
+                const folder = clientFolders.find(item => item.id === folderId);
+                if (!folder || !confirm(`Delete the folder "${folder.name}"? Its saved sheets will stay in All projects.`)) return;
+                savedSheets.forEach(sheet => {
+                    if (sheet.folderId === folderId) sheet.folderId = null;
+                });
+                clientFolders = clientFolders.filter(item => item.id !== folderId);
+                if (activeProjectFolderId === folderId) activeProjectFolderId = null;
+                saveToStorage();
+                renderProjectViews();
+                showToast('Client folder deleted; saved sheets were kept', 'success');
+            }
+
+            function createClientFolderRow(folder) {
+                const row = document.createElement('div');
+                row.className = 'client-folder-row';
+                if (activeProjectFolderId === folder.id) row.classList.add('active');
+                row.dataset.folderId = folder.id;
+
+                const openButton = document.createElement('button');
+                openButton.type = 'button';
+                openButton.className = 'folder-open-button';
+                openButton.setAttribute('aria-label', `Open ${folder.name} folder`);
+                const glyph = document.createElement('span');
+                glyph.className = 'folder-glyph';
+                glyph.setAttribute('aria-hidden', 'true');
+                glyph.textContent = '▱';
+                const name = document.createElement('span');
+                name.className = 'folder-name';
+                name.textContent = folder.name;
+                const count = document.createElement('span');
+                count.className = 'folder-count';
+                count.textContent = savedSheets.filter(sheet => sheet.folderId === folder.id).length;
+                openButton.append(glyph, name, count);
+                openButton.addEventListener('click', () => {
+                    activeProjectFolderId = folder.id;
+                    renderProjectViews();
+                });
+
+                const actions = document.createElement('div');
+                actions.className = 'folder-row-actions';
+                const renameButton = document.createElement('button');
+                renameButton.type = 'button';
+                renameButton.className = 'folder-action';
+                renameButton.textContent = 'Rename';
+                renameButton.addEventListener('click', () => renameClientFolder(folder.id));
+                const deleteButton = document.createElement('button');
+                deleteButton.type = 'button';
+                deleteButton.className = 'folder-action';
+                deleteButton.textContent = 'Delete';
+                deleteButton.addEventListener('click', () => deleteClientFolder(folder.id));
+                actions.append(renameButton, deleteButton);
+                row.append(openButton, actions);
+
+                row.addEventListener('dragover', event => {
+                    event.preventDefault();
+                    event.dataTransfer.dropEffect = 'move';
+                    row.classList.add('drag-target');
+                });
+                row.addEventListener('dragleave', event => {
+                    if (!row.contains(event.relatedTarget)) row.classList.remove('drag-target');
+                });
+                row.addEventListener('drop', event => {
+                    event.preventDefault();
+                    row.classList.remove('drag-target');
+                    moveSheetToFolder(event.dataTransfer.getData('text/plain'), folder.id);
+                });
+                return row;
+            }
+
+            function createSavedSheetCard(sheet, allowMove = false) {
                 const studentCount = Array.isArray(sheet.students) ? sheet.students.length : 0;
                 const savedDate = sheet.savedAt && !Number.isNaN(Date.parse(sheet.savedAt))
                     ? new Date(sheet.savedAt).toLocaleDateString()
@@ -2343,6 +2647,26 @@
                     icon: '▦',
                     meta: `${studentCount} students · ${savedDate}`
                 });
+                card.draggable = allowMove;
+                if (allowMove) {
+                    card.addEventListener('dragstart', event => {
+                        event.dataTransfer.setData('text/plain', sheet.id);
+                        event.dataTransfer.effectAllowed = 'move';
+                        card.classList.add('dragging');
+                    });
+                    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+
+                    const moveSelect = document.createElement('select');
+                    moveSelect.className = 'project-move-select';
+                    moveSelect.setAttribute('aria-label', `Move ${sheet.title || 'saved sheet'} to a client folder`);
+                    moveSelect.add(new Option('Move to folder…', '__choose__'));
+                    moveSelect.add(new Option('All projects (no folder)', ''));
+                    clientFolders.forEach(folder => moveSelect.add(new Option(folder.name, folder.id)));
+                    moveSelect.addEventListener('change', () => {
+                        if (moveSelect.value !== '__choose__') moveSheetToFolder(sheet.id, moveSelect.value);
+                    });
+                    card.insertBefore(moveSelect, actions);
+                }
                 addProjectAction(actions, 'Open', () => {
                     loadSavedSheet(sheet.id);
                     showPage('generatorPage');
@@ -2355,8 +2679,21 @@
             function renderProjectViews() {
                 dashboardProjectGrid.replaceChildren();
                 projectsGrid.replaceChildren();
+                clientFolderList.replaceChildren();
                 const orderedSheets = savedSheets.slice().reverse();
                 const recentSheets = orderedSheets.slice(0, 3);
+                const activeFolder = clientFolders.find(folder => folder.id === activeProjectFolderId);
+                if (activeProjectFolderId && !activeFolder) activeProjectFolderId = null;
+                const visibleSheets = activeProjectFolderId
+                    ? orderedSheets.filter(sheet => sheet.folderId === activeProjectFolderId)
+                    : orderedSheets;
+
+                clientFolderCount.textContent = clientFolders.length;
+                allProjectsCount.textContent = savedSheets.length;
+                allClientProjectsBtn.classList.toggle('active', !activeProjectFolderId);
+                clientFolders.forEach(folder => clientFolderList.appendChild(createClientFolderRow(folder)));
+                projectsViewHeading.textContent = activeFolder ? activeFolder.name : 'All projects';
+                projectsViewCount.textContent = `${visibleSheets.length} ${visibleSheets.length === 1 ? 'sheet' : 'sheets'}`;
 
                 dashboardProjectGrid.appendChild(createAutomationCard());
                 if (recentSheets.length === 0) {
@@ -2368,15 +2705,36 @@
                     recentSheets.forEach(sheet => dashboardProjectGrid.appendChild(createSavedSheetCard(sheet)));
                 }
 
-                projectsGrid.appendChild(createAutomationCard());
-                if (orderedSheets.length === 0) {
+                if (!activeProjectFolderId) projectsGrid.appendChild(createAutomationCard());
+                if (visibleSheets.length === 0) {
                     const empty = document.createElement('div');
                     empty.className = 'project-empty';
-                    empty.textContent = 'No saved sheets yet. Start an import in ID Card Generator to create a project.';
+                    empty.textContent = activeProjectFolderId
+                        ? 'This client folder has no saved sheets yet.'
+                        : 'No saved sheets yet. Start an import in ID Card Generator to create a project.';
                     projectsGrid.appendChild(empty);
                 } else {
-                    orderedSheets.forEach(sheet => projectsGrid.appendChild(createSavedSheetCard(sheet)));
+                    visibleSheets.forEach(sheet => projectsGrid.appendChild(createSavedSheetCard(sheet, true)));
                 }
+            }
+
+            function createClientFolder() {
+                const enteredName = prompt('Enter the client name for this folder:');
+                if (!enteredName || !enteredName.trim()) return;
+                const name = enteredName.trim();
+                if (clientFolders.some(folder => folder.name.toLowerCase() === name.toLowerCase())) {
+                    showToast('A client folder with that name already exists', 'error');
+                    return;
+                }
+                const folder = {
+                    id: 'client_' + Date.now() + '_' + Math.random().toString(36).slice(2, 7),
+                    name
+                };
+                clientFolders.unshift(folder);
+                activeProjectFolderId = folder.id;
+                saveToStorage();
+                renderProjectViews();
+                showToast(`Created ${name} folder`, 'success');
             }
 
             function renderSavedSheets() {
@@ -3814,6 +4172,22 @@
             });
             document.querySelectorAll('[data-open-projects]').forEach(button => {
                 button.addEventListener('click', () => showPage('projectsPage'));
+            });
+            newClientFolderBtn.addEventListener('click', createClientFolder);
+            allClientProjectsBtn.addEventListener('click', () => {
+                activeProjectFolderId = null;
+                renderProjectViews();
+            });
+            allClientProjectsBtn.addEventListener('dragover', event => {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = 'move';
+                allClientProjectsBtn.classList.add('drag-target');
+            });
+            allClientProjectsBtn.addEventListener('dragleave', () => allClientProjectsBtn.classList.remove('drag-target'));
+            allClientProjectsBtn.addEventListener('drop', event => {
+                event.preventDefault();
+                allClientProjectsBtn.classList.remove('drag-target');
+                moveSheetToFolder(event.dataTransfer.getData('text/plain'), null);
             });
             window.addEventListener('hashchange', () => showPage(window.location.hash.slice(1), false));
 
