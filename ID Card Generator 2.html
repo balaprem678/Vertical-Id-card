@@ -2884,6 +2884,7 @@ position: absolute;
                     localStorage.setItem(STORAGE_KEY, JSON.stringify(students));
                     const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
                     if (activeSheet) {
+                        activeSheet.officeAddress = inputOfficeAddress.value.trim();
                         activeSheet.students = students.map(student => ({ ...student }));
                     }
                     localStorage.setItem(SAVED_SHEETS_KEY, JSON.stringify(savedSheets));
@@ -3231,6 +3232,13 @@ position: absolute;
                 saveCurrentToActive();
                 activeSavedSheetId = sheet.id;
                 students = sheet.students.map(student => ({ ...emptyStudent(), ...student }));
+                const officeAddress = typeof sheet.officeAddress === 'string'
+                    ? sheet.officeAddress
+                    : (students[0]?.officeAddress ?? defaultOfficeAddress);
+                sheet.officeAddress = officeAddress;
+                students.forEach(student => {
+                    student.officeAddress = officeAddress;
+                });
                 activeIndex = students.length > 0 ? 0 : -1;
                 setFormData(activeIndex >= 0 ? students[activeIndex] : emptyStudent());
                 saveToStorage();
@@ -3311,7 +3319,10 @@ position: absolute;
                 inputBlood.value = s.blood || '';
                 inputPhone.value = s.phone || '';
                 inputAddress.value = s.address || '';
-                inputOfficeAddress.value = s.officeAddress || defaultOfficeAddress;
+                const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
+                inputOfficeAddress.value = typeof activeSheet?.officeAddress === 'string'
+                    ? activeSheet.officeAddress
+                    : (s.officeAddress ?? defaultOfficeAddress);
                 inputEmergency.value = s.emergency || '';
 
                 currentPhoto = s.photo || '';
@@ -3342,8 +3353,9 @@ position: absolute;
             }
 
             function saveCurrentToActive() {
-                if (activeIndex < 0 || activeIndex >= students.length) return;
-                students[activeIndex] = getFormData();
+                if (activeIndex >= 0 && activeIndex < students.length) {
+                    students[activeIndex] = getFormData();
+                }
                 saveToStorage();
             }
 
@@ -3915,8 +3927,16 @@ position: absolute;
                     sourceName,
                     headers: [...rawHeaders],
                     rows: rows.map(row => ({ ...row })),
+                    officeAddress: duplicate && title.toLowerCase() === duplicate.title.toLowerCase()
+                        ? (typeof duplicate.officeAddress === 'string'
+                            ? duplicate.officeAddress
+                            : (duplicate.students[0]?.officeAddress ?? defaultOfficeAddress))
+                        : (newStudents[0]?.officeAddress ?? defaultOfficeAddress),
                     students: newStudents.map(student => ({ ...student }))
                 };
+                savedSheet.students.forEach(student => {
+                    student.officeAddress = savedSheet.officeAddress;
+                });
 
                 if (duplicate && savedSheet.id === duplicate.id) {
                     const duplicateIndex = savedSheets.findIndex(sheet => sheet.id === duplicate.id);
@@ -4448,6 +4468,8 @@ position: absolute;
                         students.forEach(student => {
                             student.officeAddress = officeAddress;
                         });
+                        const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
+                        if (activeSheet) activeSheet.officeAddress = officeAddress;
                     }
                     saveCurrentToActive();
                     renderStudentList();
@@ -4460,6 +4482,8 @@ position: absolute;
                         students.forEach(student => {
                             student.officeAddress = officeAddress;
                         });
+                        const activeSheet = savedSheets.find(sheet => sheet.id === activeSavedSheetId);
+                        if (activeSheet) activeSheet.officeAddress = officeAddress;
                     }
                     saveCurrentToActive();
                     renderStudentList();
