@@ -1,0 +1,3395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SRM ID Card Studio</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #f0f2f5;
+            padding: 20px;
+        }
+
+        .login-page {
+            background: linear-gradient(135deg, #1a237e, #283593);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1000;
+        }
+        .login-page.hidden {
+            display: none;
+        }
+
+        .login-container {
+            background: white;
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 420px;
+        }
+        .login-container .logo {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .login-container .logo h1 {
+            font-size: 28px;
+            color: #1a237e;
+        }
+        .login-container .logo h1 span {
+            color: #f57c00;
+        }
+        .login-container .logo p {
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #1a237e;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(26, 35, 126, 0.1);
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-primary {
+            background: #1a237e;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #283593;
+            transform: translateY(-2px);
+        }
+        .btn-success {
+            background: #2e7d32;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #388e3c;
+            transform: translateY(-2px);
+        }
+        .btn-danger {
+            background: #c62828;
+            color: white;
+        }
+        .btn-danger:hover {
+            background: #d32f2f;
+            transform: translateY(-2px);
+        }
+        .btn-warning {
+            background: #f57c00;
+            color: white;
+        }
+        .btn-warning:hover {
+            background: #f9a825;
+            transform: translateY(-2px);
+        }
+        .btn-info {
+            background: #00838f;
+            color: white;
+        }
+        .btn-info:hover {
+            background: #0097a7;
+            transform: translateY(-2px);
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+        }
+        .btn-sm {
+            padding: 5px 12px;
+            font-size: 12px;
+            width: auto;
+        }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 13px;
+            color: #999;
+        }
+        .login-footer a {
+            color: #1a237e;
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .login-footer a:hover {
+            text-decoration: underline;
+        }
+
+        .error-msg {
+            color: #c62828;
+            font-size: 13px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .mode-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .mode-selector button {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            background: white;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .mode-selector button.active {
+            border-color: #1a237e;
+            background: #e8eaf6;
+            color: #1a237e;
+        }
+        .mode-selector button:hover {
+            border-color: #1a237e;
+        }
+        .hidden {
+            display: none !important;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            z-index: 9999;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+        .toast.success {
+            background: #2e7d32;
+        }
+        .toast.error {
+            background: #c62828;
+        }
+        .toast.info {
+            background: #1a237e;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard {
+            display: none;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        .dashboard.visible {
+            display: block;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 3px solid #1a237e;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .header h1 {
+            font-size: 22px;
+            color: #1a237e;
+        }
+        .header h1 span {
+            color: #f57c00;
+        }
+        .header .client-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .header .client-info .badge {
+            background: #e8eaf6;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #1a237e;
+            font-weight: 600;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border: 1px solid #e8eaf6;
+        }
+        .stat-card .number {
+            font-size: 28px;
+            font-weight: bold;
+            color: #1a237e;
+        }
+        .stat-card .label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+        @media (max-width: 768px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e8eaf6;
+        }
+        .form-section h2 {
+            color: #1a237e;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            font-size: 13px;
+            margin-bottom: 3px;
+            color: #333;
+        }
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        .form-group input[type="file"] {
+            padding: 6px;
+        }
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        @media (max-width: 480px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .template-upload-area {
+            border: 2px dashed #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            background: white;
+            margin-bottom: 12px;
+        }
+        .template-upload-area:hover {
+            border-color: #1a237e;
+            background: #e8eaf6;
+        }
+        .template-upload-area .preview {
+            max-width: 100%;
+            max-height: 80px;
+            object-fit: contain;
+            border-radius: 4px;
+        }
+
+        .student-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .student-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            margin-bottom: 4px;
+            border: 1px solid #e8eaf6;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .student-item:hover {
+            border-color: #1a237e;
+            background: #e8eaf6;
+        }
+        .student-item .info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .student-item .info .thumb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #e0e0e0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: #999;
+        }
+        .student-item .info .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .nav-indicator {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            background: #e8eaf6;
+            border-radius: 6px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .nav-indicator .position {
+            font-weight: 600;
+            color: #1a237e;
+            font-size: 14px;
+        }
+        .nav-indicator .nav-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .nav-indicator .nav-buttons button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .nav-indicator .nav-buttons button:hover {
+            transform: scale(1.05);
+        }
+        .nav-indicator .nav-buttons .prev {
+            background: #6c757d;
+            color: white;
+        }
+        .nav-indicator .nav-buttons .next {
+            background: #1a237e;
+            color: white;
+        }
+        .nav-indicator .nav-buttons .save-next {
+            background: #2e7d32;
+            color: white;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: #999;
+        }
+        .empty-state .icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+
+        /* ===== LIVE PREVIEW ===== */
+        .live-preview-container {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            border: 2px solid #1a237e;
+            margin-top: 15px;
+        }
+        .live-preview-container h3 {
+            color: #1a237e;
+            font-size: 15px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .zoom-controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 10px;
+        }
+        .zoom-controls button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            background: #1a237e;
+            color: white;
+        }
+        .zoom-controls button:hover {
+            transform: scale(1.1);
+        }
+        .zoom-controls .zoom-level {
+            font-weight: bold;
+            font-size: 15px;
+            color: #1a237e;
+            min-width: 55px;
+            text-align: center;
+        }
+        .zoom-controls .reset-zoom {
+            background: #6c757d;
+            font-size: 13px;
+            padding: 0 18px;
+            border-radius: 20px;
+            width: auto;
+        }
+
+        .live-card-wrapper {
+            overflow: auto;
+            display: flex;
+            justify-content: center;
+            padding: 15px;
+            background: #e8eaf6;
+            border-radius: 8px;
+            min-height: 220px;
+            position: relative;
+        }
+
+        #liveCard {
+            width: 85.6mm;
+            height: 54mm;
+            border: 2px solid #333;
+            border-radius: 4px;
+            position: relative;
+            overflow: visible;
+            background: white;
+            transform-origin: center center;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        #liveCardBg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        #liveCardBg img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #liveCardData {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+
+        /* ===== DRAGGABLE ELEMENTS ===== */
+        .draggable-element {
+            position: absolute;
+            cursor: move;
+            padding: 2px 4px;
+            border: 1px dashed transparent;
+            transition: border 0.2s, background 0.2s;
+            user-select: none;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            font-family: Arial, sans-serif;
+            z-index: 10;
+            max-width: 90%;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.2;
+        }
+
+        .draggable-element:hover {
+            border: 1px dashed #1a237e;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .draggable-element.dragging {
+            opacity: 0.8;
+            z-index: 100;
+            border: 2px solid #1a237e;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .draggable-element .el-label {
+            font-weight: bold;
+            color: #1a237e;
+            margin-right: 2px;
+        }
+
+        .draggable-element .el-value {
+            font-weight: bold;
+        }
+
+        .draggable-element .delete-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #dc3545;
+            color: white;
+            border: none;
+            font-size: 10px;
+            line-height: 16px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+            z-index: 20;
+            padding: 0;
+        }
+
+        .draggable-element:hover .delete-btn {
+            display: block;
+        }
+
+        .draggable-element .delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.2);
+        }
+
+        .draggable-element .format-toolbar {
+            position: absolute;
+            top: -30px;
+            left: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 2px 4px;
+            display: none;
+            z-index: 30;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+            white-space: nowrap;
+        }
+
+        .draggable-element .format-toolbar.show {
+            display: flex !important;
+        }
+
+        .draggable-element .format-toolbar button {
+            padding: 2px 6px;
+            font-size: 11px;
+            border: none;
+            border-radius: 2px;
+            background: transparent;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .draggable-element .format-toolbar button:hover {
+            background: #e8eaf6;
+        }
+
+        .draggable-element .format-toolbar button.active-format {
+            background: #1a237e;
+            color: white;
+        }
+
+        /* ===== PHOTO ELEMENT ===== */
+        .draggable-photo {
+            position: absolute;
+            cursor: move;
+            border: 2px dashed transparent;
+            transition: border 0.2s, background 0.2s;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 2px;
+            z-index: 10;
+            overflow: visible;
+        }
+
+        .draggable-photo:hover {
+            border: 2px dashed #1a237e;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .draggable-photo.dragging {
+            opacity: 0.8;
+            z-index: 100;
+            border: 2px solid #1a237e;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .draggable-photo .photo-frame {
+            width: 100%;
+            height: 100%;
+            border: 1.5px solid #333;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .draggable-photo .photo-frame img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .draggable-photo .resize-handle {
+            position: absolute;
+            width: 14px;
+            height: 14px;
+            background: white;
+            border: 2px solid #1a237e;
+            border-radius: 50%;
+            z-index: 20;
+            display: none;
+        }
+
+        .draggable-photo:hover .resize-handle,
+        .draggable-photo.resizing .resize-handle {
+            display: block;
+        }
+
+        .draggable-photo .resize-handle.nw {
+            top: -7px;
+            left: -7px;
+            cursor: nw-resize;
+        }
+        .draggable-photo .resize-handle.ne {
+            top: -7px;
+            right: -7px;
+            cursor: ne-resize;
+        }
+        .draggable-photo .resize-handle.sw {
+            bottom: -7px;
+            left: -7px;
+            cursor: sw-resize;
+        }
+        .draggable-photo .resize-handle.se {
+            bottom: -7px;
+            right: -7px;
+            cursor: se-resize;
+        }
+        .draggable-photo .resize-handle.n {
+            top: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: n-resize;
+        }
+        .draggable-photo .resize-handle.s {
+            bottom: -7px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: s-resize;
+        }
+        .draggable-photo .resize-handle.w {
+            top: 50%;
+            left: -7px;
+            transform: translateY(-50%);
+            cursor: w-resize;
+        }
+        .draggable-photo .resize-handle.e {
+            top: 50%;
+            right: -7px;
+            transform: translateY(-50%);
+            cursor: e-resize;
+        }
+
+        .draggable-photo .delete-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #dc3545;
+            color: white;
+            border: none;
+            font-size: 10px;
+            line-height: 16px;
+            text-align: center;
+            cursor: pointer;
+            display: none;
+            z-index: 25;
+            padding: 0;
+        }
+
+        .draggable-photo:hover .delete-btn {
+            display: block;
+        }
+
+        .draggable-photo .delete-btn:hover {
+            background: #c82333;
+            transform: scale(1.2);
+        }
+
+        /* ===== POSITION CONTROLS ===== */
+        .position-controls {
+            background: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 10px;
+            border: 1px solid #ddd;
+            display: none;
+        }
+
+        .position-controls.visible {
+            display: block;
+        }
+
+        .position-controls h4 {
+            color: #1a237e;
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .position-controls .field-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .position-controls .field-item {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            font-size: 10px;
+            padding: 2px 4px;
+            background: #f5f5f5;
+            border-radius: 4px;
+            flex-wrap: wrap;
+        }
+
+        .position-controls .field-item label {
+            font-weight: 600;
+            min-width: 20px;
+            font-size: 8px;
+            color: #1a237e;
+        }
+
+        .position-controls .field-item input[type="range"] {
+            width: 30px;
+            height: 3px;
+            cursor: pointer;
+        }
+
+        .position-controls .field-item input[type="color"] {
+            width: 20px;
+            height: 20px;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            cursor: pointer;
+            padding: 0;
+        }
+
+        .position-controls .field-item .pos-value {
+            font-size: 8px;
+            color: #666;
+            min-width: 18px;
+        }
+
+        .position-controls .field-item .size-label {
+            font-size: 7px;
+            color: #999;
+        }
+
+        .position-controls .field-item .deleted-badge {
+            font-size: 7px;
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .position-controls .field-item .format-badge {
+            font-size: 8px;
+            color: #1a237e;
+            font-weight: bold;
+        }
+
+        .position-controls .reset-pos-btn {
+            margin-top: 6px;
+            padding: 4px 12px;
+            font-size: 11px;
+            background: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .position-controls .reset-pos-btn:hover {
+            background: #c82333;
+        }
+
+        .position-controls .restore-deleted-btn {
+            margin-top: 6px;
+            padding: 4px 12px;
+            font-size: 11px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+        }
+        .position-controls .restore-deleted-btn:hover {
+            background: #218838;
+        }
+
+        .photo-size-controls {
+            background: #e8eaf6;
+            padding: 8px 12px;
+            border-radius: 6px;
+            margin-top: 6px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px 10px;
+        }
+
+        .photo-size-controls .control-group {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 10px;
+        }
+
+        .photo-size-controls .control-group label {
+            font-weight: 600;
+            font-size: 10px;
+            color: #1a237e;
+            min-width: 30px;
+        }
+
+        .photo-size-controls .control-group input[type="range"] {
+            width: 60px;
+            height: 3px;
+            cursor: pointer;
+        }
+
+        .photo-size-controls .control-group .size-value {
+            font-size: 9px;
+            font-weight: bold;
+            color: #1a237e;
+            min-width: 25px;
+            text-align: center;
+        }
+
+        .edit-mode-toggle {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .edit-mode-toggle label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #1a237e;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+
+        .edit-mode-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .edit-mode-toggle .hint {
+            font-size: 11px;
+            color: #999;
+        }
+
+        /* ===== SHEET PREVIEW ===== */
+        .sheet-preview {
+            background: white;
+            padding: 0;
+            border-radius: 0;
+            border: none;
+            overflow: auto;
+            display: none;
+            margin-top: 15px;
+        }
+        .sheet-preview.visible {
+            display: block;
+        }
+
+        .sheet-container {
+            border: 2px solid #333;
+            margin-bottom: 15px;
+            padding: 0;
+            background: white;
+            page-break-after: always;
+            width: 100%;
+            max-width: 12in;
+            margin-left: auto;
+            margin-right: auto;
+            aspect-ratio: 12 / 18;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sheet-container .sheet-header {
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            color: #1a237e;
+            padding: 5px 0;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 0;
+            background: #f8f9fa;
+        }
+
+        /* 3x7 grid with 5mm gaps — exact 12x18 layout */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 85.6mm);
+            grid-template-rows: repeat(7, 54mm);
+            gap: 5mm;
+            justify-content: center;
+            align-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-card {
+            width: 85.6mm;
+            height: 54mm;
+            border: 1px solid #333;
+            border-radius: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+            box-sizing: border-box;
+            flex-shrink: 0;
+            flex-grow: 0;
+        }
+
+        .preview-card .card-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+
+        .preview-card .card-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            height: 100%;
+        }
+
+        .preview-card .empty-card {
+            background: #f5f5f5;
+            border: 1px dashed #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #bbb;
+            font-size: 12px;
+            font-weight: bold;
+            width: 85.6mm;
+            height: 54mm;
+            flex-shrink: 0;
+            flex-grow: 0;
+            box-sizing: border-box;
+        }
+
+        .preview-card .print-element {
+            position: absolute;
+            font-family: Arial, sans-serif;
+            padding: 0 2px;
+            word-wrap: break-word;
+            white-space: normal;
+            line-height: 1.2;
+            max-width: 90%;
+            overflow: hidden;
+        }
+
+        .print-element .p-label {
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .print-element .p-value {
+            font-weight: bold;
+        }
+
+        .print-photo {
+            position: absolute;
+            border: 1.5px solid #333;
+            border-radius: 2px;
+            overflow: hidden;
+            background: #f5f5f5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .print-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .status-bar {
+            margin-top: 15px;
+            padding: 10px 15px;
+            background: #e8eaf6;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .status-bar .count {
+            font-weight: 600;
+            color: #1a237e;
+        }
+        .status-bar .count span {
+            font-size: 18px;
+        }
+
+        .list-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #e8eaf6;
+        }
+        .list-section h2 {
+            color: #1a237e;
+            font-size: 16px;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #e8eaf6;
+            padding-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .record-count {
+            font-size: 14px;
+            color: #666;
+            font-weight: normal;
+        }
+        .record-count span {
+            font-weight: bold;
+            color: #1a237e;
+        }
+        .badge {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        /* ===== PHOTO CROPPER ===== */
+        .cropper-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .cropper-overlay.active {
+            display: flex;
+        }
+
+        .cropper-box {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 95%;
+            max-height: 90vh;
+            overflow: auto;
+        }
+
+        .cropper-box h3 {
+            color: #1a237e;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .cropper-box .photo-specs {
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+            margin-bottom: 10px;
+            background: #f5f5f5;
+            padding: 8px;
+            border-radius: 6px;
+        }
+
+        .cropper-box .photo-specs span {
+            font-weight: bold;
+            color: #1a237e;
+        }
+
+        .cropper-wrapper {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+            background: #f0f0f0;
+            border-radius: 8px;
+            min-height: 300px;
+            touch-action: none;
+        }
+
+        .cropper-wrapper img {
+            display: block;
+            max-width: 100%;
+            height: auto;
+            cursor: move;
+        }
+
+        .cropper-wrapper .crop-box {
+            position: absolute;
+            border: 2px solid #1a237e;
+            box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+            cursor: move;
+            touch-action: none;
+        }
+
+        .cropper-wrapper .crop-box .resize-handle {
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background: white;
+            border: 2px solid #1a237e;
+            border-radius: 50%;
+        }
+
+        .cropper-wrapper .crop-box .resize-handle.nw {
+            top: -6px;
+            left: -6px;
+            cursor: nw-resize;
+        }
+        .cropper-wrapper .crop-box .resize-handle.ne {
+            top: -6px;
+            right: -6px;
+            cursor: ne-resize;
+        }
+        .cropper-wrapper .crop-box .resize-handle.sw {
+            bottom: -6px;
+            left: -6px;
+            cursor: sw-resize;
+        }
+        .cropper-wrapper .crop-box .resize-handle.se {
+            bottom: -6px;
+            right: -6px;
+            cursor: se-resize;
+        }
+
+        .cropper-bg-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .cropper-bg-options label {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            padding: 5px 12px;
+            border-radius: 4px;
+            border: 2px solid #ddd;
+            transition: 0.3s;
+        }
+
+        .cropper-bg-options label.active {
+            border-color: #1a237e;
+            background: #e8eaf6;
+        }
+        .cropper-bg-options label:hover {
+            border-color: #1a237e;
+        }
+
+        .cropper-bg-options .color-swatch {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+        }
+        .cropper-bg-options .color-swatch.white {
+            background: white;
+            border-color: #ddd;
+        }
+        .cropper-bg-options .color-swatch.red {
+            background: #ffebee;
+            border-color: #ffcdd2;
+        }
+        .cropper-bg-options .color-swatch.blue {
+            background: #e3f2fd;
+            border-color: #bbdefb;
+        }
+
+        .cropper-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        /* ============================================================ */
+        /* PRINT STYLES — 12 x 18 inch sheet with 5mm gaps */
+        /* ============================================================ */
+        @media print {
+            html,
+            body {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .header,
+            .form-section,
+            .list-section,
+            .btn-group,
+            .status-bar,
+            .nav-indicator,
+            .template-upload-area,
+            .live-preview-container,
+            .no-print,
+            .sheet-title,
+            .btn,
+            .stats,
+            .stat-card,
+            .main-grid,
+            .zoom-controls,
+            .client-info,
+            .dashboard .header,
+            .dashboard .stats,
+            .dashboard .main-grid,
+            .dashboard .live-preview-container,
+            .login-page,
+            .position-controls,
+            .edit-mode-toggle,
+            .cropper-overlay {
+                display: none !important;
+            }
+
+            .dashboard {
+                display: block !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                max-width: 100% !important;
+                background: white !important;
+                box-shadow: none !important;
+                border: none !important;
+                width: 100% !important;
+                height: 100% !important;
+            }
+
+            .sheet-preview {
+                display: block !important;
+                border: none !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+                width: 100% !important;
+                height: 100% !important;
+                overflow: visible !important;
+            }
+
+            .sheet-container {
+                border: 1px solid #333 !important;
+                page-break-after: always !important;
+                margin: 0 auto !important;
+                padding: 0 !important;
+                width: 12in !important;
+                height: 18in !important;
+                max-width: 12in !important;
+                max-height: 18in !important;
+                aspect-ratio: 12 / 18 !important;
+                background: white !important;
+                box-sizing: border-box !important;
+                overflow: hidden !important;
+            }
+
+            .sheet-container .sheet-header {
+                display: none !important;
+            }
+
+            .card-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 85.6mm) !important;
+                grid-template-rows: repeat(7, 54mm) !important;
+                gap: 5mm !important;
+                justify-content: center !important;
+                align-content: center !important;
+                width: 100% !important;
+                height: 100% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                box-sizing: border-box !important;
+            }
+
+            .preview-card {
+                border: 1px solid #333 !important;
+                page-break-inside: avoid !important;
+                break-inside: avoid !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                width: 85.6mm !important;
+                height: 54mm !important;
+                border-radius: 0 !important;
+                box-sizing: border-box !important;
+                flex-shrink: 0 !important;
+                flex-grow: 0 !important;
+                position: relative !important;
+            }
+
+            .preview-card .empty-card {
+                display: flex !important;
+                width: 85.6mm !important;
+                height: 54mm !important;
+                flex-shrink: 0 !important;
+                flex-grow: 0 !important;
+            }
+
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+
+            @page {
+                size: 12in 18in !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- ===== LOGIN PAGE ===== -->
+    <div class="login-page" id="loginPage">
+        <div class="login-container">
+            <div class="logo">
+                <h1>🪪 SRM ID CARD <span>STUDIO</span></h1>
+                <p>Multi-Client ID Card Management System</p>
+            </div>
+
+            <div class="mode-selector">
+                <button class="active" onclick="setMode('login')">🔐 Login</button>
+                <button onclick="setMode('register')">📝 Register</button>
+            </div>
+
+            <div id="loginForm">
+                <div class="form-group">
+                    <label>User ID / Email</label>
+                    <input type="text" id="login_email" placeholder="Enter your User ID or Email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="login_password" placeholder="Enter your password">
+                </div>
+                <div id="loginError" class="error-msg">❌ Invalid credentials. Please try again.</div>
+                <button class="btn btn-primary" onclick="loginUser()">🔐 Login</button>
+                <div style="text-align:center; margin-top:12px; font-size:13px;">
+                    <a onclick="showForgotPassword()" style="color:#1a237e; cursor:pointer; font-weight:600;">Forgot User ID or Password?</a>
+                </div>
+            </div>
+
+            <div id="registerForm" class="hidden">
+                <div class="form-group">
+                    <label>School/Company Name *</label>
+                    <input type="text" id="reg_client_name" placeholder="Enter school or company name">
+                </div>
+                <div class="form-group">
+                    <label>User ID (Choose a unique ID)</label>
+                    <input type="text" id="reg_client_id" placeholder="e.g., abcschool2024">
+                </div>
+                <div class="form-group">
+                    <label>Email ID</label>
+                    <input type="email" id="reg_email" placeholder="Enter your email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" id="reg_password" placeholder="Create a password (min 6 characters)">
+                </div>
+                <div class="form-group">
+                    <label>Confirm Password</label>
+                    <input type="password" id="reg_confirm" placeholder="Confirm your password">
+                </div>
+                <div id="regError" class="error-msg"></div>
+                <button class="btn btn-success" onclick="registerClient()">📝 Register</button>
+            </div>
+
+            <div class="login-footer">
+                <p id="footerText">Enter your credentials to access your ID card studio</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== FORGOT PASSWORD POPUP ===== -->
+    <div id="forgotPopup" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:2000; display:none; align-items:center; justify-content:center;">
+        <div style="background:white; padding:30px; border-radius:16px; max-width:400px; width:100%; margin:20px;">
+            <h3 style="color:#1a237e; margin-bottom:15px;">🔑 Forgot User ID / Password</h3>
+            <p style="color:#666; font-size:14px; margin-bottom:15px;">Enter your registered email to receive your credentials</p>
+            <div class="form-group">
+                <label>Registered Email</label>
+                <input type="email" id="forgot_email" placeholder="Enter your registered email">
+            </div>
+            <div id="forgotError" class="error-msg"></div>
+            <div id="forgotSuccess" style="display:none; color:#2e7d32; font-weight:600; margin-bottom:10px;"></div>
+            <button class="btn btn-primary" onclick="sendForgotPassword()">📧 Send My Credentials</button>
+            <button class="btn btn-secondary" onclick="closeForgotPassword()" style="margin-top:10px;">← Back to Login</button>
+        </div>
+    </div>
+
+    <!-- ===== PHOTO CROPPER OVERLAY ===== -->
+    <div class="cropper-overlay" id="cropperOverlay">
+        <div class="cropper-box">
+            <h3>📸 Crop Photo</h3>
+            <div class="photo-specs">
+                📐 <span>25 × 30 mm</span> | 🔍 <span>300 DPI</span> | 📏 <span>295 × 354 px</span> | 📐 <span>5:6 Ratio</span> | 🎨 <span>JPEG</span>
+            </div>
+            <div class="cropper-bg-options" id="cropperBgOptions">
+                <label onclick="setCropperBg('white')" class="active">
+                    <span class="color-swatch white"></span> White
+                </label>
+                <label onclick="setCropperBg('red')">
+                    <span class="color-swatch red"></span> Red
+                </label>
+                <label onclick="setCropperBg('blue')">
+                    <span class="color-swatch blue"></span> Sky Blue
+                </label>
+            </div>
+            <div class="cropper-wrapper" id="cropperWrapper">
+                <img id="cropperImage" src="" alt="Crop">
+                <div class="crop-box" id="cropBox">
+                    <div class="resize-handle nw" data-dir="nw"></div>
+                    <div class="resize-handle ne" data-dir="ne"></div>
+                    <div class="resize-handle sw" data-dir="sw"></div>
+                    <div class="resize-handle se" data-dir="se"></div>
+                </div>
+            </div>
+            <div class="cropper-actions">
+                <button class="btn btn-success" onclick="applyCrop()">✅ Apply Crop</button>
+                <button class="btn btn-danger" onclick="closeCropper()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== DASHBOARD ===== -->
+    <div class="dashboard" id="dashboard">
+        <div class="header">
+            <h1>🪪 SRM ID CARD <span>STUDIO</span></h1>
+            <div class="client-info">
+                <span class="badge" id="clientBadge">🏫 Loading...</span>
+                <button class="btn btn-danger btn-sm" onclick="logout()">🚪 Logout</button>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="number" id="totalStudents">0</div><div class="label">👨‍🎓 Total Students</div></div>
+            <div class="stat-card"><div class="number" id="cardsIssued">0</div><div class="label">🪪 Cards Issued</div></div>
+            <div class="stat-card"><div class="number" id="pendingCards">0</div><div class="label">⏳ Pending</div></div>
+            <div class="stat-card"><div class="number" id="clientName">-</div><div class="label">🏫 School/Client</div></div>
+        </div>
+
+        <div class="main-grid">
+            <div class="form-section">
+                <h2>📝 Student Details</h2>
+
+                <div class="form-group">
+                    <label>🎨 Upload Card Template (JPEG/PNG)</label>
+                    <div class="template-upload-area" onclick="document.getElementById('template_upload').click()">
+                        <input type="file" id="template_upload" accept="image/*" style="display:none;" onchange="uploadTemplate(event)">
+                        <div id="templatePreview"><span class="placeholder">🖼️ Click to upload your card design</span></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Student Name *</label>
+                    <input type="text" id="s_name" placeholder="Enter student name" oninput="updatePreview()">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>Class</label><input type="text" id="s_class" placeholder="e.g., IX 'A'" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>Blood Group</label><input type="text" id="s_blood" placeholder="e.g., A+" oninput="updatePreview()"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Father Name</label>
+                    <input type="text" id="s_father" placeholder="Enter father name" oninput="updatePreview()">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group"><label>Date of Birth</label><input type="text" id="s_dob" placeholder="DD-MM-YYYY" oninput="updatePreview()"></div>
+                    <div class="form-group"><label>ID / Roll Number</label><input type="text" id="s_id" placeholder="e.g., 123-456" oninput="updatePreview()"></div>
+                </div>
+
+                <div class="form-group">
+                    <label>Address</label>
+                    <input type="text" id="s_address" placeholder="Enter address" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="text" id="s_phone" placeholder="Enter phone number" oninput="updatePreview()">
+                </div>
+
+                <div class="form-group">
+                    <label>📸 Student Photo</label>
+                    <input type="file" id="s_photo" accept="image/*" onchange="handlePhotoUpload(event)">
+                    <div style="margin-top:5px; font-size:11px; color:#999;">
+                        <span id="photoStatus">No photo selected</span>
+                    </div>
+                </div>
+
+                <div class="nav-indicator">
+                    <div class="position">👨‍🎓 <span id="currentPos">0</span> / <span id="totalPos">0</span></div>
+                    <div class="nav-buttons">
+                        <button class="prev" onclick="prevStudent()">◀ Prev</button>
+                        <button class="save-next" onclick="saveAndNext()">💾 Save & Next</button>
+                        <button class="next" onclick="nextStudent()">Next ▶</button>
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button class="btn btn-primary" onclick="saveStudent()">💾 Save</button>
+                    <button class="btn btn-warning" onclick="editStudent()">✏️ Edit</button>
+                    <button class="btn btn-danger" onclick="deleteStudent()">🗑️ Delete</button>
+                    <button class="btn btn-secondary" onclick="clearForm()">🔄 Clear</button>
+                </div>
+
+                <div style="margin-top:10px; font-size:12px; color:#999;">
+                    <span id="recordStatus">📌 Enter details → Data appears on card preview</span>
+                </div>
+            </div>
+
+            <div class="list-section">
+                <h2>
+                    📋 Student List
+                    <span class="record-count">Records : <span id="recordCount">0</span></span>
+                </h2>
+                <div style="margin-bottom:10px; display:flex; gap:8px; flex-wrap:wrap;">
+                    <input type="text" id="searchInput" placeholder="🔍 Search..." style="flex:1; padding:8px 12px; border:1px solid #ddd; border-radius:6px;" oninput="renderList()">
+                    <button class="btn btn-success btn-sm" onclick="exportData()">📥 Export</button>
+                    <button class="btn btn-info btn-sm" onclick="previewSheet()">👁️ Preview</button>
+                    <button class="btn btn-primary btn-sm" onclick="printSheet()">🖨️ Print</button>
+                </div>
+                <div class="student-list" id="studentList">
+                    <div class="empty-state"><div class="icon">📂</div><p>No students added yet</p></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== LIVE PREVIEW ===== -->
+        <div class="live-preview-container no-print">
+            <h3>🪪 Live Preview — Drag to reposition | Resize handles on photo</h3>
+            <div class="zoom-controls">
+                <button onclick="zoomOut()" title="Zoom Out">−</button>
+                <span class="zoom-level" id="zoomLevel">100%</span>
+                <button onclick="zoomIn()" title="Zoom In">+</button>
+                <button class="reset-zoom" onclick="resetZoom()">↺ Reset</button>
+                <span style="font-size:11px; color:#999; margin-left:5px;">(mouse wheel)</span>
+            </div>
+
+            <div class="edit-mode-toggle">
+                <label>
+                    <input type="checkbox" id="editModeToggle" onchange="toggleEditMode()">
+                    ✏️ Edit Layout
+                </label>
+                <span class="hint">— Hover × delete | Drag photo edges to resize | Double-click for formatting</span>
+                <button class="btn btn-danger btn-sm" onclick="resetPositions()" style="margin-left:auto;">Reset All</button>
+                <button class="btn btn-success btn-sm" onclick="restoreDeleted()" style="margin-left:5px;">↩ Restore Deleted</button>
+            </div>
+
+            <div class="live-card-wrapper" id="liveCardWrapper">
+                <div id="liveCard">
+                    <div id="liveCardBg"></div>
+                    <div id="liveCardData"></div>
+                </div>
+            </div>
+
+            <div class="position-controls" id="positionControls">
+                <h4>📐 Element Controls: Position | Size | Color</h4>
+                <div class="field-list" id="fieldList">
+                    <!-- Generated by JavaScript -->
+                </div>
+
+                <div class="photo-size-controls" id="photoSizeControls">
+                    <div class="control-group">
+                        <label>Left:</label>
+                        <input type="range" id="photoLeft" min="0" max="80" value="2" step="0.5" oninput="updatePhotoBounds()">
+                        <span class="size-value" id="photoLeftVal">2%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Right:</label>
+                        <input type="range" id="photoRight" min="10" max="95" value="78" step="0.5" oninput="updatePhotoBounds()">
+                        <span class="size-value" id="photoRightVal">78%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Top:</label>
+                        <input type="range" id="photoTop" min="0" max="80" value="5" step="0.5" oninput="updatePhotoBounds()">
+                        <span class="size-value" id="photoTopVal">5%</span>
+                    </div>
+                    <div class="control-group">
+                        <label>Bottom:</label>
+                        <input type="range" id="photoBottom" min="5" max="95" value="88" step="0.5" oninput="updatePhotoBounds()">
+                        <span class="size-value" id="photoBottomVal">88%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== SHEET PREVIEW (12 x 18 with 5mm gaps) ===== -->
+        <div class="sheet-preview" id="sheetPreview">
+            <div id="sheetContainer"></div>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // GLOBAL VARIABLES
+        // ============================================================
+        let clients = JSON.parse(localStorage.getItem('srm_clients')) || [];
+        let currentClient = null;
+        let currentMode = 'login';
+        let students = [];
+        let currentIndex = -1;
+        let editMode = false;
+        let schoolTemplate = null;
+        let zoomLevel = 1;
+        let isDragging = false;
+        let dragField = null;
+        let dragOffsetX = 0;
+        let dragOffsetY = 0;
+        let deletedElements = [];
+        let selectedElement = null;
+        let cropperData = null;
+        let cropperBg = 'white';
+        let photoData = null;
+        let isResizingPhoto = false;
+        let resizeDir = null;
+        let resizeStartX = 0;
+        let resizeStartY = 0;
+        let resizeStartLeft = 0;
+        let resizeStartTop = 0;
+        let resizeStartWidth = 0;
+        let resizeStartHeight = 0;
+
+        // ===== ALL ELEMENTS =====
+        const ALL_ELEMENTS = [
+            { id: 'name_lbl', type: 'label', label: 'Name:', defaultLeft: 30, defaultTop: 5, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'class_lbl', type: 'label', label: 'Class:', defaultLeft: 30, defaultTop: 13, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'father_lbl', type: 'label', label: 'Father:', defaultLeft: 30, defaultTop: 21, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'dob_lbl', type: 'label', label: 'DOB:', defaultLeft: 30, defaultTop: 29, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'blood_lbl', type: 'label', label: 'Blood:', defaultLeft: 30, defaultTop: 37, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'address_lbl', type: 'label', label: 'Address:', defaultLeft: 30, defaultTop: 45, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'phone_lbl', type: 'label', label: 'Phone:', defaultLeft: 30, defaultTop: 53, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'idno_lbl', type: 'label', label: 'ID:', defaultLeft: 30, defaultTop: 61, defaultSize: 9,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'session_lbl', type: 'label', label: 'Session:', defaultLeft: 45, defaultTop: 88, defaultSize: 8,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+            { id: 'principal_lbl', type: 'label', label: '', defaultLeft: 70, defaultTop: 88, defaultSize: 8,
+                defaultColor: '#1a237e', defaultBold: true, defaultItalic: false },
+
+            { id: 'name_val', type: 'value', label: 'Name', defaultLeft: 40, defaultTop: 5, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'class_val', type: 'value', label: 'Class', defaultLeft: 40, defaultTop: 13, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'father_val', type: 'value', label: 'Father', defaultLeft: 40, defaultTop: 21, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'dob_val', type: 'value', label: 'DOB', defaultLeft: 40, defaultTop: 29, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'blood_val', type: 'value', label: 'Blood', defaultLeft: 40, defaultTop: 37, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'address_val', type: 'value', label: 'Address', defaultLeft: 40, defaultTop: 45, defaultSize: 9,
+                defaultColor: '#000000', defaultBold: false, defaultItalic: false },
+            { id: 'phone_val', type: 'value', label: 'Phone', defaultLeft: 40, defaultTop: 53, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'idno_val', type: 'value', label: 'ID', defaultLeft: 40, defaultTop: 61, defaultSize: 10,
+                defaultColor: '#000000', defaultBold: true, defaultItalic: false },
+            { id: 'session_val', type: 'value', label: 'Session', defaultLeft: 55, defaultTop: 88, defaultSize: 8,
+                defaultColor: '#000000', defaultBold: false, defaultItalic: false },
+            { id: 'principal_val', type: 'value', label: 'Principal', defaultLeft: 75, defaultTop: 88, defaultSize: 8,
+                defaultColor: '#000000', defaultBold: false, defaultItalic: false },
+
+            { id: 'photo', type: 'photo', label: 'Photo', defaultLeft: 2, defaultTop: 5, defaultSize: 25,
+                defaultColor: '#000000', defaultBold: false, defaultItalic: false }
+        ];
+
+        let elementPositions = {};
+        let photoBounds = { left: 2, right: 78, top: 5, bottom: 88 };
+
+        // ============================================================
+        // LOAD POSITIONS
+        // ============================================================
+        function loadPositions() {
+            const saved = localStorage.getItem('srm_element_positions_' + (currentClient ? currentClient.clientId :
+            'default'));
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    elementPositions = data.positions || {};
+                    deletedElements = data.deleted || [];
+                    ALL_ELEMENTS.forEach(el => {
+                        if (!elementPositions[el.id]) {
+                            elementPositions[el.id] = {
+                                left: el.defaultLeft,
+                                top: el.defaultTop,
+                                size: el.defaultSize,
+                                color: el.defaultColor,
+                                bold: el.defaultBold || false,
+                                italic: el.defaultItalic || false
+                            };
+                        }
+                        if (elementPositions[el.id].size === undefined) elementPositions[el.id].size = el.defaultSize;
+                        if (elementPositions[el.id].color === undefined) elementPositions[el.id].color = el
+                        .defaultColor;
+                        if (elementPositions[el.id].bold === undefined) elementPositions[el.id].bold = el
+                        .defaultBold || false;
+                        if (elementPositions[el.id].italic === undefined) elementPositions[el.id].italic = el
+                            .defaultItalic || false;
+                    });
+                    loadPhotoBounds();
+                    return;
+                } catch (e) {}
+            }
+
+            ALL_ELEMENTS.forEach(el => {
+                elementPositions[el.id] = {
+                    left: el.defaultLeft,
+                    top: el.defaultTop,
+                    size: el.defaultSize,
+                    color: el.defaultColor,
+                    bold: el.defaultBold || false,
+                    italic: el.defaultItalic || false
+                };
+            });
+            deletedElements = [];
+            loadPhotoBounds();
+        }
+
+        function savePositions() {
+            localStorage.setItem('srm_element_positions_' + (currentClient ? currentClient.clientId : 'default'),
+                JSON.stringify({ positions: elementPositions, deleted: deletedElements }));
+        }
+
+        function loadPhotoBounds() {
+            const saved = localStorage.getItem('srm_photo_bounds_' + (currentClient ? currentClient.clientId : 'default'));
+            if (saved) {
+                try {
+                    const data = JSON.parse(saved);
+                    photoBounds = data;
+                    document.getElementById('photoLeft').value = photoBounds.left || 2;
+                    document.getElementById('photoRight').value = photoBounds.right || 78;
+                    document.getElementById('photoTop').value = photoBounds.top || 5;
+                    document.getElementById('photoBottom').value = photoBounds.bottom || 88;
+                    document.getElementById('photoLeftVal').textContent = (photoBounds.left || 2) + '%';
+                    document.getElementById('photoRightVal').textContent = (photoBounds.right || 78) + '%';
+                    document.getElementById('photoTopVal').textContent = (photoBounds.top || 5) + '%';
+                    document.getElementById('photoBottomVal').textContent = (photoBounds.bottom || 88) + '%';
+                    return;
+                } catch (e) {}
+            }
+            photoBounds = { left: 2, right: 78, top: 5, bottom: 88 };
+        }
+
+        function updatePhotoBounds() {
+            const left = parseFloat(document.getElementById('photoLeft').value);
+            const right = parseFloat(document.getElementById('photoRight').value);
+            const top = parseFloat(document.getElementById('photoTop').value);
+            const bottom = parseFloat(document.getElementById('photoBottom').value);
+
+            document.getElementById('photoLeftVal').textContent = left + '%';
+            document.getElementById('photoRightVal').textContent = right + '%';
+            document.getElementById('photoTopVal').textContent = top + '%';
+            document.getElementById('photoBottomVal').textContent = bottom + '%';
+
+            photoBounds.left = left;
+            photoBounds.right = right;
+            photoBounds.top = top;
+            photoBounds.bottom = bottom;
+
+            localStorage.setItem('srm_photo_bounds_' + (currentClient ? currentClient.clientId : 'default'), JSON.stringify(
+            photoBounds));
+            updatePreview();
+        }
+
+        function resetPositions() {
+            if (!confirm('Reset all element positions and restore deleted?')) return;
+            ALL_ELEMENTS.forEach(el => {
+                elementPositions[el.id] = {
+                    left: el.defaultLeft,
+                    top: el.defaultTop,
+                    size: el.defaultSize,
+                    color: el.defaultColor,
+                    bold: el.defaultBold || false,
+                    italic: el.defaultItalic || false
+                };
+            });
+            deletedElements = [];
+            photoBounds = { left: 2, right: 78, top: 5, bottom: 88 };
+            document.getElementById('photoLeft').value = 2;
+            document.getElementById('photoRight').value = 78;
+            document.getElementById('photoTop').value = 5;
+            document.getElementById('photoBottom').value = 88;
+            document.getElementById('photoLeftVal').textContent = '2%';
+            document.getElementById('photoRightVal').textContent = '78%';
+            document.getElementById('photoTopVal').textContent = '5%';
+            document.getElementById('photoBottomVal').textContent = '88%';
+            localStorage.setItem('srm_photo_bounds_' + (currentClient ? currentClient.clientId : 'default'), JSON.stringify(
+            photoBounds));
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast('↺ All reset to default', 'info');
+        }
+
+        function restoreDeleted() {
+            deletedElements = [];
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast('↩ All deleted elements restored', 'success');
+        }
+
+        function deleteElement(elementId) {
+            if (!deletedElements.includes(elementId)) {
+                deletedElements.push(elementId);
+                savePositions();
+                updatePreview();
+                updateFieldControls();
+                showToast('🗑️ Element deleted', 'info');
+            }
+        }
+
+        function isElementDeleted(elementId) {
+            return deletedElements.includes(elementId);
+        }
+
+        // ============================================================
+        // PHOTO CROPPER
+        // ============================================================
+        function handlePhotoUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                photoData = e.target.result;
+                document.getElementById('photoStatus').textContent = '📸 Photo uploaded - Click "Crop" to adjust';
+                openCropper(photoData);
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function openCropper(imageSrc) {
+            const overlay = document.getElementById('cropperOverlay');
+            overlay.classList.add('active');
+            const img = document.getElementById('cropperImage');
+            img.src = imageSrc;
+            setCropperBg('white');
+
+            img.onload = function() {
+                initCropper(img);
+            };
+        }
+
+        function initCropper(img) {
+            const wrapper = document.getElementById('cropperWrapper');
+            const cropBox = document.getElementById('cropBox');
+            const imgRect = img.getBoundingClientRect();
+
+            let boxSize = Math.min(imgRect.width * 0.6, imgRect.height * 0.5);
+            let boxWidth = boxSize * (5 / 6);
+            let boxHeight = boxSize;
+
+            const left = (imgRect.width - boxWidth) / 2;
+            const top = (imgRect.height - boxHeight) / 2;
+
+            cropBox.style.left = left + 'px';
+            cropBox.style.top = top + 'px';
+            cropBox.style.width = boxWidth + 'px';
+            cropBox.style.height = boxHeight + 'px';
+
+            cropperData = {
+                imgWidth: imgRect.width,
+                imgHeight: imgRect.height,
+                left: left,
+                top: top,
+                width: boxWidth,
+                height: boxHeight,
+                naturalWidth: img.naturalWidth,
+                naturalHeight: img.naturalHeight
+            };
+
+            setupCropperDrag(cropBox);
+            setupCropperResize(cropBox);
+        }
+
+        function setupCropperDrag(cropBox) {
+            let isDragging = false;
+            let startX, startY, startLeft, startTop;
+
+            cropBox.addEventListener('mousedown', function(e) {
+                if (e.target.classList.contains('resize-handle')) return;
+                isDragging = true;
+                startX = e.clientX;
+                startY = e.clientY;
+                startLeft = parseFloat(cropBox.style.left);
+                startTop = parseFloat(cropBox.style.top);
+                cropBox.style.cursor = 'grabbing';
+                e.preventDefault();
+            });
+
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                const dx = e.clientX - startX;
+                const dy = e.clientY - startY;
+                const img = document.getElementById('cropperImage');
+                const imgRect = img.getBoundingClientRect();
+
+                let newLeft = Math.max(0, Math.min(imgRect.width - parseFloat(cropBox.style.width), startLeft + dx));
+                let newTop = Math.max(0, Math.min(imgRect.height - parseFloat(cropBox.style.height), startTop + dy));
+
+                cropBox.style.left = newLeft + 'px';
+                cropBox.style.top = newTop + 'px';
+                cropperData.left = newLeft;
+                cropperData.top = newTop;
+            });
+
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    isDragging = false;
+                    cropBox.style.cursor = 'move';
+                }
+            });
+        }
+
+        function setupCropperResize(cropBox) {
+            const handles = cropBox.querySelectorAll('.resize-handle');
+
+            handles.forEach(handle => {
+                handle.addEventListener('mousedown', function(e) {
+                    e.stopPropagation();
+                    const dir = this.dataset.dir;
+                    let isResizing = true;
+                    const startX = e.clientX;
+                    const startY = e.clientY;
+                    const startWidth = parseFloat(cropBox.style.width);
+                    const startHeight = parseFloat(cropBox.style.height);
+                    const startLeft = parseFloat(cropBox.style.left);
+                    const startTop = parseFloat(cropBox.style.top);
+                    const img = document.getElementById('cropperImage');
+                    const imgRect = img.getBoundingClientRect();
+
+                    document.addEventListener('mousemove', function(e) {
+                        if (!isResizing) return;
+                        const dx = e.clientX - startX;
+                        const dy = e.clientY - startY;
+
+                        let newWidth = startWidth;
+                        let newHeight = startHeight;
+                        let newLeft = startLeft;
+                        let newTop = startTop;
+
+                        if (dir.includes('e')) {
+                            newWidth = Math.max(50, Math.min(imgRect.width - startLeft, startWidth + dx));
+                            newHeight = newWidth * (6 / 5);
+                        }
+                        if (dir.includes('s')) {
+                            newHeight = Math.max(50, Math.min(imgRect.height - startTop, startHeight + dy));
+                            newWidth = newHeight * (5 / 6);
+                        }
+                        if (dir.includes('w')) {
+                            newWidth = Math.max(50, Math.min(startLeft + startWidth, startWidth - dx));
+                            newLeft = startLeft + (startWidth - newWidth);
+                            newHeight = newWidth * (6 / 5);
+                        }
+                        if (dir.includes('n')) {
+                            newHeight = Math.max(50, Math.min(startTop + startHeight, startHeight - dy));
+                            newTop = startTop + (startHeight - newHeight);
+                            newWidth = newHeight * (5 / 6);
+                        }
+
+                        newWidth = Math.min(newWidth, imgRect.width - newLeft);
+                        newHeight = Math.min(newHeight, imgRect.height - newTop);
+
+                        cropBox.style.width = newWidth + 'px';
+                        cropBox.style.height = newHeight + 'px';
+                        cropBox.style.left = newLeft + 'px';
+                        cropBox.style.top = newTop + 'px';
+
+                        cropperData.width = newWidth;
+                        cropperData.height = newHeight;
+                        cropperData.left = newLeft;
+                        cropperData.top = newTop;
+                    });
+
+                    document.addEventListener('mouseup', function() {
+                        isResizing = false;
+                    });
+                });
+            });
+        }
+
+        function setCropperBg(color) {
+            cropperBg = color;
+            document.querySelectorAll('.cropper-bg-options label').forEach(el => el.classList.remove('active'));
+            document.querySelector(`.cropper-bg-options label:has(.color-swatch.${color})`)?.classList.add('active');
+        }
+
+        function applyCrop() {
+            const img = document.getElementById('cropperImage');
+
+            const canvas = document.createElement('canvas');
+            const targetWidth = 295;
+            const targetHeight = 354;
+            canvas.width = targetWidth;
+            canvas.height = targetHeight;
+            const ctx = canvas.getContext('2d');
+
+            let bgColor = '#ffffff';
+            let bgName = 'White';
+            if (cropperBg === 'red') {
+                bgColor = '#ffebee';
+                bgName = 'Red';
+            } else if (cropperBg === 'blue') {
+                bgColor = '#e3f2fd';
+                bgName = 'Sky Blue';
+            }
+
+            ctx.fillStyle = bgColor;
+            ctx.fillRect(0, 0, targetWidth, targetHeight);
+            ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+            const croppedDataURL = canvas.toDataURL('image/jpeg', 0.95);
+
+            photoData = croppedDataURL;
+            document.getElementById('photoStatus').textContent = `✅ Cropped (${targetWidth}×${targetHeight}px, ${bgName} background)`;
+
+            updatePreview();
+            closeCropper();
+
+            showToast(`✅ Photo cropped with ${bgName} background!`, 'success');
+        }
+
+        function closeCropper() {
+            document.getElementById('cropperOverlay').classList.remove('active');
+        }
+
+        // ============================================================
+        // FORMATTING FUNCTIONS
+        // ============================================================
+        function toggleBold(elementId) {
+            if (isElementDeleted(elementId)) return;
+            if (!elementPositions[elementId]) {
+                const def = ALL_ELEMENTS.find(el => el.id === elementId);
+                elementPositions[elementId] = { left: def.defaultLeft, top: def.defaultTop, size: def.defaultSize,
+                    color: def.defaultColor, bold: false, italic: false };
+            }
+            elementPositions[elementId].bold = !elementPositions[elementId].bold;
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast('🔤 Toggled Bold', 'info');
+        }
+
+        function toggleItalic(elementId) {
+            if (isElementDeleted(elementId)) return;
+            if (!elementPositions[elementId]) {
+                const def = ALL_ELEMENTS.find(el => el.id === elementId);
+                elementPositions[elementId] = { left: def.defaultLeft, top: def.defaultTop, size: def.defaultSize,
+                    color: def.defaultColor, bold: false, italic: false };
+            }
+            elementPositions[elementId].italic = !elementPositions[elementId].italic;
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast('🔤 Toggled Italic', 'info');
+        }
+
+        function increaseFontSize(elementId) {
+            if (isElementDeleted(elementId)) return;
+            if (!elementPositions[elementId]) {
+                const def = ALL_ELEMENTS.find(el => el.id === elementId);
+                elementPositions[elementId] = { left: def.defaultLeft, top: def.defaultTop, size: def.defaultSize,
+                    color: def.defaultColor, bold: false, italic: false };
+            }
+            const currentSize = elementPositions[elementId].size || 10;
+            const newSize = Math.min(currentSize + 1, 24);
+            elementPositions[elementId].size = newSize;
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast(`📏 Font size: ${newSize}pt`, 'info');
+        }
+
+        function decreaseFontSize(elementId) {
+            if (isElementDeleted(elementId)) return;
+            if (!elementPositions[elementId]) {
+                const def = ALL_ELEMENTS.find(el => el.id === elementId);
+                elementPositions[elementId] = { left: def.defaultLeft, top: def.defaultTop, size: def.defaultSize,
+                    color: def.defaultColor, bold: false, italic: false };
+            }
+            const currentSize = elementPositions[elementId].size || 10;
+            const newSize = Math.max(currentSize - 1, 4);
+            elementPositions[elementId].size = newSize;
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+            showToast(`📏 Font size: ${newSize}pt`, 'info');
+        }
+
+        // ============================================================
+        // ZOOM CONTROLS
+        // ============================================================
+        function updateZoom() {
+            const card = document.getElementById('liveCard');
+            if (card) {
+                card.style.transform = `scale(${zoomLevel})`;
+                document.getElementById('zoomLevel').textContent = Math.round(zoomLevel * 100) + '%';
+            }
+        }
+
+        function zoomIn() { if (zoomLevel < 3) { zoomLevel = Math.min(zoomLevel + 0.1, 3);
+                updateZoom(); } }
+
+        function zoomOut() { if (zoomLevel > 0.3) { zoomLevel = Math.max(zoomLevel - 0.1, 0.3);
+                updateZoom(); } }
+
+        function resetZoom() { zoomLevel = 1;
+            updateZoom();
+            showToast('↺ Zoom reset to 100%', 'info'); }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const wrapper = document.getElementById('liveCardWrapper');
+            if (wrapper) {
+                wrapper.addEventListener('wheel', function(e) { e.preventDefault(); if (e.deltaY < 0) { zoomIn(); } else {
+                        zoomOut(); } }, { passive: false });
+            }
+        });
+
+        // ============================================================
+        // TOGGLE EDIT MODE
+        // ============================================================
+        function toggleEditMode() {
+            editMode = document.getElementById('editModeToggle').checked;
+            updatePreview();
+            document.getElementById('positionControls').classList.toggle('visible', editMode);
+            if (editMode) {
+                updateFieldControls();
+            }
+        }
+
+        // ============================================================
+        // FIELD CONTROLS
+        // ============================================================
+        function updateFieldControls() {
+            const container = document.getElementById('fieldList');
+            container.innerHTML = ALL_ELEMENTS.filter(el => el.type !== 'photo').map(el => {
+                const pos = elementPositions[el.id] || { left: el.defaultLeft, top: el.defaultTop, size: el
+                        .defaultSize, color: el.defaultColor, bold: false, italic: false };
+                const isDeleted = isElementDeleted(el.id);
+                const labelText = el.type === 'label' ? el.label : el.label;
+                const boldStatus = pos.bold ? 'B' : '';
+                const italicStatus = pos.italic ? 'I' : '';
+                const formatText = boldStatus + italicStatus;
+                return `
+                        <div class="field-item" style="${isDeleted ? 'opacity:0.4;' : ''}">
+                            <label>${labelText}</label>
+                            ${isDeleted ? '<span class="deleted-badge">DELETED</span>' : ''}
+                            ${!isDeleted ? `<span class="format-badge">${formatText || 'Normal'}</span>` : ''}
+                            <span style="font-size:7px;color:#999;">L:</span>
+                            <input type="range" min="0" max="90" value="${pos.left}" 
+                                   oninput="updateFieldPos('${el.id}', 'left', this.value)" ${isDeleted ? 'disabled' : ''}>
+                            <span class="pos-value">${Math.round(pos.left)}%</span>
+                            <span style="font-size:7px;color:#999;">T:</span>
+                            <input type="range" min="0" max="90" value="${pos.top}" 
+                                   oninput="updateFieldPos('${el.id}', 'top', this.value)" ${isDeleted ? 'disabled' : ''}>
+                            <span class="pos-value">${Math.round(pos.top)}%</span>
+                            ${el.type === 'value' ? `
+                                <span class="size-label">Sz:</span>
+                                <input type="range" min="4" max="24" step="0.5" value="${pos.size || 10}" 
+                                       oninput="updateFieldPos('${el.id}', 'size', this.value)" ${isDeleted ? 'disabled' : ''}>
+                                <span class="pos-value">${Math.round(pos.size || 10)}pt</span>
+                                <span class="size-label">Clr:</span>
+                                <input type="color" value="${pos.color || '#000000'}" 
+                                       oninput="updateFieldPos('${el.id}', 'color', this.value)" ${isDeleted ? 'disabled' : ''}>
+                            ` : ''}
+                            ${el.type === 'label' ? `
+                                <span class="size-label">Sz:</span>
+                                <input type="range" min="4" max="24" step="0.5" value="${pos.size || 9}" 
+                                       oninput="updateFieldPos('${el.id}', 'size', this.value)" ${isDeleted ? 'disabled' : ''}>
+                                <span class="pos-value">${Math.round(pos.size || 9)}pt</span>
+                                <span class="size-label">Clr:</span>
+                                <input type="color" value="${pos.color || '#1a237e'}" 
+                                       oninput="updateFieldPos('${el.id}', 'color', this.value)" ${isDeleted ? 'disabled' : ''}>
+                            ` : ''}
+                            <button class="btn btn-danger btn-sm" style="padding:1px 6px;font-size:8px;min-width:auto;" 
+                                    onclick="deleteElement('${el.id}')" ${isDeleted ? 'disabled' : ''}>×</button>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        function updateFieldPos(fieldId, axis, value) {
+            if (isElementDeleted(fieldId)) return;
+            if (!elementPositions[fieldId]) {
+                const def = ALL_ELEMENTS.find(el => el.id === fieldId);
+                elementPositions[fieldId] = { left: def.defaultLeft, top: def.defaultTop, size: def.defaultSize,
+                    color: def.defaultColor, bold: false, italic: false };
+            }
+            elementPositions[fieldId][axis] = (axis === 'color') ? value : parseFloat(value);
+            savePositions();
+            updatePreview();
+            updateFieldControls();
+        }
+
+        // ============================================================
+        // LOGIN / REGISTER
+        // ============================================================
+        function setMode(mode) {
+            currentMode = mode;
+            document.querySelectorAll('.mode-selector button').forEach(b => b.classList.remove('active'));
+            if (mode === 'login') {
+                document.querySelector('.mode-selector button:first-child').classList.add('active');
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('footerText').textContent = 'Enter your credentials to access your ID card studio';
+            } else {
+                document.querySelector('.mode-selector button:last-child').classList.add('active');
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('footerText').textContent = 'Create your free account to start managing ID cards';
+            }
+            document.getElementById('loginError').style.display = 'none';
+            document.getElementById('regError').style.display = 'none';
+        }
+
+        function registerClient() {
+            const name = document.getElementById('reg_client_name').value.trim();
+            const clientId = document.getElementById('reg_client_id').value.trim();
+            const email = document.getElementById('reg_email').value.trim();
+            const password = document.getElementById('reg_password').value;
+            const confirm = document.getElementById('reg_confirm').value;
+            const errorEl = document.getElementById('regError');
+
+            if (!name) { errorEl.textContent = '⚠️ Please enter School/Company Name';
+                errorEl.style.display = 'block'; return; }
+            if (!clientId) { errorEl.textContent = '⚠️ Please enter a User ID';
+                errorEl.style.display = 'block'; return; }
+            if (clients.some(c => c.clientId === clientId)) { errorEl.textContent = '⚠️ User ID already exists.';
+                errorEl.style.display = 'block'; return; }
+            if (!email || !email.includes('@')) { errorEl.textContent = '⚠️ Please enter a valid email';
+                errorEl.style.display = 'block'; return; }
+            if (password.length < 6) { errorEl.textContent = '⚠️ Password must be at least 6 characters';
+                errorEl.style.display = 'block'; return; }
+            if (password !== confirm) { errorEl.textContent = '⚠️ Passwords do not match';
+                errorEl.style.display = 'block'; return; }
+
+            const newClient = {
+                id: Date.now().toString(),
+                clientId: clientId,
+                name: name,
+                email: email,
+                password: password,
+                role: 'client',
+                schoolName: name,
+                created: new Date().toISOString()
+            };
+            clients.push(newClient);
+            localStorage.setItem('srm_clients', JSON.stringify(clients));
+
+            showToast('✅ Account created! Please login.', 'success');
+            setMode('login');
+            document.getElementById('login_email').value = clientId;
+            document.getElementById('login_password').value = password;
+            document.getElementById('reg_client_name').value = '';
+            document.getElementById('reg_client_id').value = '';
+            document.getElementById('reg_email').value = '';
+            document.getElementById('reg_password').value = '';
+            document.getElementById('reg_confirm').value = '';
+            document.getElementById('regError').style.display = 'none';
+        }
+
+        function loginUser() {
+            const email = document.getElementById('login_email').value.trim();
+            const password = document.getElementById('login_password').value.trim();
+            const errorEl = document.getElementById('loginError');
+
+            if (!email || !password) {
+                errorEl.textContent = '⚠️ Please enter both User ID and Password';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            const client = clients.find(c => (c.clientId === email || c.email === email) && c.password === password);
+            if (!client) {
+                errorEl.textContent = '❌ Invalid credentials. Please try again.';
+                errorEl.style.display = 'block';
+                return;
+            }
+
+            currentClient = client;
+            localStorage.setItem('srm_current_client', JSON.stringify(client));
+
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('visible');
+
+            document.getElementById('clientBadge').textContent = '🏫 ' + (client.schoolName || client.name);
+            document.getElementById('clientName').textContent = (client.schoolName || client.name).substring(0, 20);
+
+            const clientStorageKey = 'srm_students_' + client.clientId;
+            students = JSON.parse(localStorage.getItem(clientStorageKey)) || [];
+            schoolTemplate = localStorage.getItem('srm_template_' + client.clientId) || null;
+
+            loadPositions();
+            loadTemplate();
+            renderList();
+            updateStatus();
+            updatePreview();
+            resetZoom();
+
+            showToast('✅ Welcome ' + client.name + '!', 'success');
+        }
+
+        function showForgotPassword() {
+            document.getElementById('forgotPopup').style.display = 'flex';
+            document.getElementById('forgotError').style.display = 'none';
+            document.getElementById('forgotSuccess').style.display = 'none';
+            document.getElementById('forgot_email').value = '';
+        }
+
+        function closeForgotPassword() {
+            document.getElementById('forgotPopup').style.display = 'none';
+        }
+
+        function sendForgotPassword() {
+            const email = document.getElementById('forgot_email').value.trim();
+            const errorEl = document.getElementById('forgotError');
+            const successEl = document.getElementById('forgotSuccess');
+
+            if (!email || !email.includes('@')) {
+                errorEl.textContent = '⚠️ Please enter a valid email';
+                errorEl.style.display = 'block';
+                successEl.style.display = 'none';
+                return;
+            }
+
+            const client = clients.find(c => c.email === email);
+            if (!client) {
+                errorEl.textContent = '❌ No account found with this email';
+                errorEl.style.display = 'block';
+                successEl.style.display = 'none';
+                return;
+            }
+
+            errorEl.style.display = 'none';
+            successEl.style.display = 'block';
+            successEl.innerHTML = `
+                        ✅ Your credentials have been sent to ${email}<br>
+                        <b>User ID:</b> ${client.clientId}<br>
+                        <b>Password:</b> ${client.password}
+                    `;
+
+            document.getElementById('login_email').value = client.clientId;
+            document.getElementById('login_password').value = client.password;
+
+            setTimeout(() => {
+                closeForgotPassword();
+                setMode('login');
+                showToast('✅ Credentials sent to your email!', 'success');
+            }, 3000);
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                localStorage.removeItem('srm_current_client');
+                document.getElementById('dashboard').classList.remove('visible');
+                document.getElementById('loginPage').classList.remove('hidden');
+                document.getElementById('login_email').value = '';
+                document.getElementById('login_password').value = '';
+                currentClient = null;
+                students = [];
+                showToast('👋 Logged out successfully', 'info');
+            }
+        }
+
+        // ============================================================
+        // TEMPLATE
+        // ============================================================
+        function uploadTemplate(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                schoolTemplate = e.target.result;
+                if (currentClient) { localStorage.setItem('srm_template_' + currentClient.clientId, schoolTemplate); }
+                document.getElementById('templatePreview').innerHTML =
+                    `<img src="${schoolTemplate}" class="preview" alt="Template"><div style="font-size:11px; color:#2e7d32;">✅ Template uploaded!</div>`;
+                showToast('✅ Template uploaded!', 'success');
+                updatePreview();
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function loadTemplate() {
+            if (schoolTemplate) {
+                document.getElementById('templatePreview').innerHTML =
+                    `<img src="${schoolTemplate}" class="preview" alt="Template"><div style="font-size:11px; color:#2e7d32;">✅ Template loaded</div>`;
+                updatePreview();
+            }
+        }
+
+        // ============================================================
+        // STUDENT CRUD
+        // ============================================================
+        function getClientStorageKey() {
+            return currentClient ? 'srm_students_' + currentClient.clientId : 'srm_students_default';
+        }
+
+        function saveStudent() {
+            const name = document.getElementById('s_name').value.trim();
+            if (!name) { showToast('⚠️ Please enter Student Name!', 'error'); return; }
+
+            let photoToSave = photoData || null;
+            if (currentIndex >= 0 && students[currentIndex] && students[currentIndex].photo && !photoData) {
+                photoToSave = students[currentIndex].photo;
+            }
+
+            saveToArray(photoToSave);
+        }
+
+        function saveToArray(photoData) {
+            const student = {
+                id: Date.now(),
+                name: document.getElementById('s_name').value.trim(),
+                class: document.getElementById('s_class').value.trim(),
+                father: document.getElementById('s_father').value.trim(),
+                dob: document.getElementById('s_dob').value.trim(),
+                blood: document.getElementById('s_blood').value.trim(),
+                phone: document.getElementById('s_phone').value.trim(),
+                address: document.getElementById('s_address').value.trim(),
+                idno: document.getElementById('s_id').value.trim(),
+                photo: photoData || null,
+                issued: false
+            };
+
+            if (editMode && currentIndex >= 0) {
+                student.id = students[currentIndex].id;
+                students[currentIndex] = student;
+                editMode = false;
+                showToast('✅ Student updated!', 'success');
+            } else {
+                students.push(student);
+                showToast('✅ Student saved! (' + students.length + ' total)', 'success');
+            }
+
+            localStorage.setItem(getClientStorageKey(), JSON.stringify(students));
+            clearForm();
+            renderList();
+            updateStatus();
+            document.getElementById('recordStatus').textContent = '📌 Student saved successfully!';
+            photoData = null;
+            document.getElementById('photoStatus').textContent = 'No photo selected';
+            document.getElementById('s_photo').value = '';
+        }
+
+        function saveAndNext() {
+            const name = document.getElementById('s_name').value.trim();
+            if (!name) { showToast('⚠️ Please enter Student Name!', 'error'); return; }
+            saveStudent();
+            setTimeout(() => {
+                clearForm();
+                document.getElementById('s_name').focus();
+                updateStatus();
+                showToast('➡️ Ready for next student', 'info');
+            }, 300);
+        }
+
+        function nextStudent() {
+            if (students.length === 0) { showToast('⚠️ No students available', 'error'); return; }
+            let nextIndex = currentIndex + 1;
+            if (nextIndex >= students.length) nextIndex = 0;
+            selectStudent(nextIndex);
+        }
+
+        function prevStudent() {
+            if (students.length === 0) { showToast('⚠️ No students available', 'error'); return; }
+            let prevIndex = currentIndex - 1;
+            if (prevIndex < 0) prevIndex = students.length - 1;
+            selectStudent(prevIndex);
+        }
+
+        function selectStudent(index) {
+            currentIndex = index;
+            const s = students[index];
+            document.getElementById('s_name').value = s.name || '';
+            document.getElementById('s_class').value = s.class || '';
+            document.getElementById('s_father').value = s.father || '';
+            document.getElementById('s_dob').value = s.dob || '';
+            document.getElementById('s_blood').value = s.blood || '';
+            document.getElementById('s_phone').value = s.phone || '';
+            document.getElementById('s_address').value = s.address || '';
+            document.getElementById('s_id').value = s.idno || '';
+            document.getElementById('s_photo').value = '';
+            document.getElementById('photoStatus').textContent = s.photo ? '📸 Photo loaded' : 'No photo';
+            photoData = s.photo || null;
+            editMode = false;
+            document.getElementById('recordStatus').textContent = '📌 Selected: ' + s.name;
+            renderList();
+            updateStatus();
+            updatePreview();
+        }
+
+        function editStudent() {
+            if (currentIndex < 0) { showToast('⚠️ Select a student first!', 'error'); return; }
+            editMode = true;
+            document.getElementById('recordStatus').textContent = '✏️ Editing: ' + students[currentIndex].name;
+            showToast('✏️ Editing: ' + students[currentIndex].name, 'info');
+        }
+
+        function deleteStudent() {
+            if (currentIndex < 0) { showToast('⚠️ Select a student first!', 'error'); return; }
+            if (confirm('Delete ' + students[currentIndex].name + '?')) {
+                students.splice(currentIndex, 1);
+                localStorage.setItem(getClientStorageKey(), JSON.stringify(students));
+                currentIndex = -1;
+                clearForm();
+                renderList();
+                updateStatus();
+                document.getElementById('recordStatus').textContent = '🗑️ Student deleted';
+                showToast('🗑️ Student deleted', 'error');
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('s_name').value = '';
+            document.getElementById('s_class').value = '';
+            document.getElementById('s_father').value = '';
+            document.getElementById('s_dob').value = '';
+            document.getElementById('s_blood').value = '';
+            document.getElementById('s_phone').value = '';
+            document.getElementById('s_address').value = '';
+            document.getElementById('s_id').value = '';
+            document.getElementById('s_photo').value = '';
+            document.getElementById('photoStatus').textContent = 'No photo selected';
+            photoData = null;
+            editMode = false;
+            currentIndex = -1;
+            document.getElementById('recordStatus').textContent = '📌 Enter details → Data appears on card preview';
+            renderList();
+            updateStatus();
+            updatePreview();
+        }
+
+        // ============================================================
+        // RENDER LIST
+        // ============================================================
+        function renderList() {
+            const container = document.getElementById('studentList');
+            const search = document.getElementById('searchInput')?.value?.toLowerCase() || '';
+            let filtered = students;
+            if (search) {
+                filtered = students.filter(s =>
+                    s.name?.toLowerCase().includes(search) ||
+                    s.class?.toLowerCase().includes(search) ||
+                    s.idno?.toLowerCase().includes(search)
+                );
+            }
+
+            if (filtered.length === 0) {
+                container.innerHTML =
+                    `<div class="empty-state"><div class="icon">📂</div><p>${students.length === 0 ? 'No students added yet' : 'No results found'}</p></div>`;
+                return;
+            }
+
+            container.innerHTML = filtered.map((s, i) => {
+                const realIndex = students.indexOf(s);
+                return `
+                        <div class="student-item ${realIndex === currentIndex ? 'active' : ''}" onclick="selectStudent(${realIndex})">
+                            <div class="info">
+                                <div class="thumb">${s.photo ? `<img src="${s.photo}">` : '📷'}</div>
+                                <div><div class="name">${s.name || 'Unknown'}</div><div class="class">${s.class || ''} ${s.blood ? '| ' + s.blood : ''}</div></div>
+                            </div>
+                            <span class="badge">✅ Card</span>
+                        </div>
+                    `;
+            }).join('');
+        }
+
+        function updateStatus() {
+            document.getElementById('recordCount').textContent = students.length;
+            document.getElementById('totalStudents').textContent = students.length;
+            const issued = students.filter(s => s.issued).length;
+            document.getElementById('cardsIssued').textContent = issued;
+            document.getElementById('pendingCards').textContent = students.length - issued;
+            if (students.length > 0 && currentIndex >= 0) {
+                document.getElementById('currentPos').textContent = currentIndex + 1;
+            } else if (students.length > 0) {
+                document.getElementById('currentPos').textContent = students.length;
+            } else {
+                document.getElementById('currentPos').textContent = '0';
+            }
+            document.getElementById('totalPos').textContent = students.length;
+        }
+
+        // ============================================================
+        // PREVIEW
+        // ============================================================
+        function updatePreview() {
+            const name = document.getElementById('s_name').value.trim() || '';
+            const cls = document.getElementById('s_class').value.trim() || '';
+            const father = document.getElementById('s_father').value.trim() || '';
+            const dob = document.getElementById('s_dob').value.trim() || '';
+            const blood = document.getElementById('s_blood').value.trim() || '';
+            const phone = document.getElementById('s_phone').value.trim() || '';
+            const address = document.getElementById('s_address').value.trim() || '';
+            const id = document.getElementById('s_id').value.trim() || '';
+
+            const photo = photoData || null;
+            renderLiveCard(name, cls, father, dob, blood, phone, address, id, photo);
+        }
+
+        function renderLiveCard(name, cls, father, dob, blood, phone, address, id, photo) {
+            const container = document.getElementById('liveCardData');
+            const bgContainer = document.getElementById('liveCardBg');
+
+            if (schoolTemplate) {
+                bgContainer.innerHTML = `<img src="${schoolTemplate}">`;
+            } else {
+                bgContainer.innerHTML =
+                    `<div style="width:100%;height:100%;background:#f0f0f0;display:flex;align-items:center;justify-content:center;font-size:12px;color:#999;">Upload template</div>`;
+            }
+
+            let html = '';
+            const isEdit = editMode;
+
+            ALL_ELEMENTS.forEach(el => {
+                const pos = elementPositions[el.id] || { left: el.defaultLeft, top: el.defaultTop, size: el
+                        .defaultSize, color: el.defaultColor, bold: false, italic: false };
+                const isDeleted = isElementDeleted(el.id);
+
+                if (isDeleted) return;
+
+                if (el.type === 'photo') {
+                    const left = photoBounds.left || 2;
+                    const right = photoBounds.right || 78;
+                    const top = photoBounds.top || 5;
+                    const bottom = photoBounds.bottom || 88;
+                    const width = right - left;
+                    const height = bottom - top;
+
+                    html += `
+                            <div class="draggable-photo" id="elem-${el.id}" 
+                                 style="left:${left}%; top:${top}%; width:${width}%; height:${height}%; cursor:${isEdit ? 'move' : 'default'}; border:${isEdit ? '2px dashed #1a237e' : 'none'}; background:${isEdit ? 'rgba(255,255,255,0.2)' : 'transparent'};"
+                                 data-field="${el.id}">
+                                <div class="photo-frame">
+                                    ${photo ? `<img src="${photo}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:4px;color:#999;">Photo</span>'}
+                                </div>
+                                ${isEdit ? `
+                                    <div class="resize-handle nw" data-dir="nw"></div>
+                                    <div class="resize-handle ne" data-dir="ne"></div>
+                                    <div class="resize-handle sw" data-dir="sw"></div>
+                                    <div class="resize-handle se" data-dir="se"></div>
+                                    <div class="resize-handle n" data-dir="n"></div>
+                                    <div class="resize-handle s" data-dir="s"></div>
+                                    <div class="resize-handle w" data-dir="w"></div>
+                                    <div class="resize-handle e" data-dir="e"></div>
+                                ` : ''}
+                                ${isEdit ? `<button class="delete-btn" onclick="event.stopPropagation();deleteElement('${el.id}')">×</button>` : ''}
+                            </div>
+                        `;
+                } else {
+                    const fontSize = pos.size || (el.type === 'label' ? 9 : 10);
+                    const color = pos.color || (el.type === 'label' ? '#1a237e' : '#000000');
+                    const borderStyle = isEdit ? '1px dashed #1a237e' : 'none';
+                    const bgStyle = isEdit ? 'rgba(255,255,255,0.2)' : 'transparent';
+                    const cursorStyle = isEdit ? 'move' : 'default';
+                    const isLabel = el.type === 'label';
+                    const isBold = pos.bold || false;
+                    const isItalic = pos.italic || false;
+
+                    let fontWeight = isBold ? 'bold' : 'normal';
+                    let fontStyle = isItalic ? 'italic' : 'normal';
+
+                    let displayText = '';
+                    if (isLabel) {
+                        displayText =
+                            `<span class="el-label" style="font-weight:${fontWeight}; font-style:${fontStyle};">${el.label}</span>`;
+                    } else {
+                        const valMap = {
+                            'name_val': name,
+                            'class_val': cls,
+                            'father_val': father,
+                            'dob_val': dob,
+                            'blood_val': blood,
+                            'phone_val': phone,
+                            'address_val': address,
+                            'idno_val': id,
+                            'session_val': '2016-17',
+                            'principal_val': 'Principal'
+                        };
+                        const val = valMap[el.id] || '';
+                        displayText =
+                            `<span class="el-value" style="font-weight:${fontWeight}; font-style:${fontStyle};">${val}</span>`;
+                    }
+
+                    html += `
+                            <div class="draggable-element" id="elem-${el.id}" 
+                                 style="left:${pos.left}%; top:${pos.top}%; font-size:${fontSize}px; color:${color}; border:${borderStyle}; background:${bgStyle}; cursor:${cursorStyle}; max-width:${el.id === 'address_val' ? '65%' : '80%'};"
+                                 data-field="${el.id}"
+                                 ondblclick="toggleFormatToolbar('${el.id}')">
+                                ${displayText}
+                                ${isEdit ? `<button class="delete-btn" onclick="event.stopPropagation();deleteElement('${el.id}')">×</button>` : ''}
+                                ${isEdit ? `
+                                    <div class="format-toolbar" id="toolbar-${el.id}">
+                                        <button onclick="event.stopPropagation();increaseFontSize('${el.id}')" title="Increase Font Size">A+</button>
+                                        <button onclick="event.stopPropagation();decreaseFontSize('${el.id}')" title="Decrease Font Size">A-</button>
+                                        <button onclick="event.stopPropagation();toggleBold('${el.id}')" title="Bold" class="${pos.bold ? 'active-format' : ''}"><b>B</b></button>
+                                        <button onclick="event.stopPropagation();toggleItalic('${el.id}')" title="Italic" class="${pos.italic ? 'active-format' : ''}"><i>I</i></button>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        `;
+                }
+            });
+
+            container.innerHTML = html;
+
+            if (editMode) {
+                document.querySelectorAll('.draggable-element, .draggable-photo').forEach(el => {
+                    el.addEventListener('mousedown', function(e) {
+                        if (!editMode) return;
+                        if (e.target.classList.contains('delete-btn')) return;
+                        if (e.target.closest('.format-toolbar')) return;
+                        if (e.target.classList.contains('resize-handle')) {
+                            startPhotoResize(e, this, e.target.dataset.dir);
+                            return;
+                        }
+                        startDrag(e, this);
+                    });
+                    el.addEventListener('touchstart', function(e) {
+                        if (!editMode) return;
+                        if (e.target.classList.contains('delete-btn')) return;
+                        if (e.target.closest('.format-toolbar')) return;
+                        if (e.target.classList.contains('resize-handle')) {
+                            startPhotoResizeTouch(e, this, e.target.dataset.dir);
+                            return;
+                        }
+                        startDragTouch(e, this);
+                    });
+                });
+            }
+        }
+
+        // ============================================================
+        // PHOTO RESIZE
+        // ============================================================
+        function startPhotoResize(e, element, dir) {
+            if (!editMode) return;
+            isResizingPhoto = true;
+            resizeDir = dir;
+            resizeStartX = e.clientX;
+            resizeStartY = e.clientY;
+
+            const rect = element.getBoundingClientRect();
+            const cardRect = document.getElementById('liveCard').getBoundingClientRect();
+
+            resizeStartLeft = parseFloat(element.style.left) || 2;
+            resizeStartTop = parseFloat(element.style.top) || 5;
+            resizeStartWidth = parseFloat(element.style.width) || 25;
+            resizeStartHeight = parseFloat(element.style.height) || 30;
+
+            element.classList.add('resizing');
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        function startPhotoResizeTouch(e, element, dir) {
+            if (!editMode) return;
+            const touch = e.touches[0];
+            isResizingPhoto = true;
+            resizeDir = dir;
+            resizeStartX = touch.clientX;
+            resizeStartY = touch.clientY;
+
+            const rect = element.getBoundingClientRect();
+            const cardRect = document.getElementById('liveCard').getBoundingClientRect();
+
+            resizeStartLeft = parseFloat(element.style.left) || 2;
+            resizeStartTop = parseFloat(element.style.top) || 5;
+            resizeStartWidth = parseFloat(element.style.width) || 25;
+            resizeStartHeight = parseFloat(element.style.height) || 30;
+
+            element.classList.add('resizing');
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isResizingPhoto) return;
+            const dx = (e.clientX - resizeStartX) / document.getElementById('liveCard').getBoundingClientRect().width *
+            100;
+            const dy = (e.clientY - resizeStartY) / document.getElementById('liveCard').getBoundingClientRect().height *
+            100;
+
+            let newLeft = resizeStartLeft;
+            let newTop = resizeStartTop;
+            let newWidth = resizeStartWidth;
+            let newHeight = resizeStartHeight;
+
+            const dir = resizeDir;
+
+            if (dir.includes('e')) {
+                newWidth = Math.max(5, Math.min(85 - newLeft, resizeStartWidth + dx));
+            }
+            if (dir.includes('w')) {
+                newWidth = Math.max(5, resizeStartWidth - dx);
+                newLeft = resizeStartLeft + (resizeStartWidth - newWidth);
+                if (newLeft < 0) { newWidth = newWidth + newLeft;
+                    newLeft = 0; }
+            }
+            if (dir.includes('s')) {
+                newHeight = Math.max(5, Math.min(85 - newTop, resizeStartHeight + dy));
+            }
+            if (dir.includes('n')) {
+                newHeight = Math.max(5, resizeStartHeight - dy);
+                newTop = resizeStartTop + (resizeStartHeight - newHeight);
+                if (newTop < 0) { newHeight = newHeight + newTop;
+                    newTop = 0; }
+            }
+
+            photoBounds.left = newLeft;
+            photoBounds.top = newTop;
+            photoBounds.right = newLeft + newWidth;
+            photoBounds.bottom = newTop + newHeight;
+
+            document.getElementById('photoLeft').value = photoBounds.left;
+            document.getElementById('photoRight').value = photoBounds.right;
+            document.getElementById('photoTop').value = photoBounds.top;
+            document.getElementById('photoBottom').value = photoBounds.bottom;
+            document.getElementById('photoLeftVal').textContent = Math.round(photoBounds.left) + '%';
+            document.getElementById('photoRightVal').textContent = Math.round(photoBounds.right) + '%';
+            document.getElementById('photoTopVal').textContent = Math.round(photoBounds.top) + '%';
+            document.getElementById('photoBottomVal').textContent = Math.round(photoBounds.bottom) + '%';
+
+            updatePreview();
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            if (isResizingPhoto) {
+                isResizingPhoto = false;
+                document.querySelectorAll('.draggable-photo.resizing').forEach(el => el.classList.remove('resizing'));
+                localStorage.setItem('srm_photo_bounds_' + (currentClient ? currentClient.clientId : 'default'), JSON
+                    .stringify(photoBounds));
+                savePositions();
+            }
+        });
+
+        document.addEventListener('touchmove', function(e) {
+            if (!isResizingPhoto) return;
+            const touch = e.touches[0];
+            const dx = (touch.clientX - resizeStartX) / document.getElementById('liveCard').getBoundingClientRect()
+                .width * 100;
+            const dy = (touch.clientY - resizeStartY) / document.getElementById('liveCard').getBoundingClientRect()
+                .height * 100;
+
+            let newLeft = resizeStartLeft;
+            let newTop = resizeStartTop;
+            let newWidth = resizeStartWidth;
+            let newHeight = resizeStartHeight;
+
+            const dir = resizeDir;
+
+            if (dir.includes('e')) {
+                newWidth = Math.max(5, Math.min(85 - newLeft, resizeStartWidth + dx));
+            }
+            if (dir.includes('w')) {
+                newWidth = Math.max(5, resizeStartWidth - dx);
+                newLeft = resizeStartLeft + (resizeStartWidth - newWidth);
+                if (newLeft < 0) { newWidth = newWidth + newLeft;
+                    newLeft = 0; }
+            }
+            if (dir.includes('s')) {
+                newHeight = Math.max(5, Math.min(85 - newTop, resizeStartHeight + dy));
+            }
+            if (dir.includes('n')) {
+                newHeight = Math.max(5, resizeStartHeight - dy);
+                newTop = resizeStartTop + (resizeStartHeight - newHeight);
+                if (newTop < 0) { newHeight = newHeight + newTop;
+                    newTop = 0; }
+            }
+
+            photoBounds.left = newLeft;
+            photoBounds.top = newTop;
+            photoBounds.right = newLeft + newWidth;
+            photoBounds.bottom = newTop + newHeight;
+
+            document.getElementById('photoLeft').value = photoBounds.left;
+            document.getElementById('photoRight').value = photoBounds.right;
+            document.getElementById('photoTop').value = photoBounds.top;
+            document.getElementById('photoBottom').value = photoBounds.bottom;
+            document.getElementById('photoLeftVal').textContent = Math.round(photoBounds.left) + '%';
+            document.getElementById('photoRightVal').textContent = Math.round(photoBounds.right) + '%';
+            document.getElementById('photoTopVal').textContent = Math.round(photoBounds.top) + '%';
+            document.getElementById('photoBottomVal').textContent = Math.round(photoBounds.bottom) + '%';
+
+            updatePreview();
+        }, { passive: false });
+
+        document.addEventListener('touchend', function(e) {
+            if (isResizingPhoto) {
+                isResizingPhoto = false;
+                document.querySelectorAll('.draggable-photo.resizing').forEach(el => el.classList.remove('resizing'));
+                localStorage.setItem('srm_photo_bounds_' + (currentClient ? currentClient.clientId : 'default'), JSON
+                    .stringify(photoBounds));
+                savePositions();
+            }
+        });
+
+        // ============================================================
+        // DRAG & DROP
+        // ============================================================
+        function startDrag(e, element) {
+            if (!editMode) return;
+            if (element.classList.contains('delete-btn')) return;
+            if (element.closest('.format-toolbar')) return;
+            if (element.classList.contains('resize-handle')) return;
+            isDragging = true;
+            dragField = element;
+            element.classList.add('dragging');
+            const rect = element.getBoundingClientRect();
+            const cardRect = document.getElementById('liveCard').getBoundingClientRect();
+            dragOffsetX = ((e.clientX - rect.left) / rect.width) * 100;
+            dragOffsetY = ((e.clientY - rect.top) / rect.height) * 100;
+            e.preventDefault();
+        }
+
+        document.addEventListener('mousemove', function(e) {
+            if (!isDragging || !dragField) return;
+            const cardRect = document.getElementById('liveCard').getBoundingClientRect();
+            const x = ((e.clientX - cardRect.left) / cardRect.width) * 100;
+            const y = ((e.clientY - cardRect.top) / cardRect.height) * 100;
+            const fieldId = dragField.dataset.field;
+            if (fieldId && elementPositions[fieldId]) {
+                const newLeft = Math.max(0, Math.min(85, x - dragOffsetX));
+                const newTop = Math.max(0, Math.min(85, y - dragOffsetY));
+                elementPositions[fieldId].left = newLeft;
+                elementPositions[fieldId].top = newTop;
+                dragField.style.left = newLeft + '%';
+                dragField.style.top = newTop + '%';
+                updateFieldControls();
+            }
+        });
+
+        document.addEventListener('mouseup', function(e) {
+            if (isDragging && dragField) {
+                isDragging = false;
+                dragField.classList.remove('dragging');
+                savePositions();
+                dragField = null;
+            }
+        });
+
+        function startDragTouch(e, element) {
+            if (!editMode) return;
+            if (element.classList.contains('delete-btn')) return;
+            if (element.closest('.format-toolbar')) return;
+            if (element.classList.contains('resize-handle')) return;
+            const touch = e.touches[0];
+            isDragging = true;
+            dragField = element;
+            element.classList.add('dragging');
+            const rect = element.getBoundingClientRect();
+            dragOffsetX = ((touch.clientX - rect.left) / rect.width) * 100;
+            dragOffsetY = ((touch.clientY - rect.top) / rect.height) * 100;
+            e.preventDefault();
+        }
+
+        document.addEventListener('touchmove', function(e) {
+            if (!isDragging || !dragField) return;
+            const touch = e.touches[0];
+            const cardRect = document.getElementById('liveCard').getBoundingClientRect();
+            const x = ((touch.clientX - cardRect.left) / cardRect.width) * 100;
+            const y = ((touch.clientY - cardRect.top) / cardRect.height) * 100;
+            const fieldId = dragField.dataset.field;
+            if (fieldId && elementPositions[fieldId]) {
+                const newLeft = Math.max(0, Math.min(85, x - dragOffsetX));
+                const newTop = Math.max(0, Math.min(85, y - dragOffsetY));
+                elementPositions[fieldId].left = newLeft;
+                elementPositions[fieldId].top = newTop;
+                dragField.style.left = newLeft + '%';
+                dragField.style.top = newTop + '%';
+                updateFieldControls();
+            }
+        }, { passive: false });
+
+        document.addEventListener('touchend', function(e) {
+            if (isDragging && dragField) {
+                isDragging = false;
+                dragField.classList.remove('dragging');
+                savePositions();
+                dragField = null;
+            }
+        });
+
+        // ============================================================
+        // TOGGLE FORMAT TOOLBAR
+        // ============================================================
+        function toggleFormatToolbar(elementId) {
+            const toolbar = document.getElementById('toolbar-' + elementId);
+            if (toolbar) {
+                toolbar.classList.toggle('show');
+                document.querySelectorAll('.format-toolbar.show').forEach(tb => {
+                    if (tb.id !== 'toolbar-' + elementId) {
+                        tb.classList.remove('show');
+                    }
+                });
+            }
+        }
+
+        // ============================================================
+        // SHEET PREVIEW — 12 x 18 with 5mm gaps, 3 columns × 7 rows
+        // ============================================================
+        function previewSheet() {
+            if (students.length === 0) { showToast('⚠️ No students to preview!', 'error'); return; }
+
+            const container = document.getElementById('sheetContainer');
+            const maxCardsPerSheet = 21; // 3 × 7
+            const totalSheets = Math.ceil(students.length / maxCardsPerSheet);
+
+            let allSheetsHTML = '';
+
+            for (let sheetIndex = 0; sheetIndex < totalSheets; sheetIndex++) {
+                const start = sheetIndex * maxCardsPerSheet;
+                const end = Math.min(start + maxCardsPerSheet, students.length);
+                const sheetStudents = students.slice(start, end);
+
+                let sheetHTML = `
+                        <div class="sheet-container">
+                            <div class="sheet-header">📋 Sheet ${sheetIndex + 1} — Cards ${start + 1} to ${end} (${sheetStudents.length} cards) | 12 × 18 in · 5mm spacing</div>
+                            <div class="card-grid">
+                    `;
+
+                // Fill all 21 slots (3×7)
+                for (let i = 0; i < maxCardsPerSheet; i++) {
+                    if (i < sheetStudents.length) {
+                        sheetHTML += generatePrintCard(sheetStudents[i]);
+                    } else {
+                        sheetHTML += `<div class="empty-card">Empty</div>`;
+                    }
+                }
+
+                sheetHTML += `
+                            </div>
+                        </div>
+                    `;
+
+                allSheetsHTML += sheetHTML;
+            }
+
+            container.innerHTML = allSheetsHTML;
+            document.getElementById('sheetPreview').classList.add('visible');
+            showToast(`👁️ Showing ${totalSheets} sheet(s) with ${students.length} cards (3×7, 5mm gaps)`, 'info');
+        }
+
+        function generatePrintCard(s) {
+            const bgHtml = schoolTemplate ? `<img src="${schoolTemplate}" class="card-bg">` : '';
+
+            let fieldsHtml = '';
+
+            ALL_ELEMENTS.forEach(el => {
+                if (isElementDeleted(el.id)) return;
+                const pos = elementPositions[el.id] || { left: el.defaultLeft, top: el.defaultTop, size: el
+                        .defaultSize, color: el.defaultColor, bold: false, italic: false };
+
+                if (el.type === 'photo') {
+                    const left = photoBounds.left || 2;
+                    const right = photoBounds.right || 78;
+                    const top = photoBounds.top || 5;
+                    const bottom = photoBounds.bottom || 88;
+                    const width = right - left;
+                    const height = bottom - top;
+
+                    fieldsHtml += `
+                            <div class="print-photo" style="left:${left}%; top:${top}%; width:${width}%; height:${height}%;">
+                                ${s.photo ? `<img src="${s.photo}" style="width:100%;height:100%;object-fit:cover;">` : '<span style="font-size:4px;color:#999;">Photo</span>'}
+                            </div>
+                        `;
+                } else {
+                    const fontSize = pos.size || (el.type === 'label' ? 9 : 10);
+                    const color = pos.color || (el.type === 'label' ? '#1a237e' : '#000000');
+                    const isLabel = el.type === 'label';
+                    const isBold = pos.bold || false;
+                    const isItalic = pos.italic || false;
+
+                    let fontWeight = isBold ? 'bold' : 'normal';
+                    let fontStyle = isItalic ? 'italic' : 'normal';
+
+                    let displayText = '';
+                    if (isLabel) {
+                        displayText =
+                            `<span class="p-label" style="font-weight:${fontWeight}; font-style:${fontStyle};">${el.label}</span>`;
+                    } else {
+                        const valMap = {
+                            'name_val': s.name || '',
+                            'class_val': s.class || '',
+                            'father_val': s.father || '',
+                            'dob_val': s.dob || '',
+                            'blood_val': s.blood || '',
+                            'phone_val': s.phone || '',
+                            'address_val': s.address || '',
+                            'idno_val': s.idno || '',
+                            'session_val': '2016-17',
+                            'principal_val': 'Principal'
+                        };
+                        const val = valMap[el.id] || '';
+                        displayText =
+                            `<span class="p-value" style="font-weight:${fontWeight}; font-style:${fontStyle};">${val}</span>`;
+                    }
+
+                    fieldsHtml += `
+                            <div class="print-element" style="left:${pos.left}%; top:${pos.top}%; font-size:${fontSize}px; color:${color}; max-width:${el.id === 'address_val' ? '65%' : '80%'};">
+                                ${displayText}
+                            </div>
+                        `;
+                }
+            });
+
+            return `
+                    <div class="preview-card">
+                        ${bgHtml}
+                        <div class="card-content">
+                            ${fieldsHtml}
+                        </div>
+                    </div>
+                `;
+        }
+
+        function printSheet() {
+            if (students.length === 0) { showToast('⚠️ No students to print!', 'error'); return; }
+            if (!document.getElementById('sheetPreview').classList.contains('visible')) { previewSheet(); }
+            setTimeout(() => window.print(), 400);
+        }
+
+        function exportData() {
+            if (students.length === 0) { showToast('⚠️ No students to export!', 'error'); return; }
+            let csv = 'S.No,Name,Class,Father,DOB,Blood,Phone,Address,ID\n';
+            students.forEach((s, i) => {
+                csv +=
+                    `${i+1},"${s.name || ''}","${s.class || ''}","${s.father || ''}","${s.dob || ''}","${s.blood || ''}","${s.phone || ''}","${s.address || ''}","${s.idno || ''}"\n`;
+            });
+            const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = (currentClient ? currentClient.clientId : 'students') + '_data.csv';
+            link.click();
+            URL.revokeObjectURL(link.href);
+            showToast('📥 Data exported successfully!', 'success');
+        }
+
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(message, type = 'info') {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            const toast = document.createElement('div');
+            toast.className = 'toast ' + type;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                toast.style.transition = '0.3s';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // ============================================================
+        // KEYBOARD SHORTCUTS
+        // ============================================================
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 's') { e.preventDefault();
+                saveStudent(); }
+            if (e.ctrlKey && e.shiftKey && e.key === 'N') { e.preventDefault();
+                saveAndNext(); }
+            if (e.ctrlKey && e.key === 'p') { e.preventDefault();
+                printSheet(); }
+            if (e.key === 'ArrowRight' && !e.ctrlKey && !e.shiftKey) { e.preventDefault();
+                nextStudent(); }
+            if (e.key === 'ArrowLeft' && !e.ctrlKey && !e.shiftKey) { e.preventDefault();
+                prevStudent(); }
+            if (e.key === 'Enter') {
+                if (!document.getElementById('loginPage').classList.contains('hidden')) {
+                    if (currentMode === 'login') { loginUser(); } else { registerClient(); }
+                }
+            }
+        });
+
+        // ============================================================
+        // CHECK SESSION ON LOAD
+        // ============================================================
+        const savedClient = localStorage.getItem('srm_current_client');
+        if (savedClient) {
+            try {
+                const client = JSON.parse(savedClient);
+                if (client) {
+                    currentClient = client;
+                    document.getElementById('loginPage').classList.add('hidden');
+                    document.getElementById('dashboard').classList.add('visible');
+                    document.getElementById('clientBadge').textContent = '🏫 ' + (client.schoolName || client.name);
+                    document.getElementById('clientName').textContent = (client.schoolName || client.name).substring(0,
+                    20);
+                    const clientStorageKey = 'srm_students_' + client.clientId;
+                    students = JSON.parse(localStorage.getItem(clientStorageKey)) || [];
+                    schoolTemplate = localStorage.getItem('srm_template_' + client.clientId) || null;
+                    loadPositions();
+                    loadTemplate();
+                    renderList();
+                    updateStatus();
+                    updatePreview();
+                    resetZoom();
+                }
+            } catch (e) {}
+        }
+
+        console.log('🪪 SRM ID Card Studio — 12×18 PDF with 5mm spacing');
+        console.log('📌 3 columns × 7 rows = 21 cards per sheet');
+        console.log('📌 Card: 85.6×54mm · Gap: 5mm');
+        console.log('📌 Shortcuts: Ctrl+S=Save, Ctrl+Shift+N=Save&Next, Ctrl+P=Print');
+    </script>
+</body>
+</html>
