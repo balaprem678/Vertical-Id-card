@@ -11,6 +11,10 @@
             font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
         }
 
+        [hidden] {
+            display: none !important;
+        }
+
         body {
             background: #eef2f6;
             display: flex;
@@ -720,9 +724,10 @@
             position: absolute;
             top: 78px;
             left: 73px;
-            width: 120px;
-            height: 150px;
-            border-radius: 6px;
+            width: 100px;
+            height: 100px;
+            aspect-ratio: 1;
+            border-radius: 50%;
             background: #e2e8f0;
             overflow: hidden;
             display: flex;
@@ -750,7 +755,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            object-position: top;
+            object-position: center;
             display: block;
         }
 
@@ -816,13 +821,14 @@
             font-size: 16px;
             font-weight: 800;
             letter-spacing: 0.3px;
-            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .field-badge.front-course {
             top: 280px;
             left: 23px;
-
+            width: 82%;
+            justify-content: center;
+            text-align: center;
             span{
                 text-transform: uppercase;
             }
@@ -857,7 +863,7 @@
         }
         &.back-emergency,
           &.back-father {
-            span.label-text{
+            /* span.label-text{
                 width: 115px !important;
                 &::after {
     content: ":";
@@ -865,7 +871,7 @@
     left: 105px;
 }
 
-            }
+            } */
         }
  
         }
@@ -916,9 +922,9 @@
         .back-father {
             top: 175px;
             left: 20px;
-            span{
+            /* span{
                 width: 120px !important;
-            }
+            } */
         }
 
         .back-emergency {
@@ -2148,6 +2154,167 @@
             box-shadow: 0 8px 22px rgba(30, 55, 45, 0.06);
         }
 
+        .card-maker-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 0 0 16px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--admin-line);
+        }
+
+        .card-maker-tab {
+            min-height: 40px;
+            padding: 9px 16px;
+            border: 1px solid var(--admin-line);
+            border-radius: 10px;
+            background: #fff;
+            color: var(--admin-muted);
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .card-maker-tab:hover,
+        .card-maker-tab[aria-selected="true"] {
+            border-color: #9ac7b2;
+            background: #e6f4ef;
+            color: var(--admin-green-deep);
+        }
+
+        .card-maker-saved-panel[hidden] {
+            display: none !important;
+        }
+
+        .card-maker-saved-panel {
+            padding: 20px;
+            border: 1px solid var(--admin-line);
+            border-radius: 14px;
+            background: linear-gradient(180deg, #fff, #f9fbfa);
+            box-shadow: 0 8px 22px rgba(30, 55, 45, 0.06);
+        }
+
+        .card-maker-saved-panel h2 {
+            margin: 0;
+            color: var(--admin-green-deep);
+            font-size: 17px;
+        }
+
+        .card-maker-saved-panel > p {
+            margin: 6px 0 16px;
+            color: var(--admin-muted);
+            font-size: 12px;
+        }
+
+        .card-maker-design-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 12px;
+        }
+
+        .card-maker-design-empty {
+            grid-column: 1 / -1;
+            padding: 12px;
+            border: 1px dashed var(--admin-line);
+            border-radius: 9px;
+            color: var(--admin-muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .card-maker-design-card {
+            display: flex;
+            min-width: 0;
+            flex-direction: column;
+            gap: 10px;
+            padding: 13px;
+            border: 1px solid var(--admin-line);
+            border-radius: 11px;
+            background: #fff;
+        }
+
+        .card-maker-design-name {
+            overflow: hidden;
+            color: var(--admin-ink);
+            font-size: 13px;
+            font-weight: 800;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .card-maker-design-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .card-maker-design-actions button {
+            min-width: 0;
+            padding: 7px 10px;
+            border: 1px solid var(--admin-line);
+            border-radius: 7px;
+            background: #fff;
+            color: var(--admin-green-deep);
+            font: inherit;
+            font-size: 10px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .card-maker-design-actions button:hover {
+            border-color: #9ac7b2;
+            background: #e6f4ef;
+        }
+
+        .card-maker-design-actions .card-maker-design-delete {
+            color: #b42318;
+        }
+
+        .card-maker-design-actions .card-maker-design-delete:hover {
+            background: #fff1f0;
+        }
+
+        .card-maker-editor-actions {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: end;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-bottom: 12px;
+        }
+
+        .card-maker-name-field {
+            display: grid;
+            flex: 1;
+            gap: 5px;
+            min-width: 220px;
+            color: var(--admin-muted);
+            font-size: 11px;
+            font-weight: 700;
+            text-align: left;
+        }
+
+        .card-maker-name-field input {
+            width: 100%;
+            min-height: 36px;
+            padding: 8px 10px;
+            border: 1px solid var(--admin-line);
+            border-radius: 8px;
+            color: var(--admin-ink);
+            font: inherit;
+        }
+
+        .card-maker-rename-input {
+            width: 100%;
+            min-width: 0;
+            padding: 8px 10px;
+            border: 1px solid var(--admin-line);
+            border-radius: 8px;
+            color: var(--admin-ink);
+            font: inherit;
+        }
+
         .card-maker-form {
             display: flex;
             flex-direction: column;
@@ -2294,6 +2461,34 @@
             outline-offset: 1px;
         }
 
+        .maker-photo-slot {
+            top: 20%;
+            left: 31%;
+            display: grid;
+            place-items: center;
+            width: 100px;
+            height: 100px;
+            overflow: hidden;
+            border: 1px dashed rgba(24, 53, 47, 0.7);
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.78);
+            color: #18352f;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .maker-photo-style-fields {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+
+        .maker-photo-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
         .maker-front-name,
         .maker-front-id,
         .maker-front-position {
@@ -2303,7 +2498,10 @@
             border-radius: 4px;
             color: #fff;
             text-align: center;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.7);
+        }
+
+        .maker-front-position {
+            text-transform: uppercase;
         }
 
         .maker-front-name {
@@ -2329,8 +2527,6 @@
         .maker-principal-signature {
             top: 85%;
             left: 35%;
-            width: 76px;
-            height: 34px;
             object-fit: contain;
         }
 
@@ -2342,7 +2538,17 @@
             font-size: 10px;
             font-weight: 800;
             text-align: center;
-            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+        }
+
+        .principal_label {
+            position: absolute;
+            bottom: 5px;
+            left: 8%;
+            width: 84%;
+            color: #fff;
+            font-size: 10px;
+            font-weight: 800;
+            text-align: center;
         }
 
         .maker-back-row {
@@ -2412,6 +2618,42 @@
         .maker-office-phone { top: 76%; }
         .maker-office-email { top: 85%; }
 
+        .generator-design-overlay {
+            position: absolute;
+            z-index: 6;
+            pointer-events: none;
+        }
+
+        .generator-design-signature {
+            width: 76px;
+            height: 34px;
+            object-fit: contain;
+        }
+
+        .generator-design-label,
+        .generator-design-contact {
+            color: #18352f;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            overflow-wrap: anywhere;
+        }
+
+        .generator-design-social {
+            right: 9px;
+            bottom: 8px;
+            left: 9px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .generator-design-social img {
+            width: 22px;
+            height: 22px;
+            object-fit: contain;
+        }
+
         .card-maker-layout-help {
             margin: 12px 0 0;
             color: var(--admin-muted);
@@ -2444,6 +2686,41 @@
             font-size: 12px;
         }
 
+        .maker-position-controls input[type="color"] {
+            width: 38px;
+            height: 34px;
+            padding: 3px;
+            border: 1px solid #d4dfd8;
+            border-radius: 7px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .maker-text-size-controls {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--admin-ink);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .maker-text-size-controls button {
+            min-width: 34px;
+            height: 34px;
+            border: 1px solid #d4dfd8;
+            border-radius: 7px;
+            background: #fff;
+            color: #18352f;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 800;
+        }
+
+        .maker-text-size-controls button:hover {
+            background: #e8f3ee;
+        }
+
         .maker-position-arrows {
             display: grid;
             grid-template-columns: repeat(3, 34px);
@@ -2470,28 +2747,6 @@
         .maker-position-down { grid-column: 2; grid-row: 2; }
         .maker-position-right { grid-column: 3; grid-row: 2; }
 
-        .photo-radius-control {
-            display: flex;
-            align-items: center;
-            gap: 7px;
-            padding: 4px 9px;
-            border: 1px solid #cbd5e1;
-            border-radius: 8px;
-            background: white;
-            color: #334155;
-            font-size: 12px;
-        }
-
-        .photo-radius-control input {
-            width: 90px;
-            accent-color: #2563eb;
-        }
-
-        .photo-radius-control output {
-            min-width: 36px;
-            font-weight: 700;
-        }
-
         .card-maker-downloads {
             display: flex;
             flex-wrap: wrap;
@@ -2500,10 +2755,10 @@
             margin-top: 18px;
         }
 
-        @media (max-width: 900px) {
+        @media (max-width: 1100px) {
             .card-maker-layout { grid-template-columns: 1fr; }
-            .card-maker-form { max-height: none; }
             .card-maker-preview { position: static; }
+            .card-maker-form { max-height: none; }
         }
 
         @media (max-width: 560px) {
@@ -2635,7 +2890,7 @@
             bottom: 22px;
             width: 28%;
             left: 40%;
-            transform: rotate(15deg);
+            transform: none;
         }
 
         .socialmedia{
@@ -2748,10 +3003,21 @@ position: absolute;
             <div class="page-heading">
                 <div>
                     <h1 id="makeIdCardHeading">Make ID Card</h1>
-                    <p>Upload front and back card templates, enter the details, and download both sides.</p>
+                    <p>Create reusable card templates, then use them to automate cards for your student roster.</p>
                 </div>
             </div>
-            <div class="card-maker-layout">
+            <div class="card-maker-tabs" role="tablist" aria-label="Card design views">
+                <button class="card-maker-tab" id="makerEditorTab" type="button" role="tab" aria-controls="makerEditorPanel" aria-selected="true" data-maker-tab="editor">Card Template</button>
+                <button class="card-maker-tab" id="makerSavedTab" type="button" role="tab" aria-controls="makerSavedPanel" aria-selected="false" data-maker-tab="saved">Saved Card Designs</button>
+            </div>
+            <div id="makerEditorPanel" role="tabpanel" aria-labelledby="makerEditorTab">
+                <div class="card-maker-editor-actions">
+                    <label class="card-maker-name-field" for="makerDesignName">Card design name
+                        <input id="makerDesignName" type="text" maxlength="80" placeholder="Enter a name before saving" autocomplete="off">
+                    </label>
+                    <button class="btn btn-outline btn-sm" id="newMakerDesign" type="button">＋ New Card Design</button>
+                </div>
+                <div class="card-maker-layout">
                 <form class="card-maker-form" id="cardMakerForm" onsubmit="return false;">
                     <fieldset class="card-maker-group">
                         <legend>Card templates</legend>
@@ -2763,85 +3029,35 @@ position: absolute;
                             <label for="makerBackUpload">Back card image</label>
                             <input id="makerBackUpload" type="file" accept="image/*">
                         </div>
-                    </fieldset>
-                    <fieldset class="card-maker-group">
-                        <legend>Front of card</legend>
-                        <div class="card-maker-field full-width">
-                            <label for="makerName">Name</label>
-                            <input id="makerName" type="text" placeholder="Full name" data-preview-target="makerPreviewName">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerIdNumber">ID number</label>
-                            <input id="makerIdNumber" type="text" placeholder="ID number" data-preview-target="makerPreviewId">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerPosition">Position</label>
-                            <input id="makerPosition" type="text" placeholder="Position" data-preview-target="makerPreviewPosition">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerPrincipalLabel">Principal label</label>
-                            <input id="makerPrincipalLabel" type="text" value="Principal" data-preview-target="makerPreviewPrincipal">
-                        </div>
                         <div class="card-maker-field">
                             <label for="makerPrincipalSignature">Principal signature image</label>
                             <input id="makerPrincipalSignature" type="file" accept="image/*">
                         </div>
                     </fieldset>
-                    <fieldset class="card-maker-group">
-                        <legend>Back of card</legend>
+                    <fieldset class="card-maker-group maker-photo-style-fields">
+                        <legend>Staff photo size and shape</legend>
                         <div class="card-maker-field">
-                            <label for="makerDob">Date of birth</label>
-                            <input id="makerDob" type="text" placeholder="DD/MM/YYYY" data-preview-target="makerPreviewDob">
+                            <label for="makerPhotoWidth">Width (px)</label>
+                            <input id="makerPhotoWidth" type="number" min="20" max="200" step="1" value="100">
                         </div>
                         <div class="card-maker-field">
-                            <label for="makerBloodGroup">Blood group</label>
-                            <input id="makerBloodGroup" type="text" placeholder="e.g. O+" data-preview-target="makerPreviewBlood">
+                            <label for="makerPhotoHeight">Height (px)</label>
+                            <input id="makerPhotoHeight" type="number" min="20" max="200" step="1" value="100">
                         </div>
                         <div class="card-maker-field">
-                            <label for="makerPhone">Phone number</label>
-                            <input id="makerPhone" type="tel" placeholder="Phone number" data-preview-target="makerPreviewPhone">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerGuardianName">Emergency contact</label>
-                            <input id="makerGuardianName" type="text" placeholder="Emergency contact" data-preview-target="makerPreviewGuardianName">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerGuardianNumber">Emergency contact number</label>
-                            <input id="makerGuardianNumber" type="tel" placeholder="Emergency contact number" data-preview-target="makerPreviewGuardianNumber">
-                        </div>
-                        <div class="card-maker-field full-width">
-                            <label for="makerAddress">Address</label>
-                            <textarea id="makerAddress" placeholder="Home address" data-preview-target="makerPreviewAddress"></textarea>
+                            <label for="makerPhotoRadius">Border radius (%)</label>
+                            <input id="makerPhotoRadius" type="number" min="0" max="50" step="1" value="50">
                         </div>
                     </fieldset>
-                    <fieldset class="card-maker-group">
-                        <legend>Social media images</legend>
+                    <fieldset class="card-maker-group maker-photo-style-fields">
+                        <legend>Principal signature size</legend>
                         <div class="card-maker-field">
-                            <label for="makerSocialOne">Social image 1</label>
-                            <input id="makerSocialOne" type="file" accept="image/*">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerSocialTwo">Social image 2</label>
-                            <input id="makerSocialTwo" type="file" accept="image/*">
-                        </div>
-                        <div class="card-maker-field full-width">
-                            <label for="makerSocialThree">Social image 3</label>
-                            <input id="makerSocialThree" type="file" accept="image/*">
-                        </div>
-                    </fieldset>
-                    <fieldset class="card-maker-group">
-                        <legend>Office contact</legend>
-                        <div class="card-maker-field full-width">
-                            <label for="makerOfficeAddress">Office address</label>
-                            <textarea id="makerOfficeAddress" placeholder="Office address" data-preview-target="makerPreviewOfficeAddress"></textarea>
+                            <label for="makerSignatureWidth">Width (px)</label>
+                            <input id="makerSignatureWidth" type="number" min="10" max="200" step="1" value="76">
                         </div>
                         <div class="card-maker-field">
-                            <label for="makerOfficePhone">Office phone number</label>
-                            <input id="makerOfficePhone" type="tel" placeholder="Office phone" data-preview-target="makerPreviewOfficePhone">
-                        </div>
-                        <div class="card-maker-field">
-                            <label for="makerOfficeEmail">Office email address</label>
-                            <input id="makerOfficeEmail" type="email" placeholder="name@example.com" data-preview-target="makerPreviewOfficeEmail">
+                            <label for="makerSignatureHeight">Height (px)</label>
+                            <input id="makerSignatureHeight" type="number" min="10" max="120" step="1" value="34">
                         </div>
                     </fieldset>
                 </form>
@@ -2852,11 +3068,12 @@ position: absolute;
                             <span class="card-maker-side-title">Front preview</span>
                             <div class="maker-card" id="makerFrontCard">
                                 <img class="maker-card-background" id="makerFrontBackground" alt="" hidden>
+                                <div class="maker-layout-item maker-photo-slot" data-layout-field="staffPhoto" id="makerPreviewStaffPhoto">Staff photo</div>
                                 <span class="maker-layout-item maker-front-name" data-layout-field="frontName" id="makerPreviewName">Name</span>
                                 <span class="maker-layout-item maker-front-id" data-layout-field="frontId" id="makerPreviewId">ID number</span>
                                 <span class="maker-layout-item maker-front-position" data-layout-field="frontPosition" id="makerPreviewPosition">Position</span>
-                                <img class="maker-layout-item maker-principal-signature" data-layout-field="principalSignature" id="makerPreviewSignature" alt="" hidden>
                                 <span class="maker-layout-item maker-principal-label" data-layout-field="principalLabel" id="makerPreviewPrincipal">Principal</span>
+                                <img class="maker-layout-item maker-principal-signature" data-layout-field="principalSignature" id="makerPreviewSignature" alt="Principal signature" hidden>
                             </div>
                         </div>
                         <div class="card-maker-side">
@@ -2864,33 +3081,25 @@ position: absolute;
                             <div class="maker-card" id="makerBackCard">
                                 <img class="maker-card-background" id="makerBackBackground" alt="" hidden>
                                 <div class="maker-layout-item maker-back-row" data-layout-field="backDob"><strong>Date of birth</strong><span class="maker-back-value" id="makerPreviewDob">—</span></div>
-                                <div class="maker-layout-item maker-back-row" data-layout-field="backBlood"><strong>Blood group</strong><span class="maker-back-value" id="makerPreviewBlood">—</span></div>
+                                <div class="maker-layout-item maker-back-row" data-layout-field="backBlood"><strong>Blood group</strong><span class="maker-back-value">—</span></div>
                                 <div class="maker-layout-item maker-back-row" data-layout-field="backPhone"><strong>Phone</strong><span class="maker-back-value" id="makerPreviewPhone">—</span></div>
-                                <div class="maker-layout-item maker-back-row" data-layout-field="backEmergencyName"><strong>Emergency contact</strong><span class="maker-back-value" id="makerPreviewGuardianName">—</span></div>
-                                <div class="maker-layout-item maker-back-row" data-layout-field="backEmergencyNumber"><strong>Emergency no.</strong><span class="maker-back-value" id="makerPreviewGuardianNumber">—</span></div>
+                                <div class="maker-layout-item maker-back-row" data-layout-field="backEmergencyName"><strong>Emergency Contact</strong><span class="maker-back-value" id="makerPreviewGuardianName">—</span></div>
+                                <div class="maker-layout-item maker-back-row" data-layout-field="backEmergencyNumber"><strong>Emergency Number</strong><span class="maker-back-value" id="makerPreviewGuardianNumber">—</span></div>
                                 <div class="maker-layout-item maker-back-row" data-layout-field="backAddress"><strong>Address</strong><span class="maker-back-value" id="makerPreviewAddress">—</span></div>
-                                <div class="maker-back-footer">
-                                    <div class="maker-social-images">
-                                        <img class="maker-social-image" id="makerPreviewSocialOne" alt="" hidden>
-                                        <img class="maker-social-image" id="makerPreviewSocialTwo" alt="" hidden>
-                                        <img class="maker-social-image" id="makerPreviewSocialThree" alt="" hidden>
-                                    </div>
-                                </div>
                                 <span class="maker-layout-item maker-office-details maker-office-address" data-layout-field="officeAddress" id="makerPreviewOfficeAddress"></span>
-                                <span class="maker-layout-item maker-office-details maker-office-phone" data-layout-field="officePhone" id="makerPreviewOfficePhone"></span>
-                                <span class="maker-layout-item maker-office-details maker-office-email" data-layout-field="officeEmail" id="makerPreviewOfficeEmail"></span>
                             </div>
                         </div>
                     </div>
-                    <p class="card-maker-layout-help">Select a field and use the arrow buttons to position it, then save the layout.</p>
+                    <p class="card-maker-layout-help">Select a field and use the arrow buttons to position it, then save the card design.</p>
                     <div class="maker-position-controls" role="group" aria-label="Selected field position controls">
                         <label for="makerSelectedField">Move field</label>
                         <select id="makerSelectedField">
+                            <option value="staffPhoto">Staff photo</option>
                             <option value="frontName">Name</option>
                             <option value="frontId">ID number</option>
                             <option value="frontPosition">Position</option>
-                            <option value="principalSignature">Principal signature</option>
                             <option value="principalLabel">Principal label</option>
+                            <option value="principalSignature">Principal signature</option>
                             <option value="backDob">Date of birth</option>
                             <option value="backBlood">Blood group</option>
                             <option value="backPhone">Phone number</option>
@@ -2898,9 +3107,14 @@ position: absolute;
                             <option value="backEmergencyNumber">Emergency contact number</option>
                             <option value="backAddress">Address</option>
                             <option value="officeAddress">Office address</option>
-                            <option value="officePhone">Office phone number</option>
-                            <option value="officeEmail">Office email</option>
                         </select>
+                        <label for="makerTextColor">Text color</label>
+                        <input id="makerTextColor" type="color" value="#ffffff" aria-label="Selected field text color">
+                        <div class="maker-text-size-controls" role="group" aria-label="Change the size of the selected text">
+                            <span id="makerTextSizeValue" aria-live="polite">100%</span>
+                            <button id="decreaseMakerTextSize" type="button" aria-label="Decrease selected text size" title="Decrease selected text size">A-</button>
+                            <button id="increaseMakerTextSize" type="button" aria-label="Increase selected text size" title="Increase selected text size">A+</button>
+                        </div>
                         <div class="maker-position-arrows" aria-label="Move selected field by 5 pixels">
                             <button class="maker-position-up" type="button" data-layout-direction="up" aria-label="Move up" title="Move up">↑</button>
                             <button class="maker-position-left" type="button" data-layout-direction="left" aria-label="Move left" title="Move left">←</button>
@@ -2909,13 +3123,21 @@ position: absolute;
                         </div>
                     </div>
                     <div class="card-maker-downloads">
-                        <button class="btn btn-success btn-sm" id="saveMakerLayout" type="button">Save Layout</button>
+                        <button class="btn btn-success btn-sm" id="saveMakerLayout" type="button">Save Card Design</button>
                         <button class="btn btn-outline btn-sm" id="resetMakerLayout" type="button">Reset Layout</button>
                         <button class="btn btn-primary btn-sm" id="downloadMakerFront" type="button">Download Front PNG</button>
                         <button class="btn btn-primary btn-sm" id="downloadMakerBack" type="button">Download Back PNG</button>
                     </div>
                 </div>
             </div>
+            </div>
+            <section class="card-maker-saved-panel" id="makerSavedPanel" role="tabpanel" aria-labelledby="makerSavedTab" hidden>
+                <h2>Saved card designs</h2>
+                <p>Select a design to edit it or send it to the student card automation.</p>
+                <div class="card-maker-design-list" id="makerSavedDesignList" aria-live="polite">
+                    <div class="card-maker-design-empty">Loading saved designs...</div>
+                </div>
+            </section>
         </section>
 
         <section class="app-page settings-page" id="settingsPage" aria-labelledby="settingsHeading" hidden>
@@ -3071,7 +3293,7 @@ position: absolute;
                                 <span id="valFrontId">—</span>
                             </div>
                             <div class="field-badge front-course">
-                                <span class="label-text">Course</span>
+                                <span class="label-text">Position</span>
                                 <span class="value-text" id="valFrontCourse">—</span>
                             </div>
                             <div class="field-badge front-batch">
@@ -3081,6 +3303,7 @@ position: absolute;
                             <img class="principal_sign"
                                 src="data:image/png;base64,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"
                                 alt="" />
+                            <span class="principal_label">Principal</span>
                         </div>
                     </div>
 
@@ -3111,7 +3334,7 @@ position: absolute;
                                 <span class="value-text" id="valBackFather">—</span>
                             </div>
                             <div class="field-badge back-emergency">
-                                <span class="label-text">Emergency No</span>
+                                <span class="label-text">Emergency Number</span>
                                 <span class="value-text" id="valBackEmergency">—</span>
                             </div>
                             <div class="socialmedia"> 
@@ -3148,8 +3371,8 @@ position: absolute;
                         <input type="text" id="inputId" placeholder="e.g. BHARATHI-001">
                     </div>
                     <div class="form-field">
-                        <label for="inputCourse">Course</label>
-                        <input type="text" id="inputCourse" placeholder="e.g. B.Tech">
+                        <label for="inputCourse">Position</label>
+                        <input type="text" id="inputCourse" placeholder="e.g. Manager">
                     </div>
                     <div class="form-field">
                         <label for="inputBatch">Batch</label>
@@ -3189,11 +3412,6 @@ position: absolute;
                 <div class="action-bar">
                     <input type="url" id="photoUrlInput" placeholder="Photo URL (https://... or Google Drive link)"
                         style="flex:1;min-width:200px;padding:8px 12px;border-radius:20px;border:1px solid #cbd5e1;font-size:12px;">
-                    <label class="photo-radius-control" for="photoRadiusInput">
-                        Photo corners
-                        <input type="range" id="photoRadiusInput" min="0" max="60" step="1" value="6">
-                        <output id="photoRadiusValue" for="photoRadiusInput">6px</output>
-                    </label>
                     <button class="btn btn-primary btn-sm" id="applyPhotoBtn">Apply Photo</button>
                     <button class="btn btn-outline btn-sm" id="batchPhotoBtn"
                         title="Batch upload student photos matching IDs or names">📁 Batch Photos</button>
@@ -3499,6 +3717,12 @@ position: absolute;
             function showPage(pageId, updateHash = true) {
                 const targetPage = document.getElementById(pageId);
                 if (!targetPage || !targetPage.classList.contains('app-page')) pageId = 'dashboardPage';
+                if (pageId === 'generatorPage') {
+                    const activeDesignId = localStorage.getItem(MAKER_ACTIVE_DESIGN_KEY);
+                    const activeDesign = makerSavedDesigns.find(design => design.id === activeDesignId);
+                    if (activeDesign) applyAutomationDesign(activeDesign);
+                    else clearAutomationDesign();
+                }
                 const currentPage = document.querySelector('.app-page:not([hidden])');
                 const pageChanged = !currentPage || currentPage.id !== pageId;
                 document.querySelectorAll('.app-page').forEach(page => {
@@ -4307,8 +4531,8 @@ position: absolute;
             const EXACT_HEADER_MAP = {
                 // Name
                 'name': 'name', 'fullname': 'name', 'studentname': 'name', 'candidate': 'name', 'candidatename': 'name', 'personname': 'name',
-                // Course
-                'course': 'course', 'program': 'course', 'programme': 'course', 'branch': 'course', 'degree': 'course', 'dept': 'course', 'department': 'course', 'stream': 'course', 'major': 'course',
+                // Position / course
+                'course': 'course', 'program': 'course', 'programme': 'course', 'branch': 'course', 'degree': 'course', 'dept': 'course', 'department': 'course', 'stream': 'course', 'major': 'course', 'position': 'course', 'jobtitle': 'course', 'designation': 'course', 'role': 'course',
                 // Batch
                 'batch': 'batch', 'year': 'batch', 'academicyear': 'batch', 'session': 'batch', 'class': 'batch', 'cohort': 'batch',
                 // ID Number
@@ -4341,6 +4565,7 @@ position: absolute;
                 if (norm.includes('birth') || norm.includes('dob')) return 'dob';
                 if (norm.includes('blood')) return 'blood';
                 if (norm.includes('phone') || norm.includes('mobile') || norm.includes('cell') || norm.includes('contact')) return 'phone';
+                if (norm.includes('position') || norm.includes('designation') || norm.includes('jobtitle') || norm === 'role') return 'course';
                 if (norm.includes('course') || norm.includes('degree') || norm.includes('branch') || norm.includes('dept') || norm.includes('program')) return 'course';
                 if (norm.includes('batch') || norm.includes('session') || norm.includes('cohort')) return 'batch';
                 if (norm.includes('roll') || norm.includes('reg') || norm.includes('enroll') || norm.includes('admiss') || norm === 'id' || norm.endsWith('id')) return 'id';
@@ -4475,7 +4700,8 @@ position: absolute;
                     const field = mapHeaderToField(h);
                     if (field) {
                         fieldMap[h] = field;
-                        matchedChips.push(`<span class="map-chip matched">✓ ${h} → <strong>${field.toUpperCase()}</strong></span>`);
+                        const displayField = field === 'course' ? 'POSITION' : field.toUpperCase();
+                        matchedChips.push(`<span class="map-chip matched">✓ ${h} → <strong>${displayField}</strong></span>`);
                     } else {
                         unmatchedChips.push(`<span class="map-chip unmatched">? ${h}</span>`);
                     }
@@ -4487,7 +4713,7 @@ position: absolute;
                     throw new Error(
                         'Could not identify student columns in ' + sourceName + '.<br>' +
                         'Found headers: <code>[' + rawHeaders.join(', ') + ']</code>.<br>' +
-                        'Expected at least: Name, ID, Course.'
+                        'Expected at least: Name, ID, Position.'
                     );
                 }
 
@@ -4731,7 +4957,7 @@ position: absolute;
                     showToast('No students to export', 'error');
                     return;
                 }
-                const headers = ['Full Name', 'Course', 'Batch', "Father's Name", 'Date of Birth', 'Blood Group', 'Phone Number', 'Address', 'Emergency Contact', 'ID Number', 'Dummy Image URL'];
+                const headers = ['Full Name', 'Position', 'Batch', "Father's Name", 'Date of Birth', 'Blood Group', 'Phone Number', 'Address', 'Emergency Contact', 'ID Number', 'Dummy Image URL'];
                 const rows = students.map(s => [
                     s.name, s.course, s.batch, s.father, s.dob, s.blood, s.phone, s.address, s.emergency, s.id, s.photo
                 ]);
@@ -5195,14 +5421,178 @@ position: absolute;
             bindCardMakerImageUpload('makerFrontUpload', 'makerFrontBackground', 'makerFrontHint');
             bindCardMakerImageUpload('makerBackUpload', 'makerBackBackground', 'makerBackHint');
             bindCardMakerImageUpload('makerPrincipalSignature', 'makerPreviewSignature');
-            bindCardMakerImageUpload('makerSocialOne', 'makerPreviewSocialOne');
-            bindCardMakerImageUpload('makerSocialTwo', 'makerPreviewSocialTwo');
-            bindCardMakerImageUpload('makerSocialThree', 'makerPreviewSocialThree');
 
             const MAKER_LAYOUT_KEY = 'bharathi_id_card_maker_layout_v1';
+            const MAKER_ACTIVE_DESIGN_KEY = 'bharathi_id_card_maker_active_design_v1';
+            const MAKER_DESIGNS_DB = 'bharathi_id_card_maker_designs_v1';
+            const MAKER_DESIGNS_STORE = 'designs';
             const makerLayoutItems = document.querySelectorAll('.maker-card [data-layout-field]');
             const makerSelectedField = document.getElementById('makerSelectedField');
+            const makerSavedDesignList = document.getElementById('makerSavedDesignList');
+            const makerEditorPanel = document.getElementById('makerEditorPanel');
+            const makerSavedPanel = document.getElementById('makerSavedPanel');
+            const makerTabButtons = document.querySelectorAll('[data-maker-tab]');
+            const makerTextColorInput = document.getElementById('makerTextColor');
+            const makerTextSizeValue = document.getElementById('makerTextSizeValue');
+            const makerPhotoWidthInput = document.getElementById('makerPhotoWidth');
+            const makerPhotoHeightInput = document.getElementById('makerPhotoHeight');
+            const makerPhotoRadiusInput = document.getElementById('makerPhotoRadius');
+            const makerSignatureWidthInput = document.getElementById('makerSignatureWidth');
+            const makerSignatureHeightInput = document.getElementById('makerSignatureHeight');
+            const defaultMakerPhotoStyle = { width: 100, height: 100, borderRadius: 50 };
+            const defaultMakerSignatureStyle = { width: 76, height: 34 };
+            let makerTextColors = {};
+            let makerTextScales = {};
+            const makerTextFields = new Set(
+                Array.from(makerLayoutItems)
+                    .map(item => item.dataset.layoutField)
+                    .filter(fieldName => fieldName !== 'staffPhoto' && fieldName !== 'principalSignature')
+            );
+            const makerTextBaseSizes = new Map();
+            const makerImageAssets = [
+                { imageId: 'makerFrontBackground', inputId: 'makerFrontUpload' },
+                { imageId: 'makerBackBackground', inputId: 'makerBackUpload' },
+                { imageId: 'makerPreviewSignature', inputId: 'makerPrincipalSignature' }
+            ];
+            const generatorFrontBackground = document.getElementById('frontCardBg');
+            const generatorBackBackground = document.getElementById('backCardBg');
+            const generatorLayoutTargets = {
+                staffPhoto: '#photoHolder',
+                frontName: '.field-badge.front-name',
+                frontId: '.field-badge.front-id',
+                frontPosition: '.field-badge.front-course',
+                principalLabel: '.principal_label',
+                principalSignature: '.principal_sign',
+                backDob: '.field-badge.back-dob',
+                backBlood: '.field-badge.back-blood',
+                backPhone: '.field-badge.back-phone',
+                backAddress: '.field-badge.back-address',
+                backEmergencyName: '.field-badge.back-father',
+                backEmergencyNumber: '.field-badge.back-emergency',
+                officeAddress: '.field-badge.back-OfficeAddress'
+            };
             let makerLayout = {};
+            let makerSavedDesigns = [];
+            let activeMakerDesignId = null;
+
+            function getMakerTextElements(fieldName) {
+                const previewItem = Array.from(makerLayoutItems).find(item => item.dataset.layoutField === fieldName);
+                const generatorItem = generatorLayoutTargets[fieldName]
+                    ? document.querySelector(generatorLayoutTargets[fieldName])
+                    : null;
+                return [previewItem, generatorItem]
+                    .filter(Boolean)
+                    .flatMap(element => [element, ...element.querySelectorAll('*')]);
+            }
+
+            makerTextFields.forEach(fieldName => {
+                getMakerTextElements(fieldName).forEach(element => {
+                    makerTextBaseSizes.set(element, Number.parseFloat(getComputedStyle(element).fontSize));
+                });
+            });
+
+            function updateMakerTextSizeValue() {
+                const fieldName = makerSelectedField.value;
+                const scale = makerTextScales[fieldName] || 1;
+                makerTextSizeValue.textContent = `${Math.round(scale * 100)}%`;
+                const disabled = !makerTextFields.has(fieldName);
+                document.getElementById('decreaseMakerTextSize').disabled = disabled;
+                document.getElementById('increaseMakerTextSize').disabled = disabled;
+            }
+
+            function applyMakerTextScale(fieldName, scale) {
+                if (!makerTextFields.has(fieldName)) return;
+                const normalizedScale = Number.isFinite(scale) ? Math.min(2, Math.max(0.6, scale)) : 1;
+                makerTextScales[fieldName] = normalizedScale;
+                getMakerTextElements(fieldName).forEach(element => {
+                    const baseSize = makerTextBaseSizes.get(element);
+                    if (Number.isFinite(baseSize)) element.style.fontSize = `${baseSize * normalizedScale}px`;
+                });
+                if (fieldName === makerSelectedField.value) updateMakerTextSizeValue();
+            }
+
+            function getLegacyTextScales(legacyScale) {
+                if (!Number.isFinite(legacyScale)) return {};
+                return Object.fromEntries(Array.from(makerTextFields, fieldName => [fieldName, legacyScale]));
+            }
+
+            function applyMakerTextScales(scales = {}, legacyScale) {
+                makerTextBaseSizes.forEach((baseSize, element) => {
+                    if (Number.isFinite(baseSize)) element.style.removeProperty('font-size');
+                });
+                makerTextScales = {};
+                if (scales && typeof scales === 'object' && !Array.isArray(scales)) {
+                    Object.entries(scales).forEach(([fieldName, scale]) => {
+                        if (makerTextFields.has(fieldName) && Number.isFinite(scale)) {
+                            makerTextScales[fieldName] = Math.min(2, Math.max(0.6, scale));
+                        }
+                    });
+                }
+                if (Object.keys(makerTextScales).length === 0 && Number.isFinite(legacyScale)) {
+                    makerTextScales = getLegacyTextScales(legacyScale);
+                }
+                Object.entries(makerTextScales).forEach(([fieldName, scale]) => applyMakerTextScale(fieldName, scale));
+                updateMakerTextSizeValue();
+            }
+
+            function applyMakerPhotoStyle(photoStyle = {}) {
+                const normalizedStyle = {
+                    width: Number.isFinite(photoStyle.width) ? Math.min(200, Math.max(20, photoStyle.width)) : defaultMakerPhotoStyle.width,
+                    height: Number.isFinite(photoStyle.height) ? Math.min(200, Math.max(20, photoStyle.height)) : defaultMakerPhotoStyle.height,
+                    borderRadius: Number.isFinite(photoStyle.borderRadius) ? Math.min(50, Math.max(0, photoStyle.borderRadius)) : defaultMakerPhotoStyle.borderRadius
+                };
+                makerPhotoWidthInput.value = normalizedStyle.width;
+                makerPhotoHeightInput.value = normalizedStyle.height;
+                makerPhotoRadiusInput.value = normalizedStyle.borderRadius;
+
+                [document.getElementById('makerPreviewStaffPhoto'), photoHolder].forEach(element => {
+                    element.style.width = `${normalizedStyle.width}px`;
+                    element.style.height = `${normalizedStyle.height}px`;
+                    element.style.borderRadius = `${normalizedStyle.borderRadius}%`;
+                });
+                return normalizedStyle;
+            }
+
+            function applyMakerSignatureStyle(signatureStyle = {}) {
+                const normalizedStyle = {
+                    width: Number.isFinite(signatureStyle.width) ? Math.min(200, Math.max(10, signatureStyle.width)) : defaultMakerSignatureStyle.width,
+                    height: Number.isFinite(signatureStyle.height) ? Math.min(120, Math.max(10, signatureStyle.height)) : defaultMakerSignatureStyle.height
+                };
+                makerSignatureWidthInput.value = normalizedStyle.width;
+                makerSignatureHeightInput.value = normalizedStyle.height;
+
+                [document.getElementById('makerPreviewSignature'), document.querySelector('.principal_sign')].forEach(element => {
+                    element.style.width = `${normalizedStyle.width}px`;
+                    element.style.height = `${normalizedStyle.height}px`;
+                });
+                return normalizedStyle;
+            }
+
+            function showMakerTab(tabName) {
+                const showSaved = tabName === 'saved';
+                makerEditorPanel.hidden = showSaved;
+                makerSavedPanel.hidden = !showSaved;
+                makerTabButtons.forEach(button => {
+                    const selected = button.dataset.makerTab === tabName;
+                    button.setAttribute('aria-selected', String(selected));
+                    button.tabIndex = selected ? 0 : -1;
+                });
+                if (!showSaved) {
+                    requestAnimationFrame(() => makerLayoutItems.forEach(item => {
+                        const position = makerLayout[item.dataset.layoutField];
+                        if (!position || !Number.isFinite(position.x) || !Number.isFinite(position.y)) return;
+                        const card = item.closest('.maker-card');
+                        const maxLeft = Math.max(0, card.clientWidth - item.offsetWidth);
+                        const maxTop = Math.max(0, card.clientHeight - item.offsetHeight);
+                        item.style.left = `${Math.min(maxLeft, card.clientWidth * position.x / 100)}px`;
+                        item.style.top = `${Math.min(maxTop, card.clientHeight * position.y / 100)}px`;
+                    }));
+                }
+            }
+
+            makerTabButtons.forEach(button => {
+                button.addEventListener('click', () => showMakerTab(button.dataset.makerTab));
+            });
 
             try {
                 const savedLayout = localStorage.getItem(MAKER_LAYOUT_KEY);
@@ -5226,11 +5616,379 @@ position: absolute;
                 showToast('Unable to load the saved card layout: ' + error.message, 'error');
             }
 
+            function openMakerDesignDatabase() {
+                return new Promise((resolve, reject) => {
+                    if (!window.indexedDB) {
+                        reject(new Error('This browser does not support saved card designs.'));
+                        return;
+                    }
+                    const request = window.indexedDB.open(MAKER_DESIGNS_DB, 1);
+                    request.onupgradeneeded = () => {
+                        request.result.createObjectStore(MAKER_DESIGNS_STORE, { keyPath: 'id' });
+                    };
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error || new Error('Unable to open card design storage.'));
+                });
+            }
+
+            async function getSavedMakerDesigns() {
+                const database = await openMakerDesignDatabase();
+                return new Promise((resolve, reject) => {
+                    const transaction = database.transaction(MAKER_DESIGNS_STORE, 'readonly');
+                    const request = transaction.objectStore(MAKER_DESIGNS_STORE).getAll();
+                    let designs = [];
+                    request.onsuccess = () => { designs = request.result; };
+                    request.onerror = () => reject(request.error || new Error('Unable to read saved card designs.'));
+                    transaction.oncomplete = () => {
+                        database.close();
+                        resolve(designs);
+                    };
+                    transaction.onerror = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Unable to read saved card designs.'));
+                    };
+                    transaction.onabort = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Reading saved card designs was cancelled.'));
+                    };
+                });
+            }
+
+            async function storeMakerDesign(design) {
+                const database = await openMakerDesignDatabase();
+                return new Promise((resolve, reject) => {
+                    const transaction = database.transaction(MAKER_DESIGNS_STORE, 'readwrite');
+                    transaction.objectStore(MAKER_DESIGNS_STORE).put(design);
+                    transaction.oncomplete = () => {
+                        database.close();
+                        resolve();
+                    };
+                    transaction.onerror = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Unable to save this card design.'));
+                    };
+                    transaction.onabort = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Saving this card design was cancelled.'));
+                    };
+                });
+            }
+
+            async function removeMakerDesign(designId) {
+                const database = await openMakerDesignDatabase();
+                return new Promise((resolve, reject) => {
+                    const transaction = database.transaction(MAKER_DESIGNS_STORE, 'readwrite');
+                    transaction.objectStore(MAKER_DESIGNS_STORE).delete(designId);
+                    transaction.oncomplete = () => {
+                        database.close();
+                        resolve();
+                    };
+                    transaction.onerror = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Unable to delete this card design.'));
+                    };
+                    transaction.onabort = () => {
+                        database.close();
+                        reject(transaction.error || new Error('Deleting this card design was cancelled.'));
+                    };
+                });
+            }
+
+            function applyMakerLayout(layout) {
+                makerLayoutItems.forEach(item => {
+                    item.style.removeProperty('left');
+                    item.style.removeProperty('top');
+                    const position = layout[item.dataset.layoutField];
+                    if (!position || !Number.isFinite(position.x) || !Number.isFinite(position.y)) return;
+                    item.style.left = `${Math.max(0, Math.min(100, position.x))}%`;
+                    item.style.top = `${Math.max(0, Math.min(100, position.y))}%`;
+                });
+                makerLayout = layout;
+            }
+
+            function defaultMakerTextColor(fieldName) {
+                return ['frontName', 'frontId', 'frontPosition', 'principalLabel'].includes(fieldName) ? '#ffffff' : '#18352f';
+            }
+
+            function applyTextColor(element, color) {
+                if (!element || !color) return;
+                element.style.color = color;
+                element.querySelectorAll('*').forEach(child => { child.style.color = color; });
+            }
+
+            function applyMakerTextColors(colors = {}) {
+                makerTextColors = { ...colors };
+                makerLayoutItems.forEach(item => {
+                    const fieldName = item.dataset.layoutField;
+                    if (fieldName === 'staffPhoto' || fieldName === 'principalSignature') return;
+                    const color = makerTextColors[fieldName] || defaultMakerTextColor(fieldName);
+                    applyTextColor(item, color);
+                    applyTextColor(document.querySelector(generatorLayoutTargets[fieldName]), color);
+                });
+            }
+
+            function applyMakerDesignImages(images) {
+                makerImageAssets.forEach(({ imageId, inputId }) => {
+                    const preview = document.getElementById(imageId);
+                    const source = images[imageId];
+                    const input = document.getElementById(inputId);
+                    input.value = '';
+                    if (typeof source === 'string' && source.startsWith('data:image/')) {
+                        preview.src = source;
+                        preview.hidden = false;
+                    } else {
+                        preview.removeAttribute('src');
+                        preview.hidden = true;
+                    }
+                });
+            }
+
+            function applyMakerDesignToEditor(design) {
+                applyMakerDesignImages(design.images || {});
+                applyMakerPhotoStyle(design.photoStyle || defaultMakerPhotoStyle);
+                applyMakerSignatureStyle(design.signatureStyle || defaultMakerSignatureStyle);
+                applyMakerLayout(design.layout || {});
+                applyMakerTextColors(design.textColors || {});
+                const textScales = design.textScales && Object.keys(design.textScales).length
+                    ? design.textScales
+                    : getLegacyTextScales(design.textScale);
+                applyMakerTextScales(textScales);
+                activeMakerDesignId = design.id;
+                localStorage.setItem(MAKER_ACTIVE_DESIGN_KEY, design.id);
+                localStorage.setItem(MAKER_LAYOUT_KEY, JSON.stringify(makerLayout));
+            }
+
+            function applyAutomationDesign(design) {
+                const images = design.images || {};
+                const layout = design.layout || {};
+                applyMakerPhotoStyle(design.photoStyle || defaultMakerPhotoStyle);
+                applyMakerSignatureStyle(design.signatureStyle || defaultMakerSignatureStyle);
+                const frontBackground = images.makerFrontBackground;
+                const backBackground = images.makerBackBackground;
+                generatorFrontBackground.hidden = typeof frontBackground !== 'string';
+                generatorBackBackground.hidden = typeof backBackground !== 'string';
+                if (typeof frontBackground === 'string') generatorFrontBackground.src = frontBackground;
+                else generatorFrontBackground.removeAttribute('src');
+                if (typeof backBackground === 'string') generatorBackBackground.src = backBackground;
+                else generatorBackBackground.removeAttribute('src');
+
+                Object.entries(generatorLayoutTargets).forEach(([field, selector]) => {
+                    const element = document.querySelector(selector);
+                    element.hidden = false;
+                    element.style.removeProperty('left');
+                    element.style.removeProperty('top');
+                    const position = layout[field];
+                    if (!position || !Number.isFinite(position.x) || !Number.isFinite(position.y)) return;
+                    element.style.left = `${Math.max(0, Math.min(100, position.x))}%`;
+                    element.style.top = `${Math.max(0, Math.min(100, position.y))}%`;
+                });
+
+                const signature = document.querySelector('.principal_sign');
+                const signatureSource = images.makerPreviewSignature;
+                signature.hidden = typeof signatureSource !== 'string';
+                if (typeof signatureSource === 'string') signature.src = signatureSource;
+                else signature.removeAttribute('src');
+                applyMakerTextColors(design.textColors || {});
+                const textScales = design.textScales && Object.keys(design.textScales).length
+                    ? design.textScales
+                    : getLegacyTextScales(design.textScale);
+                applyMakerTextScales(textScales);
+                document.querySelector('.field-badge.front-batch').hidden = true;
+                document.querySelector('.socialmedia').hidden = true;
+                document.querySelector('.field-badge.front-course .label-text').hidden = true;
+                photoHolder.hidden = false;
+            }
+
+            function clearAutomationDesign() {
+                generatorFrontBackground.hidden = true;
+                generatorBackBackground.hidden = true;
+                applyMakerPhotoStyle(defaultMakerPhotoStyle);
+                applyMakerSignatureStyle(defaultMakerSignatureStyle);
+                applyMakerTextScales({});
+                generatorFrontBackground.removeAttribute('src');
+                generatorBackBackground.removeAttribute('src');
+                photoHolder.hidden = true;
+                document.querySelectorAll('#frontCard .field-badge, #backCard .field-badge, .principal_sign, .principal_label, .socialmedia').forEach(element => {
+                    element.hidden = true;
+                });
+                document.querySelectorAll('.generator-design-overlay').forEach(element => { element.hidden = true; });
+            }
+
+            function openAutomationWithMakerDesign(design) {
+                try {
+                    activeMakerDesignId = design.id;
+                    localStorage.setItem(MAKER_ACTIVE_DESIGN_KEY, design.id);
+                    applyAutomationDesign(design);
+                    showPage('generatorPage');
+                } catch (error) {
+                    console.error('Card automation design error:', error);
+                    showToast('Unable to open card automation with this design: ' + error.message, 'error');
+                }
+            }
+
+            document.getElementById('newMakerDesign').addEventListener('click', () => {
+                document.getElementById('cardMakerForm').reset();
+                document.getElementById('makerDesignName').value = '';
+                document.querySelectorAll('#cardMakerForm [data-preview-target]').forEach(input => {
+                    const preview = document.getElementById(input.dataset.previewTarget);
+                    preview.textContent = input.value.trim() || input.placeholder || '—';
+                });
+                applyMakerDesignImages({});
+                applyMakerPhotoStyle(defaultMakerPhotoStyle);
+                applyMakerSignatureStyle(defaultMakerSignatureStyle);
+                applyMakerTextScales({});
+                applyMakerLayout({});
+                applyMakerTextColors({});
+                activeMakerDesignId = null;
+                localStorage.removeItem(MAKER_ACTIVE_DESIGN_KEY);
+                localStorage.removeItem(MAKER_LAYOUT_KEY);
+                selectMakerField(makerSelectedField.value);
+                renderSavedMakerDesigns();
+                showMakerTab('editor');
+            });
+
+            function createMakerDesignAction(label, className, action) {
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = className;
+                button.textContent = label;
+                button.addEventListener('click', action);
+                return button;
+            }
+
+            function editMakerDesign(design) {
+                try {
+                    applyMakerDesignToEditor(design);
+                    document.getElementById('makerDesignName').value = design.name;
+                    renderSavedMakerDesigns();
+                    showMakerTab('editor');
+                    showToast(`Editing card design: ${design.name}`, 'success');
+                } catch (error) {
+                    console.error('Card design edit error:', error);
+                    showToast('Unable to edit card design: ' + error.message, 'error');
+                }
+            }
+
+            function renameMakerDesign(design, card) {
+                const nameElement = card.querySelector('.card-maker-design-name');
+                const actions = card.querySelector('.card-maker-design-actions');
+                const input = document.createElement('input');
+                input.className = 'card-maker-rename-input';
+                input.type = 'text';
+                input.maxLength = 80;
+                input.value = design.name;
+                input.setAttribute('aria-label', `Rename ${design.name}`);
+                const saveButton = createMakerDesignAction('Save name', '', async () => {
+                    const name = input.value.trim();
+                    if (!name) {
+                        showToast('Enter a name for this card design.', 'error');
+                        input.focus();
+                        return;
+                    }
+                    const duplicate = makerSavedDesigns.find(
+                        savedDesign => savedDesign.id !== design.id && savedDesign.name.toLowerCase() === name.toLowerCase()
+                    );
+                    if (duplicate) {
+                        showToast(`A card design named "${duplicate.name}" already exists.`, 'error');
+                        return;
+                    }
+                    try {
+                        const renamedDesign = { ...design, name, updatedAt: new Date().toISOString() };
+                        await storeMakerDesign(renamedDesign);
+                        makerSavedDesigns = makerSavedDesigns.map(savedDesign =>
+                            savedDesign.id === design.id ? renamedDesign : savedDesign
+                        );
+                        makerSavedDesigns.sort((first, second) => first.name.localeCompare(second.name));
+                        renderSavedMakerDesigns();
+                        showToast(`Renamed card design to: ${name}`, 'success');
+                    } catch (error) {
+                        console.error('Card design rename error:', error);
+                        showToast('Unable to rename card design: ' + error.message, 'error');
+                    }
+                });
+                const cancelButton = createMakerDesignAction('Cancel', '', () => renderSavedMakerDesigns());
+                nameElement.replaceWith(input);
+                actions.replaceChildren(saveButton, cancelButton);
+                input.focus();
+                input.select();
+            }
+
+            async function deleteMakerDesign(design) {
+                if (!confirm(`Delete the saved card design "${design.name}"?`)) return;
+                try {
+                    await removeMakerDesign(design.id);
+                    makerSavedDesigns = makerSavedDesigns.filter(savedDesign => savedDesign.id !== design.id);
+                    if (activeMakerDesignId === design.id) {
+                        activeMakerDesignId = null;
+                        localStorage.removeItem(MAKER_ACTIVE_DESIGN_KEY);
+                    }
+                    renderSavedMakerDesigns();
+                    showToast(`Deleted card design: ${design.name}`, 'success');
+                } catch (error) {
+                    console.error('Card design delete error:', error);
+                    showToast('Unable to delete card design: ' + error.message, 'error');
+                }
+            }
+
+            function renderSavedMakerDesigns() {
+                makerSavedDesignList.replaceChildren();
+                if (makerSavedDesigns.length === 0) {
+                    const emptyState = document.createElement('div');
+                    emptyState.className = 'card-maker-design-empty';
+                    emptyState.textContent = 'No saved designs yet. Create a card template and click Save Card Design to add it here.';
+                    makerSavedDesignList.appendChild(emptyState);
+                    return;
+                }
+
+                makerSavedDesigns.forEach(design => {
+                    const card = document.createElement('article');
+                    card.className = 'card-maker-design-card';
+                    const name = document.createElement('h3');
+                    name.className = 'card-maker-design-name';
+                    name.textContent = design.name;
+                    const actions = document.createElement('div');
+                    actions.className = 'card-maker-design-actions';
+                    actions.append(
+                        createMakerDesignAction('Edit', '', () => editMakerDesign(design)),
+                        createMakerDesignAction('Rename', '', () => renameMakerDesign(design, card)),
+                        createMakerDesignAction('Delete', 'card-maker-design-delete', () => deleteMakerDesign(design)),
+                        createMakerDesignAction('Generator', 'btn-primary', () => openAutomationWithMakerDesign(design))
+                    );
+                    card.append(name, actions);
+                    makerSavedDesignList.appendChild(card);
+                });
+            }
+
+            async function loadSavedMakerDesigns() {
+                try {
+                    makerSavedDesigns = await getSavedMakerDesigns();
+                    makerSavedDesigns.sort((first, second) => first.name.localeCompare(second.name));
+                    const activeDesignId = localStorage.getItem(MAKER_ACTIVE_DESIGN_KEY);
+                    const activeDesign = makerSavedDesigns.find(design => design.id === activeDesignId);
+                    if (activeDesign) {
+                        applyMakerDesignToEditor(activeDesign);
+                        activeMakerDesignId = activeDesign.id;
+                        document.getElementById('makerDesignName').value = activeDesign.name;
+                    }
+                    renderSavedMakerDesigns();
+                    if (!document.getElementById('generatorPage').hidden) {
+                        if (activeDesign) applyAutomationDesign(activeDesign);
+                        else clearAutomationDesign();
+                    }
+                } catch (error) {
+                    console.error('Card design list load error:', error);
+                    makerSavedDesignList.textContent = 'Unable to load saved designs: ' + error.message;
+                    showToast('Unable to load saved card designs: ' + error.message, 'error');
+                }
+            }
+
             function selectMakerField(fieldName) {
                 makerLayoutItems.forEach(item => {
                     item.classList.toggle('is-selected', item.dataset.layoutField === fieldName);
                 });
                 makerSelectedField.value = fieldName;
+                makerTextColorInput.value = makerTextColors[fieldName] || defaultMakerTextColor(fieldName);
+                updateMakerTextSizeValue();
             }
 
             makerLayoutItems.forEach(item => {
@@ -5238,6 +5996,41 @@ position: absolute;
             });
             selectMakerField(makerSelectedField.value);
             makerSelectedField.addEventListener('change', () => selectMakerField(makerSelectedField.value));
+            [makerPhotoWidthInput, makerPhotoHeightInput, makerPhotoRadiusInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if ([makerPhotoWidthInput, makerPhotoHeightInput, makerPhotoRadiusInput]
+                        .some(control => !control.value || !control.validity.valid)) return;
+                    applyMakerPhotoStyle({
+                        width: makerPhotoWidthInput.valueAsNumber,
+                        height: makerPhotoHeightInput.valueAsNumber,
+                        borderRadius: makerPhotoRadiusInput.valueAsNumber
+                    });
+                });
+            });
+            [makerSignatureWidthInput, makerSignatureHeightInput].forEach(input => {
+                input.addEventListener('input', () => {
+                    if ([makerSignatureWidthInput, makerSignatureHeightInput]
+                        .some(control => !control.value || !control.validity.valid)) return;
+                    applyMakerSignatureStyle({
+                        width: makerSignatureWidthInput.valueAsNumber,
+                        height: makerSignatureHeightInput.valueAsNumber
+                    });
+                });
+            });
+            document.getElementById('decreaseMakerTextSize').addEventListener('click', () => {
+                const fieldName = makerSelectedField.value;
+                applyMakerTextScale(fieldName, (makerTextScales[fieldName] || 1) - 0.1);
+            });
+            document.getElementById('increaseMakerTextSize').addEventListener('click', () => {
+                const fieldName = makerSelectedField.value;
+                applyMakerTextScale(fieldName, (makerTextScales[fieldName] || 1) + 0.1);
+            });
+            makerTextColorInput.addEventListener('input', () => {
+                const fieldName = makerSelectedField.value;
+                if (fieldName === 'staffPhoto' || fieldName === 'principalSignature') return;
+                makerTextColors[fieldName] = makerTextColorInput.value;
+                applyMakerTextColors(makerTextColors);
+            });
 
             document.querySelectorAll('[data-layout-direction]').forEach(button => {
                 button.addEventListener('click', () => {
@@ -5264,32 +6057,91 @@ position: absolute;
                 });
             });
 
-            document.getElementById('saveMakerLayout').addEventListener('click', () => {
+            document.getElementById('saveMakerLayout').addEventListener('click', async () => {
+                const nameInput = document.getElementById('makerDesignName');
+                const name = nameInput.value.trim();
+                if (!name) {
+                    showToast('Enter a card design name before saving.', 'error');
+                    nameInput.focus();
+                    return;
+                }
+                const existingDesign = makerSavedDesigns.find(
+                    design => design.name.toLowerCase() === name.toLowerCase()
+                );
+                if (existingDesign && existingDesign.id !== activeMakerDesignId) {
+                    showToast(`A card design named "${existingDesign.name}" already exists. Choose another name.`, 'error');
+                    nameInput.focus();
+                    return;
+                }
+
                 try {
+                    const layout = {};
                     makerLayoutItems.forEach(item => {
                         if (item.hidden) return;
                         const card = item.closest('.maker-card');
-                        makerLayout[item.dataset.layoutField] = {
+                        if (!card.clientWidth || !card.clientHeight) {
+                            throw new Error('Open the card-making page before saving the design.');
+                        }
+                        layout[item.dataset.layoutField] = {
                             x: Math.max(0, Math.min(100, (item.offsetLeft / card.clientWidth) * 100)),
                             y: Math.max(0, Math.min(100, (item.offsetTop / card.clientHeight) * 100))
                         };
                     });
-                    localStorage.setItem(MAKER_LAYOUT_KEY, JSON.stringify(makerLayout));
-                    showToast('Card layout saved. It will be restored when you reopen this page.', 'success');
+
+                    const design = {
+                        id: existingDesign ? existingDesign.id : `design-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 9)}`,
+                        name,
+                        createdAt: existingDesign ? existingDesign.createdAt : new Date().toISOString(),
+                        updatedAt: new Date().toISOString(),
+                        layout,
+                        photoStyle: applyMakerPhotoStyle({
+                            width: makerPhotoWidthInput.valueAsNumber,
+                            height: makerPhotoHeightInput.valueAsNumber,
+                            borderRadius: makerPhotoRadiusInput.valueAsNumber
+                        }),
+                        signatureStyle: applyMakerSignatureStyle({
+                            width: makerSignatureWidthInput.valueAsNumber,
+                            height: makerSignatureHeightInput.valueAsNumber
+                        }),
+                        textScales: {
+                            ...getLegacyTextScales(existingDesign.textScale),
+                            ...existingDesign.textScales,
+                            ...makerTextScales
+                        },
+                        textColors: { ...makerTextColors },
+                        images: Object.fromEntries(makerImageAssets.map(({ imageId }) => {
+                            const image = document.getElementById(imageId);
+                            return [imageId, image.hidden ? null : image.src];
+                        }))
+                    };
+                    await storeMakerDesign(design);
+                    makerLayout = layout;
+                    activeMakerDesignId = design.id;
+                    makerSavedDesigns = makerSavedDesigns.filter(savedDesign => savedDesign.id !== design.id);
+                    makerSavedDesigns.push(design);
+                    makerSavedDesigns.sort((first, second) => first.name.localeCompare(second.name));
+                    localStorage.setItem(MAKER_LAYOUT_KEY, JSON.stringify(layout));
+                    localStorage.setItem(MAKER_ACTIVE_DESIGN_KEY, design.id);
+                    renderSavedMakerDesigns();
+                    showMakerTab('saved');
+                    showToast(`Saved card design: ${name}`, 'success');
                 } catch (error) {
-                    console.error('Card layout save error:', error);
-                    showToast('Unable to save the card layout: ' + error.message, 'error');
+                    console.error('Card design save error:', error);
+                    showToast('Unable to save card design: ' + error.message, 'error');
                 }
             });
 
             document.getElementById('resetMakerLayout').addEventListener('click', () => {
                 try {
                     localStorage.removeItem(MAKER_LAYOUT_KEY);
-                    makerLayout = {};
+                    localStorage.removeItem(MAKER_ACTIVE_DESIGN_KEY);
+                    activeMakerDesignId = null;
                     makerLayoutItems.forEach(item => {
                         item.style.removeProperty('left');
                         item.style.removeProperty('top');
                     });
+                    makerLayout = {};
+                    renderSavedMakerDesigns();
                     selectMakerField(makerSelectedField.value);
                     showToast('Card layout reset to its defaults.', 'success');
                 } catch (error) {
@@ -5297,41 +6149,7 @@ position: absolute;
                     showToast('Unable to reset the card layout: ' + error.message, 'error');
                 }
             });
-
-            const PHOTO_RADIUS_KEY = 'bharathi_id_card_photo_radius_v1';
-            const photoRadiusInput = document.getElementById('photoRadiusInput');
-            const photoRadiusValue = document.getElementById('photoRadiusValue');
-            const applyPhotoRadius = () => {
-                const radius = Number(photoRadiusInput.value);
-                photoHolder.style.borderRadius = `${radius}px`;
-                photoRadiusValue.value = `${radius}px`;
-                photoRadiusValue.textContent = `${radius}px`;
-            };
-
-            try {
-                const savedRadius = localStorage.getItem(PHOTO_RADIUS_KEY);
-                if (savedRadius !== null) {
-                    const radius = Number(savedRadius);
-                    if (!Number.isFinite(radius) || radius < 0 || radius > 60) {
-                        throw new Error('Saved photo corner radius is invalid.');
-                    }
-                    photoRadiusInput.value = String(radius);
-                }
-                applyPhotoRadius();
-            } catch (error) {
-                console.error('Photo corner radius load error:', error);
-                showToast('Unable to load photo corner settings: ' + error.message, 'error');
-            }
-
-            photoRadiusInput.addEventListener('input', applyPhotoRadius);
-            photoRadiusInput.addEventListener('change', () => {
-                try {
-                    localStorage.setItem(PHOTO_RADIUS_KEY, photoRadiusInput.value);
-                } catch (error) {
-                    console.error('Photo corner radius save error:', error);
-                    showToast('Unable to save photo corner settings: ' + error.message, 'error');
-                }
-            });
+            loadSavedMakerDesigns();
 
             document.getElementById('downloadMakerFront').addEventListener('click', () => {
                 downloadMakerCard('makerFrontCard', 'downloadMakerFront', 'id_card_front.png');
@@ -5611,7 +6429,7 @@ position: absolute;
             showPage(window.location.hash.slice(1) || 'dashboardPage', false);
 
             // Default prefill sheet URL from the user
-            sheetUrl.value = 'https://docs.google.com/spreadsheets/d/1WlV_EWQZE1b1sVhKqY7396CU9-cxBxp495OY45iknJI/edit?gid=0#gid=0';
+            sheetUrl.value = 'https://docs.google.com/spreadsheets/d/1WlV_EWQZE1b1sVhKqY7396CU9-cxBxp495OY45iknJI/edit?gid=1955875962#gid=1955875962';
         })();
     </script>
 </body>
